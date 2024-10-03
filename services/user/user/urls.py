@@ -17,6 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # TODO: Create/delete user, login, logout, update user
+    # path("api/v1/login")
+    # path("api/v1/logout")
+    # path("api/v1/user")
+    # path("api/v1/user/<int:user_id>/")
 ]
