@@ -1,4 +1,3 @@
-from pydantic import ValidationError
 from models import User
 from utils import hash_password, validate_password
 
@@ -19,7 +18,7 @@ def create_user(
 def validate_user(user_name: str, password: str) -> User:
     try:
         user = User.objects.get(user_name=user_name)
-        if validate_password(password, user.password):
+        if user and validate_password(password, user.password):
             return user
         else:
             raise ValueError("The provided password is incorrect.")
