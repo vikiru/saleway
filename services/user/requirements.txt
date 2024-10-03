@@ -1,3 +1,10 @@
+bcrypt
+black
 Django
+django-allauth
+django-cors-headers
+django-environ
 django-extensions
+djangorestframework
+psycopg2-binary
 requests
