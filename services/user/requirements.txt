@@ -6,7 +6,6 @@ django-cors-headers
 django-environ
 django-extensions
 django-ninja
-djangorestframework
 psycopg2-binary
 requests
 pydantic

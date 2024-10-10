@@ -1,24 +1,27 @@
-from models import User
-from utils import hash_password, validate_password
+from .models import EcommerceUser, EcommerceUserInput
+from django.shortcuts import get_object_or_404
+
 
 def create_user(first_name, last_name, user_name, email, password) -> None:
-    hashed_password = hash_password(password)
-    User.objects.create(
+    EcommerceUser.objects.create(
         first_name=first_name,
         last_name=last_name,
         user_name=user_name,
         email=email,
-        password=hashed_password,
+        password=password,
     )
 
 
-def get_user(id: int) -> User:
-    return User.objects.get(id=id)
+def get_user_by_id(id: int) -> EcommerceUser:
+    return get_object_or_404(EcommerceUser, id=id)
 
 
-def update_user(id: int, user: User) -> None:
-    User.objects.filter(id=id).update(user=user)
+def modify_user(id: int, user: EcommerceUserInput) -> None:
+    user = get_object_or_404(EcommerceUser, id=id)
+    for attr, value in user.dict().items():
+        setattr(user, attr, value)
+    user.save()
 
 
-def delete_user(id: int) -> None:
-    User.objects.filter(id=id).delete()
+def remove_user(id: int) -> None:
+    EcommerceUser.objects.filter(id=id).delete()
