@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import environ
-import os
 
 env = environ.Env()
 
@@ -40,16 +39,15 @@ INSTALLED_APPS = [
     "user",
     "allauth",
     "allauth.account",
-    "django_extensions",
     "ninja",
     "corsheaders",
+    "django_extensions",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_extensions",
 ]
 
 MIDDLEWARE = [
