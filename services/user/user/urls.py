@@ -21,4 +21,7 @@ from .api import api
 
 API_VERSION = "v1"
 
-urlpatterns = [path("admin/", admin.site.urls), path(f"api/{API_VERSION}/", api.urls)]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path(f"api/{API_VERSION}", api.urls),
+]
