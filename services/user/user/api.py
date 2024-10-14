@@ -170,6 +170,14 @@ def update_user(
 @api.delete("/users/{user_id}", auth=django_auth)
 def delete_user(request, user_id: int) -> None:
     try:
+        if request.user.id != user_id:
+            return ApiResponse(
+                message="Permission denied.",
+                data={},
+                error="You do not have permission to access this user.",
+                status=403,
+                success=False,
+            )
         response = remove_user(user_id)
 
         if response.error:

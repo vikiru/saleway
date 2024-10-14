@@ -1,3 +1,9 @@
+black
 Django
+django-cors-headers
+django-environ
 django-extensions
+django-ninja
+psycopg2-binary
 requests
+pydantic
