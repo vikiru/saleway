@@ -1,10 +1,9 @@
 from .models import EcommerceUser, EcommerceUserInput, ServiceResponse
-from django.shortcuts import get_object_or_404
+from utils.user import extract_user
 
 
 def create_user(first_name, last_name, username, email, password) -> ServiceResponse:
     try:
-
         if get_user_by_email(email) or get_user_by_username(username):
             return ServiceResponse(
                 data={},
@@ -18,14 +17,7 @@ def create_user(first_name, last_name, username, email, password) -> ServiceResp
             email=email,
             password=password,
         )
-
-        data = {
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "username": user.username,
-            "email": user.email,
-        }
-
+        data = extract_user(user)
         return ServiceResponse(data=data, error="")
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
@@ -34,7 +26,6 @@ def create_user(first_name, last_name, username, email, password) -> ServiceResp
 def modify_user(id: int, updated_user: EcommerceUserInput) -> ServiceResponse:
     try:
         user = EcommerceUser.objects.filter(id=id).first()
-
         if not user:
             return ServiceResponse(data={}, error="User not found")
 
@@ -45,13 +36,7 @@ def modify_user(id: int, updated_user: EcommerceUserInput) -> ServiceResponse:
                 setattr(user, attr, value)
         user.save()
 
-        data = {
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "username": user.username,
-            "email": user.email,
-        }
-
+        data = extract_user(user)
         return ServiceResponse(data=data, error="")
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))

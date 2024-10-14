@@ -23,5 +23,5 @@ API_VERSION = "v1"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path(f"api/", api.urls),
+    path("api/", api.urls),
 ]
