@@ -1,11 +1,16 @@
-from services.rating.rating.models import UserReview, UserReviewInput
-from services.user.user.models import ServiceResponse
+from .utils.review import extract_review, extract_reviews
+from .models import UserReview, UserReviewInput, ServiceResponse
 
 
-def get_review_by_id(review_id: int) -> ServiceResponse:
+def get_review_by_id(product_id: int, review_id: int) -> ServiceResponse:
     try:
-        review = UserReview.objects.filter(id=review_id).first()
-        return ServiceResponse(data=review, error="")
+        review = UserReview.objects.filter(product_id=product_id, id=review_id).first()
+        if not review:
+            return ServiceResponse(
+                data={}, error="There is no review matching the provided id"
+            )
+        data = extract_review(review)
+        return ServiceResponse(data=data, error="")
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
 
@@ -13,22 +18,33 @@ def get_review_by_id(review_id: int) -> ServiceResponse:
 def get_reviews_by_user(user_id: int) -> ServiceResponse:
     try:
         reviews = UserReview.objects.filter(user_id=user_id)
-        return ServiceResponse(data=reviews, error="")
+        if not reviews:
+            return ServiceResponse(
+                data={}, error="There are no reviews matching the provided user."
+            )
+        data = extract_reviews(reviews)
+        return ServiceResponse(data=data, error="")
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
 
 
 def get_reviews_by_product(product_id: int) -> ServiceResponse:
     try:
-        reviews = UserReview.objects.filter(product_id=product_id)
-        return ServiceResponse(data=reviews, error="")
+        reviews = UserReview.objects.filter(product_id=product_id).all()
+        if not reviews:
+            return ServiceResponse(
+                data={}, error="There are no reviews matching the provided product."
+            )
+        data = extract_reviews(reviews)
+        print(data)
+        return ServiceResponse(data=data, error="")
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
 
 
 def create_review(payload: UserReviewInput) -> ServiceResponse:
     try:
-        review = UserReview(
+        review = UserReview.objects.create(
             user_id=payload.user_id,
             product_id=payload.product_id,
             title=payload.title,
@@ -36,10 +52,10 @@ def create_review(payload: UserReviewInput) -> ServiceResponse:
             review=payload.review,
             rating=payload.rating,
             date_reviewed=payload.date_reviewed,
-            data_purchased=payload.data_purchased,
+            date_purchased=payload.date_purchased,
         )
-        review.save()
-        return ServiceResponse(data=review, error="")
+        data = extract_review(review)
+        return ServiceResponse(data=data, error="")
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
 
@@ -54,7 +70,8 @@ def modify_review(review_id: int, updated_review: UserReviewInput) -> ServiceRes
             if value:
                 setattr(review, attr, value)
         review.save()
-        return ServiceResponse(data=review, error="")
+        data = extract_review(review)
+        return ServiceResponse(data=data, error="")
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
 
