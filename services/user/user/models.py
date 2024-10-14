@@ -44,10 +44,22 @@ class EcommerceUserOutput(Schema):
     username: str
     email: str
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "username": self.username,
+            "email": self.email,
+        }
+
 
 class UserCredentials(Schema):
     email: str
     password: str
+
+    def to_dict(self):
+        return {"email": self.email, "password": self.password}
 
 
 class ApiResponse(Schema):
@@ -57,7 +69,19 @@ class ApiResponse(Schema):
     error: str
     success: bool
 
+    def to_dict(self):
+        return {
+            "message": self.message,
+            "status": self.status,
+            "data": self.data,
+            "error": self.error,
+            "success": self.success,
+        }
+
 
 class ServiceResponse(Schema):
     data: dict
     error: str = None
+
+    def to_dict(self):
+        return {"data": self.data, "error": self.error}
