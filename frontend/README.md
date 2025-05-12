@@ -1,46 +1,59 @@
-# Getting Started with Create React App
+<h1 align="center">Boilerplate Repository <br> Future Projects 🚀 </h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center" id="badges">
+<br/>
+<a href="">
+	<img src="https://img.shields.io/badge/documentation-docs-orange" alt="Documentation"/>
+</a>
+<a href="">
+    <img src="https://img.shields.io/badge/Web-live%20site-blue" alt=""/>
+</a>
+ <a href="https://github.com/vikiru/boilerplate/blob/main/LICENSE">
+  <img src="https://img.shields.io/badge/license-MIT-aqua" alt="MIT License Badge"/>
+ </a>
+ <a href="https://github.com/prettier/prettier">
+  <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square" alt="Code Style - Prettier"/>
+ </a>
+<br/>
+  <a href="https://github.com/vikiru/boilerplate/releases">
+  <img src="https://img.shields.io/github/v/release/vikiru/boilerplate" alt="Release"/>
+ </a>
+ <a href="https://github.com/vikiru/boilerplate/issues?q=is%3Aissue+is%3Aclosed">
+  <img src="https://img.shields.io/github/issues-closed/vikiru/boilerplate" alt="Closed Issues"/>
+ </a>
+ <a href="https://github.com/vikiru/boilerplate/pulls?q=is%3Apr+is%3Aclosed">
+  <img src="https://img.shields.io/github/issues-pr-closed/vikiru/boilerplate?label=closed%20prs" alt="Closed PRs"/>
+ </a>
+</div>
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+This repository is a boilerplate repostiory for future GitHub projects.
 
-### `npm start`
+## 📖 Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+-   [📖 Table of Contents](#-table-of-contents)
+-   [🌟 Features](#-features)
+-   [🛠️ Tech Stack](#️-tech-stack)
+-   [📝 Prerequisites](#-prerequisites)
+-   [⚡ Setup Instructions](#-setup-instructions)
+-   [🔍 Testing](#-testing)
+-   [📜 Available Scripts](#-available-scripts)
+-   [✨ Acknowledgments](#-acknowledgments)
+-   [©️ License](#️-license)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🌟 Features
 
-### `npm test`
+## 🛠️ Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📝 Prerequisites
 
-### `npm run build`
+## ⚡ Setup Instructions
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🔍 Testing
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📜 Available Scripts
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ✨ Acknowledgments
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## ©️ License
