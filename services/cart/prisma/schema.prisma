@@ -5,38 +5,38 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+    provider = "prisma-client-js"
+    output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model Cart {
-  cartId    String   @id @default(uuid()) @map("cart_id")
-  userId    String   @unique @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+    cartId    String   @id @default(uuid()) @map("cart_id")
+    userId    String   @unique @map("user_id")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  totalPrice Decimal    @default(0) @map("total_price")
-  items      CartItem[]
+    totalPrice Decimal    @default(0) @map("total_price")
+    items      CartItem[]
 
-  @@index([userId])
+    @@index([userId])
 }
 
 model CartItem {
-  cartItemId String @id @default(uuid()) @map("cart_item_id")
-  productId  String @map("product_id")
-  cartId     String @map("cart_id")
+    cartItemId String @id @default(uuid()) @map("cart_item_id")
+    productId  String @map("product_id")
+    cartId     String @map("cart_id")
 
-  quantity   Int     @default(1)
-  unitPrice  Decimal @default(0) @map("unit_price")
-  totalPrice Decimal @default(0) @map("total_price")
+    quantity   Int     @default(1)
+    unitPrice  Decimal @default(0) @map("unit_price")
+    totalPrice Decimal @default(0) @map("total_price")
 
-  cart Cart @relation(fields: [cartId], references: [cartId], onDelete: Cascade)
+    cart Cart @relation(fields: [cartId], references: [cartId], onDelete: Cascade)
 
-  @@index([productId])
-  @@index([cartId])
+    @@index([productId])
+    @@index([cartId])
 }
