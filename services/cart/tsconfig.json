@@ -1,26 +1,26 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "incremental": true,
-    "allowJs": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@/config/*": ["./config/*"],
-      "@/controllers/*": ["./controllers/*"],
-      "@/data/*": ["./data/*"],
-      "@/generated/*": ["./generated/*"],
-      "@/services/*": ["./services/*"],
-      "@/types/*": ["./types/*"],
-      "@/utils/*": ["./utils/*"],
-      "@/routes/*": ["./routes/*"]
-    }
-  },
-  "include": ["./**/*", "prisma/**/*"],
-  "exclude": ["node_modules"]
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "incremental": true,
+        "allowJs": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "@/config/*": ["./config/*"],
+            "@/controllers/*": ["./controllers/*"],
+            "@/data/*": ["./data/*"],
+            "@/generated/*": ["./generated/*"],
+            "@/services/*": ["./services/*"],
+            "@/types/*": ["./types/*"],
+            "@/utils/*": ["./utils/*"],
+            "@/routes/*": ["./routes/*"]
+        }
+    },
+    "include": ["./**/*", "prisma/**/*"],
+    "exclude": ["node_modules"]
 }
