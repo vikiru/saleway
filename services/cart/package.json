@@ -1,42 +1,42 @@
 {
-  "name": "cart-service",
-  "version": "0.0.1",
-  "main": "app.ts",
-  "scripts": {
-    "build": "tsc",
-    "start": "tsx app.ts",
-    "dev": "nodemon",
-    "studio": "prisma studio"
-  },
-  "keywords": [],
-  "author": "Visakan Kirubakaran",
-  "license": "MIT",
-  "description": "",
-  "devDependencies": {
-    "@types/body-parser": "~1.19.5",
-    "@types/compression": "~1.7.5",
-    "@types/cors": "~2.8.18",
-    "@types/express": "^4.17.21",
-    "@types/module-alias": "~2.0.4",
-    "@types/morgan": "~1.9.9",
-    "@types/node": "^22.15.18",
-    "husky": "^9.1.6",
-    "nodemon": "^3.1.10",
-    "prisma": "^5.22.0",
-    "tsx": "^4.19.4",
-    "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "@prisma/client": "^5.22.0",
-    "body-parser": "^2.2.0",
-    "compression": "^1.8.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^4.19.2",
-    "express-validator": "^7.2.1",
-    "helmet": "^8.1.0",
-    "morgan": "^1.10.0",
-    "winston": "^3.17.0",
-    "zod": "^3.24.4"
-  }
+    "name": "cart-service",
+    "version": "0.0.1",
+    "description": "",
+    "keywords": [],
+    "license": "MIT",
+    "author": "Visakan Kirubakaran",
+    "main": "app.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "nodemon",
+        "start": "tsx app.ts",
+        "studio": "prisma studio"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.22.0",
+        "body-parser": "^2.2.0",
+        "compression": "^1.8.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.5.0",
+        "express": "^4.19.2",
+        "express-validator": "^7.2.1",
+        "helmet": "^8.1.0",
+        "morgan": "^1.10.0",
+        "winston": "^3.17.0",
+        "zod": "^3.24.4"
+    },
+    "devDependencies": {
+        "@types/body-parser": "~1.19.5",
+        "@types/compression": "~1.7.5",
+        "@types/cors": "~2.8.18",
+        "@types/express": "^4.17.21",
+        "@types/module-alias": "~2.0.4",
+        "@types/morgan": "~1.9.9",
+        "@types/node": "^22.15.18",
+        "husky": "^9.1.6",
+        "nodemon": "^3.1.10",
+        "prisma": "^5.22.0",
+        "tsx": "^4.19.4",
+        "typescript": "^5.8.3"
+    }
 }
