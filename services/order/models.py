@@ -1,62 +1,56 @@
 from datetime import datetime, timezone
+from decimal import Decimal
 from enum import Enum as PythonEnum
-
-from app import db
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, Numeric, Text
-from sqlalchemy.orm import relationship
+from typing import override
+from sqlmodel import Field, Relationship, SQLModel
 
 
 class OrderStatus(PythonEnum):
-    PENDING = "pending"
-    COMPLETED = "completed"
-    CANCELLED = "cancelled"
-    DELIVERED = "delivered"
+    PENDING = 'pending'
+    COMPLETED = 'completed'
+    CANCELLED = 'cancelled'
+    DELIVERED = 'delivered'
 
-    def __str__(self):
+    @override
+    def __str__(self) -> str:
         return self.value
 
 
-class Order(db.Model):
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, nullable=False)
-    purchase_date = Column(DateTime(timezone=True), nullable=False)
-    expected_delivery_date = Column(DateTime(timezone=True), nullable=False)
-    items = relationship("OrderItem", back_populates="order", lazy=True)
-    total_price = Column(Numeric, nullable=False)
-    status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
-    created_at = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc),
+# Table name: 'order'
+class Order(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    user_id: int
+    purchase_date: datetime
+    expected_delivery_date: datetime
+    total_price: Decimal
+    status: OrderStatus = Field(default=OrderStatus.PENDING)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
     )
-    updated_at = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc),
+    updated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
+    items: list['OrderItem'] = Relationship(
+        back_populates='order', sa_relationship_kwargs={'cascade': 'all'}
     )
 
 
-class OrderItem(db.Model):
-    id = Column(Integer, primary_key=True)
-    order = relationship("Order", back_populates="items")
-    order_id = Column(Integer, ForeignKey("order.id"), nullable=False)
-    product_id = Column(Integer, nullable=False)
-    product_name = Column(Text, nullable=False)
-    product_brand = Column(Text, nullable=False)
-    product_description = Column(Text, nullable=False)
-    product_image = Column(Text, nullable=False)
-    product_unit_price = Column(Numeric, nullable=False)
-    product_total_price = Column(Numeric, nullable=False)
-    product_quantity = Column(Integer, nullable=False)
-    created_at = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc),
+# Table name: 'orderitem'
+class OrderItem(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
+    order_id: int | None = Field(default=None, foreign_key='order.id')
+    product_id: int
+    product_name: str
+    product_brand: str
+    product_description: str
+    product_image: str
+    product_unit_price: Decimal
+    product_total_price: Decimal
+    product_quantity: int
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
     )
-    updated_at = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc),
+    updated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
     )
+    order: Order | None = Relationship(back_populates='items')
