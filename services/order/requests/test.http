@@ -1,0 +1,65 @@
+POST http://127.0.0.1:5000/orders HTTP/1.1
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "product_brand": "BrandX",
+      "product_description": "Description here",
+      "product_id": 101,
+      "product_image": "image_url",
+      "product_name": "Product A",
+      "product_quantity": 3,
+      "product_total_price": 31.50,
+      "product_unit_price": 10.50
+    },
+    {
+      "product_brand": "BrandY",
+      "product_description": "Description here",
+      "product_id": 102,
+      "product_image": "image_url",
+      "product_name": "Product B",
+      "product_quantity": 2,
+      "product_total_price": 15.00,
+      "product_unit_price": 7.50
+    },
+    {
+      "product_brand": "BrandZ",
+      "product_description": "Description here",
+      "product_id": 103,
+      "product_image": "image_url",
+      "product_name": "Product C",
+      "product_quantity": 1,
+      "product_total_price": 5.00,
+      "product_unit_price": 5.00
+    }
+  ],
+  "purchase_date": "2025-07-05T14:00:00+00:00",
+  "total_price": 31.50,
+  "user_id": 1
+}
+
+
+### 
+
+GET http://127.0.0.1:5000/orders/1 HTTP/1.1
+
+
+### 
+
+GET http://127.0.0.1:5000/orders/user/1 HTTP/1.1
+
+
+### 
+
+PUT http://127.0.0.1:5000/orders/2 HTTP/1.1
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+
+### 
+
+DELETE http://127.0.0.1:5000/orders/1 HTTP/1.1

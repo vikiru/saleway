@@ -23,3 +23,5 @@ app.listen(env.PORT, () => {
         `Cart Service running on http://localhost:${env.PORT}/api/${apiVersionString}`,
     );
 });
+
+// TODO: Add data dupe similar to orders service to cart service for products, cleanup any routes
