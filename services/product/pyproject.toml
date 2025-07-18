@@ -1,0 +1,28 @@
+[project]
+name = "product"
+version = "0.1.0"
+description = "A product microservice for a fake e-commerce website."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "brotli-asgi>=1.4.0",
+  "dotenv>=0.9.9",
+  "fastapi>=0.116.1",
+  "google-genai>=1.25.0",
+  "httpx>=0.28.1",
+  "loguru>=0.7.3",
+  "sqlmodel>=0.0.24",
+  "uvicorn>=0.35.0",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.12.3"]
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "single"
+line-ending = "lf"
+skip-magic-trailing-comma = false
