@@ -1,103 +1,182 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import { ShoppingBag, ChevronRight, Clock, Truck, Shield } from 'lucide-react';
+
+const products = [
+  {
+    id: 1,
+    name: 'Minimalist Wireless Headphones',
+    price: 199.99,
+    image: '/placeholder-headphones.jpg'
+  },
+  {
+    id: 2,
+    name: 'Sleek Smart Watch',
+    price: 249.99,
+    image: '/placeholder-watch.jpg'
+  },
+  {
+    id: 3,
+    name: 'Classic Sneakers',
+    price: 89.99,
+    image: '/placeholder-shoes.jpg'
+  },
+  {
+    id: 4,
+    name: 'Pour Over Coffee Set',
+    price: 129.99,
+    image: '/placeholder-coffee.jpg'
+  }
+];
+
+const collections = [
+  { name: 'New Arrivals', href: '/new-arrivals' },
+  { name: 'Best Sellers', href: '/best-sellers' },
+  { name: 'Sale', href: '/sale' }
+];
 
 export default function Home() {
-    return (
-        <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-            <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
-                <Image
-                    className="dark:invert"
-                    src="/next.svg"
-                    alt="Next.js logo"
-                    width={180}
-                    height={38}
-                    priority
-                />
-                <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm/6 sm:text-left">
-                    <li className="mb-2 tracking-[-.01em]">
-                        Get started by editing{' '}
-                        <code className="rounded bg-black/[.05] px-1 py-0.5 font-[family-name:var(--font-geist-mono)] font-semibold dark:bg-white/[.06]">
-                            src/app/page.tsx
-                        </code>
-                        .
-                    </li>
-                    <li className="tracking-[-.01em]">
-                        Save and see your changes instantly.
-                    </li>
-                </ol>
-
-                <div className="flex flex-col items-center gap-4 sm:flex-row">
-                    <a
-                        className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                        href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <Image
-                            className="dark:invert"
-                            src="/vercel.svg"
-                            alt="Vercel logomark"
-                            width={20}
-                            height={20}
-                        />
-                        Deploy now
-                    </a>
-                    <a
-                        className="flex h-10 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm font-medium transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:w-auto sm:px-5 sm:text-base md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-                        href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Read our docs
-                    </a>
-                </div>
-            </main>
-            <footer className="row-start-3 flex flex-wrap items-center justify-center gap-[24px]">
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/file.svg"
-                        alt="File icon"
-                        width={16}
-                        height={16}
-                    />
-                    Learn
-                </a>
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/window.svg"
-                        alt="Window icon"
-                        width={16}
-                        height={16}
-                    />
-                    Examples
-                </a>
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/globe.svg"
-                        alt="Globe icon"
-                        width={16}
-                        height={16}
-                    />
-                    Go to nextjs.org →
-                </a>
-            </footer>
+  return (
+    <main className="min-h-screen">
+      <section className="bg-white">
+        <div className="container mx-auto px-4 py-16 md:py-24">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl md:text-6xl font-light tracking-tight text-gray-900 mb-6">
+              Timeless Design,<br />
+              <span className="font-medium">Modern Simplicity</span>
+            </h1>
+            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+              Discover essential pieces designed for everyday life. Crafted with care, built to last.
+            </p>
+            <Link 
+              href="/shop" 
+              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800 transition-colors"
+            >
+              Shop Now
+              <ChevronRight className="ml-2 h-4 w-4" />
+            </Link>
+          </div>
         </div>
-    );
+      </section>
+
+      <section className="border-t border-gray-100">
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {collections.map((collection) => (
+              <Link 
+                key={collection.name}
+                href={collection.href}
+                className="group relative overflow-hidden bg-gray-50 rounded-lg p-8 hover:bg-gray-100 transition-colors"
+              >
+                <h2 className="text-xl font-medium text-gray-900 mb-2">{collection.name}</h2>
+                <p className="text-sm text-gray-500 flex items-center">
+                  Shop now <ChevronRight className="ml-1 h-4 w-4" />
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <Truck className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Free Shipping</h3>
+              <p className="text-gray-600">Free delivery on all orders over $50</p>
+            </div>
+            <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <Shield className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Secure Payment</h3>
+              <p className="text-gray-600">100% secure payment processing</p>
+            </div>
+            <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                <Clock className="w-8 h-8 text-yellow-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">24/7 Support</h3>
+              <p className="text-gray-600">Dedicated customer support</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-gray-100">
+        <div className="container mx-auto px-4 py-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-light text-gray-900">Featured Products</h2>
+            <Link 
+              href="/shop" 
+              className="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center"
+            >
+              View all
+              <ChevronRight className="ml-1 h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <div key={product.id} className="group relative">
+                <div className="aspect-square overflow-hidden bg-gray-50">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover object-center group-hover:opacity-90 transition-opacity"
+                  />
+                </div>
+                <div className="mt-4">
+                  <h3 className="text-sm font-medium text-gray-900">
+                    <Link href={`/products/${product.id}`}>
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {product.name}
+                    </Link>
+                  </h3>
+                  <div className="mt-1 flex justify-between">
+                    <p className="text-sm text-gray-500">${product.price.toFixed(2)}</p>
+                    <button 
+                      type="button" 
+                      className="text-gray-400 hover:text-gray-500"
+                      aria-label="Add to cart"
+                    >
+                      <ShoppingBag className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-gray-50 border-t border-gray-100">
+        <div className="container mx-auto px-4 py-24 text-center">
+          <h2 className="text-2xl font-light text-gray-900 mb-4">Join Our Community</h2>
+          <p className="text-gray-600 max-w-xl mx-auto mb-8">
+            Sign up for our newsletter and receive 10% off your first order.
+          </p>
+          <form className="max-w-md mx-auto flex">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="flex-1 min-w-0 px-4 py-2 border border-gray-300 rounded-l-md focus:ring-black focus:border-black"
+              aria-label="Email address"
+            />
+            <button
+              type="submit"
+              className="bg-black text-white px-6 py-2 rounded-r-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+  );
 }
