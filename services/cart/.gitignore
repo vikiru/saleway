@@ -1,6 +1,11 @@
-# Extra
-generated/prisma/
+###----------------###
+###  TopTal: node  ###
+###----------------###
 
+# Created by https://www.toptal.com/developers/gitignore/api/node
+# Edit at https://www.toptal.com/developers/gitignore?templates=node
+
+### Node ###
 # Logs
 logs
 *.log
@@ -131,12 +136,43 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+### Node Patch ###
 # Serverless Webpack directories
 .webpack/
 
 # SvelteKit build / generate output
 .svelte-kit
 
+# End of https://www.toptal.com/developers/gitignore/api/node
+
+###----------------###
+###  GitHub: Node  ###
+###----------------###
 
 
+.env.*
+!.env.example
 
+# Sveltekit cache directory
+.svelte-kit/
+
+# vitepress build output
+**/.vitepress/dist
+
+# vitepress cache directory
+**/.vitepress/cache
+
+# Firebase cache directory
+.firebase/
+
+# yarn v3
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Vite logs files
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
