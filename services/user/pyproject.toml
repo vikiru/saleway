@@ -1,0 +1,30 @@
+[project]
+name = "user"
+version = "0.1.0"
+description = "A user microservice for a fake e-commerce website."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "bcrypt",
+  "django",
+  "django-allauth",
+  "django-cors-headers",
+  "django-environ",
+  "django-extensions",
+  "django-ninja",
+  "psycopg2-binary",
+  "requests",
+  "pydantic",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.14.8"]
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = 'single'
+line-ending = 'lf'
+skip-magic-trailing-comma = false
