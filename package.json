@@ -6,10 +6,11 @@
 	"license": "MIT",
 	"author": "Visakan Kirubakaran",
 	"scripts": {
-		"lint": "biome lint",
-		"format": "biome check --write",
+		"lint:ts": "biome lint",
+		"format:ts": "biome check --write",
 		"prepare": "husky",
-		"ruff": "ruff check . --fix"
+		"lint:python": "ruff check services/**/*.py",
+		"format:python": "ruff format services/**/*.py"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.7",
