@@ -1,4 +1,9 @@
 onlyBuiltDependencies:
   - '@clerk/shared'
+  - esbuild
   - sharp
   - unrs-resolver
+
+overrides:
+  js-yaml@>=4.0.0 <4.1.1: '>=4.1.1'
+  next@>=15.5.0-canary.0 <15.5.7: '>=15.5.7'
