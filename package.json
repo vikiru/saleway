@@ -12,7 +12,7 @@
 		"lint:python": "ruff check services/**/*.py",
 		"format:python": "ruff format services/**/*.py",
 		"lint:java": "cd services/payment && mvn checkstyle:check",
-		"format:java": "cd services/payment && mvn fmt:format"
+		"format:java": "cd services/payment && mvn google-java-format:format"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.7",
