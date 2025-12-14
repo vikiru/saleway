@@ -1,8 +1,11 @@
 from contextlib import contextmanager
-from sqlmodel import SQLModel, Session, create_engine
+
+from sqlmodel import Session, SQLModel, create_engine
+
 from config import Config
 
 engine = create_engine(Config.DATABASE_URL, echo=True)
+
 
 @contextmanager
 def get_session():

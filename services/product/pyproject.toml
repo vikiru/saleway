@@ -11,16 +11,53 @@ dependencies = [
   "google-genai>=1.25.0",
   "httpx>=0.28.1",
   "loguru>=0.7.3",
-  "ruff>=0.14.8",
+  "psycopg2-binary>=2.9.11",
   "sqlmodel>=0.0.24",
   "uvicorn>=0.35.0",
 ]
 
 [dependency-groups]
-dev = ["ruff>=0.12.3"]
+dev = [
+    "basedpyright>=1.36.1",
+    "poethepoet>=0.38.0",
+    "ruff>=0.14.8",
+]
+
+[tool.poe.tasks]
+start = "uvicorn app:app"
+dev = "uvicorn app:app --reload"
+venv-create = "uv venv"
+venv-activate = "source .venv/bin/activate"
+sync = "uv sync"
+typecheck = "basedpyright ."
+update = "uv lock --upgrade"
+format = "ruff format ."
+lint = "ruff check --fix ."
 
 [tool.ruff]
-line-length = 80
+line-length = 120
+fix = true
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501", "W291"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["services"]
+known-third-party = ["sqlmodel", "pydantic", "dotenv", "google_genai", "loguru", "uvicorn"]
 
 [tool.ruff.format]
 docstring-code-format = true
