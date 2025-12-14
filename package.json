@@ -17,7 +17,8 @@
 		"bruno:order": "cd services/order/.bruno/order-collection && bru run",
 		"bruno:user": "cd services/user/.bruno/user-collection && bru run",
 		"bruno:rating": "cd services/rating/.bruno/rating-collection && bru run",
-		"bruno:payment": "cd services/payment/.bruno/payment-collection && bru run"
+		"bruno:payment": "cd services/payment/.bruno/payment-collection && bru run",
+		"bruno:cart": "cd services/cart/.bruno/cart-collection && bru run"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.7",
