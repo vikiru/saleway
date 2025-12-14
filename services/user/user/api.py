@@ -3,10 +3,9 @@ from django.views.decorators.csrf import csrf_exempt
 from ninja import NinjaAPI
 from ninja.security import django_auth
 
+from .definitions import ErrorResponse, SuccessResponse
 from .models import (
-    ApiResponse,
     EcommerceUserInput,
-    EcommerceUserOutput,
     UserCredentials,
 )
 from .services import (
@@ -20,18 +19,12 @@ api = NinjaAPI()
 
 
 @api.post('/users')
-def post_user(request, payload: EcommerceUserInput) -> None:
+def post_user(request, payload: EcommerceUserInput) -> SuccessResponse[dict]:
     try:
         payload_dict = payload.dict()
 
         if any(field is None or field == '' for field in payload_dict.values()):
-            return ApiResponse(
-                message='Please ensure that you properly provide all values.',
-                data={},
-                error='All fields are required.',
-                status=400,
-                success=False,
-            )
+            return ErrorResponse(success=False, error='All fields are required.')
 
         response = create_user(
             payload.first_name,
@@ -42,53 +35,23 @@ def post_user(request, payload: EcommerceUserInput) -> None:
         )
 
         if response.error:
-            return ApiResponse(
-                message='User creation failed.',
-                data={},
-                status=500,
-                success=False,
-                error=response.error,
-            )
+            return ErrorResponse(success=False, error='User creation failed.')
         else:
-            return ApiResponse(
-                message='User successfully created.',
-                data=response.data,
-                status=201,
-                success=True,
-                error='No errors occured.',
-            )
+            return SuccessResponse(success=True, message='User successfully created.', data=response.data)
     except Exception as e:
-        return ApiResponse(
-            message='User creation failed.',
-            data={},
-            error=str(e),
-            status=500,
-            success=False,
-        )
+        return ErrorResponse(success=False, error=f'User creation failed: {str(e)}')
 
 
 @api.get('/users/{user_id}', auth=django_auth)
-def get_user(request, user_id: int) -> ApiResponse:
+def get_user(request, user_id: int) -> SuccessResponse[dict]:
     try:
         user = get_user_by_id(user_id)
 
         if request.user.id != user_id:
-            return ApiResponse(
-                message='Permission denied.',
-                data={},
-                error='You do not have permission to access this user.',
-                status=403,
-                success=False,
-            )
+            return ErrorResponse(success=False, error='You do not have permission to access this user.')
 
         if not user:
-            return ApiResponse(
-                message='User not found.',
-                data={},
-                error='User not found.',
-                status=404,
-                success=False,
-            )
+            return ErrorResponse(success=False, error='User not found.')
 
         user_data = {
             'id': user.id,
@@ -98,161 +61,68 @@ def get_user(request, user_id: int) -> ApiResponse:
             'email': user.email,
         }
 
-        return ApiResponse(
-            message='User successfully retrieved.',
-            data=user_data,
-            error='No errors occurred.',
-            status=200,
-            success=True,
-        )
+        return SuccessResponse(success=True, message='User retrieved successfully.', data=user_data)
     except Exception as e:
-        return ApiResponse(
-            message='User retrieval failed.',
-            data={},
-            error=str(e),
-            status=500,
-            success=False,
-        )
+        return ErrorResponse(success=False, error=f'User retrieval failed: {str(e)}')
 
 
 @api.put('/users/{user_id}', auth=django_auth)
 @csrf_exempt
-def update_user(request, user_id: int, payload: EcommerceUserInput) -> EcommerceUserOutput:
+def update_user(request, user_id: int, payload: EcommerceUserInput) -> SuccessResponse[dict]:
     try:
         if request.user.id != user_id:
-            return ApiResponse(
-                message='Permission denied.',
-                data={},
-                error='You do not have permission to access this user.',
-                status=403,
-                success=False,
-            )
+            return ErrorResponse(success=False, error='You do not have permission to access this user.')
 
         payload_dict = payload.dict()
 
         if all(field is None or field == '' for field in payload_dict.values()):
-            return ApiResponse(
-                message='No fields provided for update.',
-                data={},
-                error='At least one field must have a value to proceed with the update.',
-                status=400,
-                success=False,
+            return ErrorResponse(
+                success=False, error='At least one field must have a value to proceed with the update.'
             )
 
         response = modify_user(user_id, payload)
 
         if response.error:
-            return ApiResponse(
-                message='User update failed.',
-                data={},
-                error=response.error,
-                status=500,
-                success=False,
-            )
+            return ErrorResponse(success=False, error='User update failed.')
         else:
-            return ApiResponse(
-                message='User successfully updated.',
-                data=response.data,
-                error='No errors occured.',
-                status=200,
-                success=True,
-            )
+            return SuccessResponse(success=True, message='User updated successfully.', data=response.data)
     except Exception as e:
-        return ApiResponse(
-            message='User update failed.',
-            data={},
-            error=str(e),
-            status=500,
-            success=False,
-        )
+        return ErrorResponse(success=False, error=f'User update failed: {str(e)}')
 
 
 @api.delete('/users/{user_id}', auth=django_auth)
 @csrf_exempt
-def delete_user(request, user_id: int) -> None:
+def delete_user(request, user_id: int) -> SuccessResponse[dict]:
     try:
         if request.user.id != user_id:
-            return ApiResponse(
-                message='Permission denied.',
-                data={},
-                error='You do not have permission to access this user.',
-                status=403,
-                success=False,
-            )
+            return ErrorResponse(success=False, error='You do not have permission to access this user.')
         response = remove_user(user_id)
 
         if response.error:
-            return ApiResponse(
-                message='User deletion failed.',
-                data={},
-                error=response.error,
-                status=500,
-                success=False,
-            )
+            return ErrorResponse(success=False, error='User deletion failed.')
         else:
-            return ApiResponse(
-                message='User successfully deleted.',
-                data={},
-                error='No errors occured.',
-                status=200,
-                success=True,
-            )
+            return SuccessResponse(success=True, message='User successfully deleted.', data={})
     except Exception as e:
-        return ApiResponse(
-            message='User deletion failed.',
-            data={},
-            error=str(e),
-            status=500,
-            success=False,
-        )
+        return ErrorResponse(success=False, error=f'User deletion failed: {str(e)}')
 
 
 @api.post('/auth/login')
-def handle_login(request, payload: UserCredentials):
+def handle_login(request, payload: UserCredentials) -> SuccessResponse[dict]:
     try:
         user = authenticate(request, username=payload.email, password=payload.password)
         if user:
             login(request, user)
-            return ApiResponse(
-                message='User successfully logged in.',
-                data={},
-                error='No errors occured.',
-                status=200,
-                success=True,
-            )
-        return ApiResponse(
-            message='Invalid credentials.',
-            data={},
-            error='User credentials are invalid.',
-            status=401,
-            success=False,
-        )
+            return SuccessResponse(success=True, message='Login successful.', data={'user_id': user.id})
+        else:
+            return ErrorResponse(success=False, error='Invalid credentials.')
     except Exception as e:
-        return ApiResponse(
-            message='User login failed.',
-            data={},
-            error=str(e),
-            status=500,
-            success=False,
-        )
+        return ErrorResponse(success=False, error=f'Login failed: {str(e)}')
 
 
 @api.post('/auth/logout')
-def handle_logout(request):
+def handle_logout(request) -> SuccessResponse[dict]:
     try:
         logout(request)
-        return ApiResponse(
-            message='User successfully logged out.',
-            data={},
-            error='No errors occured.',
-            status=200,
-            success=True,
-        )
+        return SuccessResponse(success=True, message='User successfully logged out.', data={})
     except Exception as e:
-        return ApiResponse(
-            message='User logout failed.',
-            data={},
-            error=str(e),
-            status=500,
-            success=False,
-        )
+        return ErrorResponse(success=False, error=f'Logout failed: {str(e)}')

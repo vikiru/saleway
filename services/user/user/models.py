@@ -61,28 +61,3 @@ class UserCredentials(Schema):
 
     def to_dict(self):
         return {'email': self.email, 'password': self.password}
-
-
-class ApiResponse(Schema):
-    message: str
-    status: int
-    data: dict
-    error: str
-    success: bool
-
-    def to_dict(self):
-        return {
-            'message': self.message,
-            'status': self.status,
-            'data': self.data,
-            'error': self.error,
-            'success': self.success,
-        }
-
-
-class ServiceResponse(Schema):
-    data: dict
-    error: str = None
-
-    def to_dict(self):
-        return {'data': self.data, 'error': self.error}

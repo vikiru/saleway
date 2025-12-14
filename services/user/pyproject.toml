@@ -35,9 +35,18 @@ typecheck = "basedpyright ."
 update = "uv lock --upgrade"
 format = "ruff format ."
 lint = "ruff check --fix ."
-init-db = "uv run manage.py migrate"
+migrate = "uv run manage.py migrate"
 create-migrations = "uv run manage.py makemigrations"
 reset-db = "sh -c 'uv run manage.py flush --noinput && uv run manage.py migrate'"
+create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABASE user_service;\""
+# Django Service Startup Process:
+# 1) source .venv/bin/activate  # Activate virtual environment
+# 2) uv sync                     # Install Python packages
+# 3) poe create-db               # Create PostgreSQL database (if not already)
+# 4) poe create-migrations       # Create Django migrations
+# 5) poe migrate                 # Apply Django migrations
+# 6) poe dev                     # Start development server
+#    or poe start                # Start production server
 
 [tool.ruff]
 line-length = 120

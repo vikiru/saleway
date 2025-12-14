@@ -1,6 +1,6 @@
+from .definitions import ServiceResponse
+from .models import EcommerceUser as EcommerceUserModel, EcommerceUserInput
 from utils.user import extract_user
-
-from .models import EcommerceUser, EcommerceUserInput, ServiceResponse
 
 
 def create_user(first_name, last_name, username, email, password) -> ServiceResponse:
@@ -11,7 +11,7 @@ def create_user(first_name, last_name, username, email, password) -> ServiceResp
                 error='User already exists. Please enter a different username or email.',
             )
 
-        user = EcommerceUser.objects.create(
+        user = EcommerceUserModel.objects.create(
             first_name=first_name,
             last_name=last_name,
             username=username,
@@ -26,7 +26,7 @@ def create_user(first_name, last_name, username, email, password) -> ServiceResp
 
 def modify_user(id: int, updated_user: EcommerceUserInput) -> ServiceResponse:
     try:
-        user = EcommerceUser.objects.filter(id=id).first()
+        user = EcommerceUserModel.objects.filter(id=id).first()
         if not user:
             return ServiceResponse(data={}, error='User not found')
 
@@ -44,7 +44,7 @@ def modify_user(id: int, updated_user: EcommerceUserInput) -> ServiceResponse:
 
 def remove_user(id: int) -> ServiceResponse:
     try:
-        user = EcommerceUser.objects.filter(id=id).first()
+        user = EcommerceUserModel.objects.filter(id=id).first()
 
         if not user:
             return ServiceResponse(data={}, error='User not found')
@@ -56,13 +56,13 @@ def remove_user(id: int) -> ServiceResponse:
         return ServiceResponse(data={}, error=str(e))
 
 
-def get_user_by_id(id: int) -> EcommerceUser:
-    return EcommerceUser.objects.filter(id=id).first()
+def get_user_by_id(id: int) -> EcommerceUserModel:
+    return EcommerceUserModel.objects.filter(id=id).first()
 
 
-def get_user_by_username(username: str) -> EcommerceUser:
-    return EcommerceUser.objects.filter(username=username).first()
+def get_user_by_username(username: str) -> EcommerceUserModel:
+    return EcommerceUserModel.objects.filter(username=username).first()
 
 
-def get_user_by_email(email: str) -> EcommerceUser:
-    return EcommerceUser.objects.filter(email=email).first()
+def get_user_by_email(email: str) -> EcommerceUserModel:
+    return EcommerceUserModel.objects.filter(email=email).first()
