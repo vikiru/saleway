@@ -1,0 +1,26 @@
+meta {
+  name: Create Review
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8000/api/products/1/reviews
+}
+
+body {
+  {
+    "user_id": 1,
+    "product_id": 1,
+    "title": "Great Product",
+    "author": "John Doe",
+    "review": "Great product!",
+    "rating": 5,
+    "date_reviewed": "2024-01-01T00:00:00Z",
+    "date_purchased": "2024-01-01T00:00:00Z"
+  }
+}
+
+headers {
+  content-type: application/json
+}

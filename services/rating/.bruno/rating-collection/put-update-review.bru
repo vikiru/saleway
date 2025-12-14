@@ -1,0 +1,26 @@
+meta {
+  name: Update Review
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:8000/api/products/1/reviews/1
+}
+
+body {
+  {
+    "user_id": 1,
+    "product_id": 1,
+    "title": "Updated Review",
+    "author": "John Doe",
+    "review": "Updated review - good but not perfect",
+    "rating": 4,
+    "date_reviewed": "2024-01-01T00:00:00Z",
+    "date_purchased": "2024-01-01T00:00:00Z"
+  }
+}
+
+headers {
+  content-type: application/json
+}

@@ -10,7 +10,7 @@ from .services import (
 )
 from .models import ApiResponse, UserReviewInput
 
-api = NinjaAPI()
+api = NinjaAPI(csrf=False)
 
 
 @api.get("/products/{product_id}/reviews/{review_id}")

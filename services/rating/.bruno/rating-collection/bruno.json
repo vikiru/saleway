@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "Product Collection",
+  "name": "Rating and Review Collection",
   "type": "collection",
   "ignore": [
     "node_modules",
