@@ -1,7 +1,7 @@
-import type { Request } from "express";
+import type { Request } from 'express';
 
 export interface UserRequest extends Request {
-	cartId?: number;
-	cartItemId?: number;
-	userId?: number;
+  cartId?: number;
+  cartItemId?: number;
+  userId?: number;
 }
