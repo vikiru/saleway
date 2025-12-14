@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Product Microservices Collection",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
