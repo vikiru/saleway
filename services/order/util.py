@@ -25,6 +25,6 @@ def order_to_dict(order: Order):
                 'created_at': item.created_at.isoformat(),
                 'updated_at': item.updated_at.isoformat(),
             }
-            for item in order.items
+            for item in getattr(order, 'items', [])
         ],
     }

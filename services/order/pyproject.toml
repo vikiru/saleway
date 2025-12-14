@@ -5,30 +5,14 @@ description = "An order microservice for a fake e-commerce website."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-  "backports-datetime-fromisoformat==2.0.3",
-  "blinker==1.9.0",
-  "click>=8.3.1",
   "flask>=3.1.2",
-  "flask-admin>=2.0.2",
   "flask-cors>=6.0.1",
-  "flask-marshmallow==1.3.0",
-  "flask-sqlalchemy==3.1.1",
-  "greenlet==3.2.2",
-  "gunicorn>=23.0.0",
-  "itsdangerous==2.2.0",
-  "jinja2==3.1.6",
-  "markupsafe>=3.0.3",
-  "marshmallow>=4.1.1",
-  "marshmallow-sqlalchemy==1.4.2",
-  "psycopg2>=2.9.11",
+  "psycopg2-binary>=2.9.11",
   "pydantic>=2.12.5",
   "python-dotenv>=1.2.1",
-  "ruff>=0.14.8",
-  "sqlalchemy>=2.0.44",
   "sqlmodel>=0.0.27",
-  "typing-extensions>=4.15.0",
-  "werkzeug>=3.1.4",
-  "wtforms==3.2.1",
+  "loguru>=0.7.3",
+  "flask-compress>=1.23",
 ]
 
 [dependency-groups]
@@ -38,15 +22,16 @@ dev = [
 ]
 
 [tool.poe.tasks]
-start = "flask run"
+start = "gunicorn -w 4 'app:create_app()"
 dev = "flask run --debug"
 venv-create = "uv venv"
 venv-activate = "source .venv/bin/activate"
 sync = "uv sync"
-typecheck = "basedpyright ."
 update = "uv lock --upgrade"
+typecheck = "basedpyright ."
 format = "ruff format ."
 lint = "ruff check --fix ."
+init-db = "uv run database.py"
 
 [tool.ruff]
 line-length = 120
@@ -67,11 +52,11 @@ select = [
     # isort
     "I",
 ]
-ignore = ["E501", "W291"]
+ignore = ["E501", "W291", "UP017"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["services"]
-known-third-party = ["flask", "flask_admin", "flask_cors", "flask_marshmallow", "flask_sqlalchemy", "gunicorn", "jinja2", "markupsafe", "marshmallow", "psycopg2", "pydantic", "sqlalchemy", "sqlmodel", "werkzeug", "wtforms"]
+known-third-party = ["flask", "flask_compress", "flask_cors", "loguru", "psycopg2", "pydantic", "sqlmodel"]
 
 [tool.ruff.format]
 docstring-code-format = true

@@ -1,14 +1,16 @@
 from flask import Flask
+from flask_compress import Compress
+from flask_cors import CORS
+
 from config import Config
-from extensions import ma, cors
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    ma.init_app(app)
-    cors.init_app(app)
+    Compress(app)
+    CORS(app)
 
     from orders import orders_bp
 

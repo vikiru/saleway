@@ -10,3 +10,8 @@ class Config:
         'DATABASE_URL',
         'postgresql://postgres:password@localhost:5432/ecommerce',
     )
+
+
+if __name__ == '__main__':
+    if not Config.DATABASE_URL:
+        raise ValueError('DATABASE_URL is not set. Please set it in the .env file.')

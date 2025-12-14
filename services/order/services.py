@@ -1,17 +1,62 @@
-from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
 
+from sqlalchemy.orm import selectinload
 from sqlmodel import Session, select
 
-from models import Order, OrderItem, OrderStatus
-from util import order_to_dict
+from models import Order, OrderItem, OrderItemCreate, OrderStatus
+from serializers import serialize_order, serialize_order_item
+
+
+def get_order_item(session: Session, order_id: int, item_id: int):
+    statement = select(OrderItem).where(OrderItem.order_id == order_id, OrderItem.id == item_id)
+    return session.exec(statement).first()
+
+
+def add_item_to_order(session: Session, order_id: int, item_data: OrderItemCreate):
+    order = session.get(Order, order_id)
+    if not order:
+        return None
+
+    product_total_price = item_data.product_unit_price * item_data.product_quantity
+
+    order_item = OrderItem(
+        order_id=order_id,
+        product_id=item_data.product_id,
+        product_name=item_data.product_name,
+        product_brand=item_data.product_brand,
+        product_description=item_data.product_description,
+        product_image=item_data.product_image,
+        product_unit_price=item_data.product_unit_price,
+        product_total_price=product_total_price,
+        product_quantity=item_data.product_quantity,
+    )
+
+    session.add(order_item)
+    session.commit()
+    session.refresh(order_item)
+
+    return serialize_order_item(order_item)
+
+
+def remove_item_from_order(session: Session, order_id: int, item_id: int):
+    try:
+        item = get_order_item(session, order_id, item_id)
+        if not item:
+            return False
+
+        session.delete(item)
+        session.commit()
+        return True
+    except Exception as e:
+        session.rollback()
+        raise e
 
 
 def create_order(
     session: Session,
     user_id: int,
-    items_data: list[OrderItem],
+    items_data: list[dict],
     purchase_date: datetime,
     total_price: Decimal,
 ):
@@ -32,20 +77,23 @@ def create_order(
         for item in items_data:
             order_item = OrderItem(
                 order_id=order.id,
-                product_id=item.product_id,
-                product_name=item.product_name,
-                product_brand=item.product_brand,
-                product_description=item.product_description,
-                product_image=item.product_image,
-                product_unit_price=item.product_unit_price,
-                product_total_price=item.product_total_price,
-                product_quantity=item.product_quantity,
+                product_id=item.get('product_id', 1),
+                product_name=item.get('product_name', 'Unknown Product'),
+                product_brand=item.get('product_brand', 'Unknown Brand'),
+                product_description=item.get('product_description', ''),
+                product_image=item.get('product_image', ''),
+                product_unit_price=Decimal(str(item.get('product_unit_price', 0))),
+                product_total_price=Decimal(str(item.get('product_total_price', 0))),
+                product_quantity=item.get('product_quantity', 1),
             )
             items_list.append(order_item)
 
         session.add_all(items_list)
         session.commit()
-        return order
+        session.refresh(order)
+
+        session.refresh(order, ['items'])
+        return serialize_order(order)
     except Exception as err:
         session.rollback()
         raise Exception('Failed to create order') from err
@@ -53,50 +101,37 @@ def create_order(
 
 def get_order_by_id(session: Session, order_id: int):
     try:
-        statement = select(Order, OrderItem).where(Order.id == order_id).join(OrderItem, isouter=True)
-        result = session.exec(statement).all()
+        statement = select(Order).options(selectinload(Order.items)).where(Order.id == order_id)
+        order = session.exec(statement).first()
 
-        order, *_ = result[0]
-        items = [item for _, item in result]
-        order.items = items
-        return order_to_dict(order)
+        return serialize_order(order) if order else None
     except Exception as e:
         raise Exception(f'Failed to get order by ID: {str(e)}') from e
 
 
 def get_orders_by_user_id(session: Session, user_id: int):
-    statement = select(Order, OrderItem).where(Order.user_id == user_id).join(OrderItem, isouter=True)
-    result = session.exec(statement).all()
+    try:
+        statement = select(Order).options(selectinload(Order.items)).where(Order.user_id == user_id)
+        orders = session.exec(statement).all()
 
-    orders_map = defaultdict(list)
-    orders = {}
-
-    for order, item in result:
-        orders[order.id] = order
-        if item:
-            orders_map[order.id].append(item)
-
-    order_list = []
-    for order_id, order in orders.items():
-        items = orders_map.get(order_id, [])
-        order.items = items
-        order_list.append(order_to_dict(order))
-
-    return order_list
+        return [serialize_order(order) for order in orders]
+    except Exception as e:
+        raise Exception(f'Failed to get orders by user ID: {str(e)}') from e
 
 
 def update_order_status(session: Session, order_id: int, new_status: OrderStatus):
-    order = session.get(Order, order_id)
-    if not order:
-        return None
-    order.status = new_status
     try:
+        order = session.get(Order, order_id)
+        if not order:
+            return None
+        order.status = new_status
         session.add(order)
         session.commit()
         session.refresh(order)
-        return order_to_dict(order)
+
+        session.refresh(order, ['items'])
+        return serialize_order(order)
     except Exception as e:
-        session.rollback()
         raise Exception(f'Failed to update order status: {str(e)}') from e
 
 
