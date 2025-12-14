@@ -16,4 +16,4 @@ class ErrorResponse(BaseModel):
     error: str
 
 
-Response = SuccessResponse[T] | ErrorResponse
+ServiceResponse = SuccessResponse[T] | ErrorResponse
