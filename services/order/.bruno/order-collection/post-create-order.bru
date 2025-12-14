@@ -1,0 +1,32 @@
+meta {
+  name: Create Order 1
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5000/orders
+}
+
+body {
+  {
+    "user_id": 1,
+    "items": [
+      {
+        "product_id": 1,
+        "product_name": "Laptop",
+        "product_unit_price": 999.99,
+        "product_total_price": 999.99,
+        "product_quantity": 1
+      }
+    ],
+    "purchase_date": "2025-12-13T23:00:00Z",
+    "total_price": 999.99
+  }
+}
+
+headers {
+  content-type: application/json
+}
+
+

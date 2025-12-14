@@ -1,0 +1,13 @@
+meta {
+  name: Delete Order Item
+  type: http
+  seq: 10
+}
+
+delete {
+  url: http://localhost:5000/orders/1/items/1
+}
+
+headers {
+  content-type: application/json
+}

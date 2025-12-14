@@ -1,0 +1,30 @@
+meta {
+  name: Create Order 2
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:5000/orders
+}
+
+body {
+  {
+    "user_id": 1,
+    "items": [
+      {
+        "product_id": 2,
+        "product_name": "Mouse",
+        "product_unit_price": 29.99,
+        "product_total_price": 59.98,
+        "product_quantity": 2
+      }
+    ],
+    "purchase_date": "2025-12-13T23:00:00Z",
+    "total_price": 59.98
+  }
+}
+
+headers {
+  content-type: application/json
+}

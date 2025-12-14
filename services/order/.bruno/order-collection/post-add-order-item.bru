@@ -1,0 +1,25 @@
+meta {
+  name: Add Order Item
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:5000/orders/1/items
+}
+
+body {
+  {
+    "product_id": 2,
+    "product_name": "Mouse",
+    "product_brand": "Logitech",
+    "product_description": "Wireless optical mouse",
+    "product_image": "https://example.com/mouse.jpg",
+    "product_unit_price": 29.99,
+    "product_quantity": 1
+  }
+}
+
+headers {
+  content-type: application/json
+}

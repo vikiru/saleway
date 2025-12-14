@@ -1,0 +1,19 @@
+meta {
+  name: Update Order Status
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:5000/orders/1
+}
+
+body {
+  {
+    "status": "completed"
+  }
+}
+
+headers {
+  content-type: application/json
+}
