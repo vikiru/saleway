@@ -21,11 +21,7 @@ def create_order_route():
     try:
         payload = request.get_json()
         if not payload:
-            return jsonify(
-                ErrorResponse(
-                    success=False, error='No data provided'
-                ).model_dump()
-            ), 400
+            return jsonify(ErrorResponse(success=False, error='No data provided').model_dump()), 400
 
         validated_data = Order.model_validate(payload)
 
@@ -47,11 +43,7 @@ def create_order_route():
         ), 201
 
     except ValidationError:
-        return jsonify(
-            ErrorResponse(
-                success=False, error='Invalid input format or missing fields.'
-            ).model_dump()
-        ), 400
+        return jsonify(ErrorResponse(success=False, error='Invalid input format or missing fields.').model_dump()), 400
     except Exception:
         return jsonify(
             ErrorResponse(
@@ -67,18 +59,10 @@ def get_order_route(order_id: int):
         with get_session() as session:
             order = get_order_by_id(session=session, order_id=order_id)
         if not order:
-            return jsonify(
-                ErrorResponse(
-                    success=False, error='Order not found'
-                ).model_dump()
-            ), 404
+            return jsonify(ErrorResponse(success=False, error='Order not found').model_dump()), 404
 
         print(order)
-        return jsonify(
-            SuccessResponse(
-                success=True, message='Order retrieved', data=order
-            ).model_dump()
-        ), 200
+        return jsonify(SuccessResponse(success=True, message='Order retrieved', data=order).model_dump()), 200
     except Exception:
         return jsonify(
             ErrorResponse(
@@ -95,16 +79,8 @@ def get_orders_by_user_route(user_id: int):
             orders = get_orders_by_user_id(session=session, user_id=user_id)
 
         if len(orders) == 0:
-            return jsonify(
-                ErrorResponse(
-                    success=False, error='No orders found'
-                ).model_dump()
-            ), 404
-        return jsonify(
-            SuccessResponse(
-                data=orders, success=True, message='Orders retrieved'
-            ).model_dump()
-        ), 200
+            return jsonify(ErrorResponse(success=False, error='No orders found').model_dump()), 404
+        return jsonify(SuccessResponse(data=orders, success=True, message='Orders retrieved').model_dump()), 200
     except Exception:
         return jsonify(
             ErrorResponse(
@@ -120,26 +96,14 @@ def update_order_route(order_id: int):
     try:
         data = request.get_json()
         if not data or 'status' not in data:
-            return jsonify(
-                ErrorResponse(
-                    success=False, error='Missing required fields'
-                ).model_dump()
-            ), 400
+            return jsonify(ErrorResponse(success=False, error='Missing required fields').model_dump()), 400
         new_status = OrderStatus(data['status'])
         with get_session() as session:
-            updated_order = update_order_status(
-                session=session, order_id=order_id, new_status=new_status
-            )
+            updated_order = update_order_status(session=session, order_id=order_id, new_status=new_status)
         if not updated_order:
-            return jsonify(
-                ErrorResponse(
-                    success=False, error='Order not found'
-                ).model_dump()
-            ), 404
+            return jsonify(ErrorResponse(success=False, error='Order not found').model_dump()), 404
         return jsonify(
-            SuccessResponse(
-                success=True, message='Order status updated', data=updated_order
-            ).model_dump()
+            SuccessResponse(success=True, message='Order status updated', data=updated_order).model_dump()
         ), 200
     except Exception:
         return jsonify(
@@ -156,16 +120,8 @@ def delete_order_route(order_id: int):
         with get_session() as session:
             success = delete_order(session=session, order_id=order_id)
         if not success:
-            return jsonify(
-                ErrorResponse(
-                    success=False, error='Order not found'
-                ).model_dump()
-            ), 404
-        return jsonify(
-            SuccessResponse(
-                success=True, message='Order deleted', data=order_id
-            ).model_dump()
-        ), 200
+            return jsonify(ErrorResponse(success=False, error='Order not found').model_dump()), 404
+        return jsonify(SuccessResponse(success=True, message='Order deleted', data=order_id).model_dump()), 200
     except Exception:
         return jsonify(
             ErrorResponse(

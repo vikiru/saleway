@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from enum import Enum as PythonEnum
 from typing import override
+
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -24,15 +25,9 @@ class Order(SQLModel, table=True):
     expected_delivery_date: datetime
     total_price: Decimal
     status: OrderStatus = Field(default=OrderStatus.PENDING)
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
-    updated_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
-    items: list['OrderItem'] = Relationship(
-        back_populates='order', sa_relationship_kwargs={'cascade': 'all'}
-    )
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    items: list['OrderItem'] = Relationship(back_populates='order', sa_relationship_kwargs={'cascade': 'all'})
 
 
 # Table name: 'orderitem'
@@ -47,10 +42,6 @@ class OrderItem(SQLModel, table=True):
     product_unit_price: Decimal
     product_total_price: Decimal
     product_quantity: int
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
-    updated_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     order: Order | None = Relationship(back_populates='items')

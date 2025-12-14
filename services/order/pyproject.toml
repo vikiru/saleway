@@ -1,7 +1,7 @@
 [project]
 name = "order"
 version = "0.1.0"
-description = "Order microservice for a fake e-commerce website."
+description = "An order microservice for a fake e-commerce website."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -31,8 +31,47 @@ dependencies = [
   "wtforms==3.2.1",
 ]
 
+[dependency-groups]
+dev = [
+    "poethepoet>=0.38.0",
+    "ruff>=0.14.8",
+]
+
+[tool.poe.tasks]
+start = "flask run"
+dev = "flask run --debug"
+venv-create = "uv venv"
+venv-activate = "source .venv/bin/activate"
+sync = "uv sync"
+typecheck = "basedpyright ."
+update = "uv lock --upgrade"
+format = "ruff format ."
+lint = "ruff check --fix ."
+
 [tool.ruff]
-line-length = 80
+line-length = 120
+fix = true
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501", "W291"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["services"]
+known-third-party = ["flask", "flask_admin", "flask_cors", "flask_marshmallow", "flask_sqlalchemy", "gunicorn", "jinja2", "markupsafe", "marshmallow", "psycopg2", "pydantic", "sqlalchemy", "sqlmodel", "werkzeug", "wtforms"]
 
 [tool.ruff.format]
 docstring-code-format = true
