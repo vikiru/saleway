@@ -15,6 +15,8 @@ dependencies = [
   "psycopg2-binary",
   "requests",
   "pydantic",
+  "gunicorn>=23.0.0",
+  "loguru>=0.7.3",
 ]
 
 [dependency-groups]
@@ -24,8 +26,8 @@ dev = [
 ]
 
 [tool.poe.tasks]
-start = "python manage.py runserver"
-dev = "python manage.py runserver --debug"
+start = "uv run gunicorn user.wsgi --workers 4"
+dev = "uv run python manage.py runserver --settings=user.settings --traceback"
 venv-create = "uv venv"
 venv-activate = "source .venv/bin/activate"
 sync = "uv sync"
@@ -33,6 +35,9 @@ typecheck = "basedpyright ."
 update = "uv lock --upgrade"
 format = "ruff format ."
 lint = "ruff check --fix ."
+init-db = "uv run manage.py migrate"
+create-migrations = "uv run manage.py makemigrations"
+reset-db = "sh -c 'uv run manage.py flush --noinput && uv run manage.py migrate'"
 
 [tool.ruff]
 line-length = 120

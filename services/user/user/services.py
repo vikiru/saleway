@@ -1,5 +1,6 @@
-from .models import EcommerceUser, EcommerceUserInput, ServiceResponse
 from utils.user import extract_user
+
+from .models import EcommerceUser, EcommerceUserInput, ServiceResponse
 
 
 def create_user(first_name, last_name, username, email, password) -> ServiceResponse:
@@ -7,7 +8,7 @@ def create_user(first_name, last_name, username, email, password) -> ServiceResp
         if get_user_by_email(email) or get_user_by_username(username):
             return ServiceResponse(
                 data={},
-                error="User already exists. Please enter a different username or email.",
+                error='User already exists. Please enter a different username or email.',
             )
 
         user = EcommerceUser.objects.create(
@@ -18,7 +19,7 @@ def create_user(first_name, last_name, username, email, password) -> ServiceResp
             password=password,
         )
         data = extract_user(user)
-        return ServiceResponse(data=data, error="")
+        return ServiceResponse(data=data, error='')
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
 
@@ -27,17 +28,16 @@ def modify_user(id: int, updated_user: EcommerceUserInput) -> ServiceResponse:
     try:
         user = EcommerceUser.objects.filter(id=id).first()
         if not user:
-            return ServiceResponse(data={}, error="User not found")
+            return ServiceResponse(data={}, error='User not found')
 
         updated_data = updated_user.dict()
         for attr, value in updated_data.items():
             if value:
-                print(attr, value)
                 setattr(user, attr, value)
         user.save()
 
         data = extract_user(user)
-        return ServiceResponse(data=data, error="")
+        return ServiceResponse(data=data, error='')
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
 
@@ -47,11 +47,11 @@ def remove_user(id: int) -> ServiceResponse:
         user = EcommerceUser.objects.filter(id=id).first()
 
         if not user:
-            return ServiceResponse(data={}, error="User not found")
+            return ServiceResponse(data={}, error='User not found')
 
         user.delete()
 
-        return ServiceResponse(data={}, error="")
+        return ServiceResponse(data={}, error='')
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
 

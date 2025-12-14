@@ -1,8 +1,9 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.hashers import make_password
-from ninja import Schema
 import json
+
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from ninja import Schema
 
 
 class EcommerceUser(AbstractUser):
@@ -17,8 +18,8 @@ class EcommerceUser(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "password"]
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'password']
 
     def save(self, *args, **kwargs):
         if self.password:
@@ -30,11 +31,11 @@ class EcommerceUser(AbstractUser):
 
 
 class EcommerceUserInput(Schema):
-    first_name: str = ""
-    last_name: str = ""
-    username: str = ""
-    email: str = ""
-    password: str = ""
+    first_name: str = ''
+    last_name: str = ''
+    username: str = ''
+    email: str = ''
+    password: str = ''
 
 
 class EcommerceUserOutput(Schema):
@@ -46,11 +47,11 @@ class EcommerceUserOutput(Schema):
 
     def to_dict(self):
         return {
-            "id": self.id,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "username": self.username,
-            "email": self.email,
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'username': self.username,
+            'email': self.email,
         }
 
 
@@ -59,7 +60,7 @@ class UserCredentials(Schema):
     password: str
 
     def to_dict(self):
-        return {"email": self.email, "password": self.password}
+        return {'email': self.email, 'password': self.password}
 
 
 class ApiResponse(Schema):
@@ -71,11 +72,11 @@ class ApiResponse(Schema):
 
     def to_dict(self):
         return {
-            "message": self.message,
-            "status": self.status,
-            "data": self.data,
-            "error": self.error,
-            "success": self.success,
+            'message': self.message,
+            'status': self.status,
+            'data': self.data,
+            'error': self.error,
+            'success': self.success,
         }
 
 
@@ -84,4 +85,4 @@ class ServiceResponse(Schema):
     error: str = None
 
     def to_dict(self):
-        return {"data": self.data, "error": self.error}
+        return {'data': self.data, 'error': self.error}
