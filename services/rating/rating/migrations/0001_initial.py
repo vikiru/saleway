@@ -4,41 +4,40 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name="UserReview",
+            name='UserReview',
             fields=[
                 (
-                    "id",
+                    'id',
                     models.BigAutoField(
                         auto_created=True,
                         primary_key=True,
                         serialize=False,
-                        verbose_name="ID",
+                        verbose_name='ID',
                     ),
                 ),
-                ("user_id", models.IntegerField()),
-                ("product_id", models.IntegerField()),
-                ("title", models.CharField(max_length=255)),
-                ("author", models.CharField(max_length=255)),
-                ("review", models.TextField()),
-                ("rating", models.IntegerField()),
-                ("date_reviewed", models.DateTimeField(auto_now_add=True)),
-                ("date_purchased", models.DateTimeField()),
+                ('user_id', models.IntegerField()),
+                ('product_id', models.IntegerField()),
+                ('title', models.CharField(max_length=255)),
+                ('author', models.CharField(max_length=255)),
+                ('review', models.TextField()),
+                ('rating', models.IntegerField()),
+                ('date_reviewed', models.DateTimeField(auto_now_add=True)),
+                ('date_purchased', models.DateTimeField()),
             ],
             options={
-                "constraints": [
+                'constraints': [
                     models.CheckConstraint(
-                        condition=models.Q(("rating__gte", 1), ("rating__lte", 5)),
-                        name="rating_range",
+                        condition=models.Q(('rating__gte', 1), ('rating__lte', 5)),
+                        name='rating_range',
                     )
                 ],
-                "unique_together": {("user_id", "product_id")},
+                'unique_together': {('user_id', 'product_id')},
             },
         ),
     ]

@@ -1,7 +1,8 @@
+import json
 from datetime import datetime
+
 from django.db import models
 from ninja import Schema
-import json
 
 
 class UserReview(models.Model):

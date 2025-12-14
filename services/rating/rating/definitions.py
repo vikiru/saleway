@@ -1,17 +1,17 @@
-from typing import Generic, TypeVar
+from typing import TypeVar
 
-from ninja import Schema
+from pydantic import BaseModel
 
 T = TypeVar('T')
 
 
-class SuccessResponse(Schema, Generic[T]):
+class SuccessResponse[T](BaseModel):
     success: bool
     message: str
     data: T
 
 
-class ErrorResponse(Schema):
+class ErrorResponse(BaseModel):
     success: bool
     error: str
 
