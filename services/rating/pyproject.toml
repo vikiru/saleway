@@ -16,13 +16,49 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["ruff>=0.14.8"]
+dev = [
+    "poethepoet>=0.38.0",
+    "ruff>=0.14.8",
+]
+
+[tool.poe.tasks]
+start = "python manage.py runserver"
+dev = "python manage.py runserver --debug"
+venv-create = "uv venv"
+venv-activate = "source .venv/bin/activate"
+sync = "uv sync"
+typecheck = "basedpyright ."
+update = "uv lock --upgrade"
+format = "ruff format ."
+lint = "ruff check --fix ."
 
 [tool.ruff]
-line-length = 80
+line-length = 120
+fix = true
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501", "W291"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["services"]
+known-third-party = ["django", "corsheaders", "environ", "extensions", "ninja", "psycopg2", "requests", "pydantic"]
 
 [tool.ruff.format]
 docstring-code-format = true
-quote-style = 'single'
-line-ending = 'lf'
+quote-style = "single"
+line-ending = "lf"
 skip-magic-trailing-comma = false

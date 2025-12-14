@@ -1,7 +1,9 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
-from sqlmodel import select, Session
+
+from sqlmodel import Session, select
+
 from models import Order, OrderItem, OrderStatus
 from util import order_to_dict
 
@@ -44,34 +46,26 @@ def create_order(
         session.add_all(items_list)
         session.commit()
         return order
-    except Exception:
+    except Exception as err:
         session.rollback()
-        raise Exception('Failed to create order')
+        raise Exception('Failed to create order') from err
 
 
 def get_order_by_id(session: Session, order_id: int):
     try:
-        statement = (
-            select(Order, OrderItem)
-            .where(Order.id == order_id)
-            .join(OrderItem, isouter=True)
-        )
+        statement = select(Order, OrderItem).where(Order.id == order_id).join(OrderItem, isouter=True)
         result = session.exec(statement).all()
 
         order, *_ = result[0]
         items = [item for _, item in result]
-        setattr(order, 'items', items)
+        order.items = items
         return order_to_dict(order)
     except Exception as e:
-        raise Exception(f'Failed to get order by ID: {str(e)}')
+        raise Exception(f'Failed to get order by ID: {str(e)}') from e
 
 
 def get_orders_by_user_id(session: Session, user_id: int):
-    statement = (
-        select(Order, OrderItem)
-        .where(Order.user_id == user_id)
-        .join(OrderItem, isouter=True)
-    )
+    statement = select(Order, OrderItem).where(Order.user_id == user_id).join(OrderItem, isouter=True)
     result = session.exec(statement).all()
 
     orders_map = defaultdict(list)
@@ -85,15 +79,13 @@ def get_orders_by_user_id(session: Session, user_id: int):
     order_list = []
     for order_id, order in orders.items():
         items = orders_map.get(order_id, [])
-        setattr(order, 'items', items)
+        order.items = items
         order_list.append(order_to_dict(order))
 
     return order_list
 
 
-def update_order_status(
-    session: Session, order_id: int, new_status: OrderStatus
-):
+def update_order_status(session: Session, order_id: int, new_status: OrderStatus):
     order = session.get(Order, order_id)
     if not order:
         return None
@@ -105,7 +97,7 @@ def update_order_status(
         return order_to_dict(order)
     except Exception as e:
         session.rollback()
-        raise Exception(f'Failed to update order status: {str(e)}')
+        raise Exception(f'Failed to update order status: {str(e)}') from e
 
 
 def delete_order(session: Session, order_id: int) -> bool:
@@ -118,4 +110,4 @@ def delete_order(session: Session, order_id: int) -> bool:
         return True
     except Exception as e:
         session.rollback()
-        raise Exception(f'Failed to delete order: {str(e)}')
+        raise Exception(f'Failed to delete order: {str(e)}') from e
