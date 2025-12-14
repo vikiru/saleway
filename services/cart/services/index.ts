@@ -107,7 +107,7 @@ export async function deleteCartItemById(userId: string, itemId: string) {
 
     const itemPrice = item.totalPrice;
     await prisma.cartItem.delete({
-      where: { cartId: cartId, cartItemId: itemId },
+      where: { cartItemId: itemId },
     });
     const updatedCart = await prisma.cart.update({
       where: { userId },
@@ -158,7 +158,7 @@ export async function updateCartItemById(
 
     const itemPrice = item.totalPrice;
     await prisma.cartItem.update({
-      where: { cartId: cartId, cartItemId: updatedItem.cartItemId },
+      where: { cartItemId: updatedItem.cartItemId },
       data: updatedItem,
     });
     const updatedCart = await prisma.cart.update({

@@ -40,3 +40,8 @@ model CartItem {
     @@index([productId])
     @@index([cartId])
 }
+
+// Run 'pnpm prisma generate' # Generate Prisma Client
+// Run 'pnpm prisma migrate dev --name init' # Create + apply migration (prompts for name if omitted)
+// Run 'pnpm prisma migrate status' # Check migration history/drift
+// Run 'pnpm prisma studio' # Open Prisma Studio
