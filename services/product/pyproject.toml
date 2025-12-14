@@ -35,6 +35,16 @@ format = "ruff format ."
 lint = "ruff check --fix ."
 init-db = "uv run database.py"
 seed = "uv run seed.py"
+create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABASE product_service;\""
+
+# FastAPI Service Startup Process:
+# 1) source .venv/bin/activate  # Activate virtual environment
+# 2) uv sync                     # Install Python packages
+# 3) poe create-db               # Create PostgreSQL database (if not already)
+# 4) poe init-db                 # Initialize database with tables
+# 5) poe seed                    # Seed database with sample data
+# 6) poe dev                     # Start development server
+#    or poe start                # Start production server
 
 [tool.ruff]
 line-length = 120

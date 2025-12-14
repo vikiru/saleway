@@ -2,6 +2,7 @@ import json
 import os
 from decimal import Decimal
 
+from sqlalchemy import text
 from sqlmodel import Session
 
 from database import engine, init_db
@@ -30,8 +31,8 @@ def seed_database():
     with Session(engine) as session:
         session.query(ProductImage).delete()
         session.query(Product).delete()
-        session.execute('ALTER SEQUENCE product_id_seq RESTART WITH 1')
-        session.execute('ALTER SEQUENCE productimage_id_seq RESTART WITH 1')
+        session.execute(text('ALTER SEQUENCE product_id_seq RESTART WITH 1'))
+        session.execute(text('ALTER SEQUENCE productimage_id_seq RESTART WITH 1'))
         session.commit()
 
     with Session(engine) as session:
