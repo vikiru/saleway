@@ -10,7 +10,7 @@
 		"lint:ts": "biome lint",
 		"format:ts": "biome check --write",
 		"lint:python": "ruff check services/**/*.py",
-    "format:python": "ruff check services/**/*.py --fix && ruff format services/**/*.py",
+		"format:python": "ruff check services/**/*.py --fix && ruff format services/**/*.py",
 		"lint:java": "cd services/payment && mvn checkstyle:check",
 		"format:java": "cd services/payment && mvn google-java-format:format"
 	},
