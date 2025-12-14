@@ -1,0 +1,22 @@
+meta {
+  name: Update User 1 (John Doe)
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:8000/api/users/1
+}
+
+body {
+  {
+    "first_name": "John",
+    "last_name": "Smith",
+    "username": "johnsmith",
+    "email": "johnsmith@example.com"
+  }
+}
+
+headers {
+  content-type: application/json
+}

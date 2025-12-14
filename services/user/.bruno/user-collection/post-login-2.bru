@@ -1,0 +1,20 @@
+meta {
+  name: Post Login (Bob Doe)
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8000/api/auth/login
+}
+
+body {
+  {
+    "email": "bob@example.com",
+    "password": "password"
+  }
+}
+
+headers {
+  content-type: application/json
+}

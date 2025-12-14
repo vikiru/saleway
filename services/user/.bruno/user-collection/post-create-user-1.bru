@@ -1,0 +1,23 @@
+meta {
+  name: Create User 1 (for auth flow)
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8000/api/users
+}
+
+body {
+  {
+    "first_name": "John",
+    "last_name": "Doe",
+    "username": "johndoe",
+    "email": "john@example.com",
+    "password": "password"
+  }
+}
+
+headers {
+  content-type: application/json
+}
