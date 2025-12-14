@@ -1,0 +1,23 @@
+meta {
+  name: Add Item to Cart
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/api/v1/cart/user/1/item
+}
+
+body {
+  [
+    {
+      "productId": "1",
+      "quantity": 2,
+      "totalPrice": 59.98
+    }
+  ]
+}
+
+headers {
+  content-type: application/json
+}

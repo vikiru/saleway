@@ -1,0 +1,19 @@
+meta {
+  name: Create Cart
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/v1/cart/user/1
+}
+
+body {
+  {
+    "totalPrice": 0
+  }
+}
+
+headers {
+  content-type: application/json
+}

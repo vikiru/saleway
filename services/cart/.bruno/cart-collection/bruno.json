@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Cart Collection",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
