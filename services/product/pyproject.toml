@@ -33,6 +33,8 @@ typecheck = "basedpyright ."
 update = "uv lock --upgrade"
 format = "ruff format ."
 lint = "ruff check --fix ."
+init-db = "uv run database.py"
+seed = "uv run seed.py"
 
 [tool.ruff]
 line-length = 120
