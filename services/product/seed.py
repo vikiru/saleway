@@ -30,6 +30,8 @@ def seed_database():
     with Session(engine) as session:
         session.query(ProductImage).delete()
         session.query(Product).delete()
+        session.execute('ALTER SEQUENCE product_id_seq RESTART WITH 1')
+        session.execute('ALTER SEQUENCE productimage_id_seq RESTART WITH 1')
         session.commit()
 
     with Session(engine) as session:
@@ -62,4 +64,4 @@ def seed_database():
 
 
 if __name__ == '__main__':
-    print('OOGA BOOGA')
+    seed_database()

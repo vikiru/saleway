@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 _ = load_dotenv()
@@ -11,6 +12,7 @@ class Config:
     )
     GEMINI_API_KEY: str | None = os.getenv('GEMINI_API_KEY')
     ENVIRONMENT: str = os.getenv('ENVIRONMENT', 'development')
+
 
 if __name__ == '__main__':
     if not Config.DATABASE_URL:
