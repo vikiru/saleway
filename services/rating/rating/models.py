@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from ninja import Schema
 import json
@@ -10,8 +11,14 @@ class UserReview(models.Model):
     author = models.CharField(max_length=255)
     review = models.TextField()
     rating = models.IntegerField()
-    date_reviewed = models.DateTimeField()
+    date_reviewed = models.DateTimeField(auto_now_add=True)
     date_purchased = models.DateTimeField()
+
+    class Meta:
+        unique_together = ['user_id', 'product_id']
+        constraints = [
+            models.CheckConstraint(condition=models.Q(rating__gte=1) & models.Q(rating__lte=5), name='rating_range')
+        ]
 
     def __str__(self):
         return json.dumps(self)
@@ -24,21 +31,17 @@ class UserReviewInput(Schema):
     rating: int
     title: str
     author: str
-    review: str
-    rating: int
-    date_reviewed: str
-    date_purchased: str
+    date_purchased: datetime
 
     def to_dict(self):
         return {
-            "user_id": self.user_id,
-            "product_id": self.product_id,
-            "review": self.review,
-            "rating": self.rating,
-            "title": self.title,
-            "author": self.author,
-            "date_reviewed": self.date_reviewed,
-            "date_purchased": self.date_purchased,
+            'user_id': self.user_id,
+            'product_id': self.product_id,
+            'review': self.review,
+            'rating': self.rating,
+            'title': self.title,
+            'author': self.author,
+            'date_purchased': self.date_purchased,
         }
 
 
@@ -50,43 +53,18 @@ class UserReviewOutput(Schema):
     author: str
     review: str
     rating: int
-    date_reviewed: str
-    date_purchased: str
+    date_reviewed: datetime
+    date_purchased: datetime
 
     def to_dict(self):
         return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "product_id": self.product_id,
-            "title": self.title,
-            "author": self.author,
-            "review": self.review,
-            "rating": self.rating,
-            "date_reviewed": self.date_reviewed,
-            "date_purchased": self.date_purchased,
+            'id': self.id,
+            'user_id': self.user_id,
+            'product_id': self.product_id,
+            'title': self.title,
+            'author': self.author,
+            'review': self.review,
+            'rating': self.rating,
+            'date_reviewed': self.date_reviewed,
+            'date_purchased': self.date_purchased,
         }
-
-
-class ApiResponse(Schema):
-    message: str
-    status: int
-    data: dict
-    error: str
-    success: bool
-
-    def to_dict(self):
-        return {
-            "message": self.message,
-            "status": self.status,
-            "data": self.data,
-            "error": self.error,
-            "success": self.success,
-        }
-
-
-class ServiceResponse(Schema):
-    data: dict
-    error: str = None
-
-    def to_dict(self):
-        return {"data": self.data, "error": self.error}

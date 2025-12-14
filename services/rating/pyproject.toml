@@ -13,6 +13,7 @@ dependencies = [
   "psycopg2-binary",
   "requests",
   "pydantic",
+  "gunicorn>=23.0.0",
 ]
 
 [dependency-groups]
@@ -22,8 +23,8 @@ dev = [
 ]
 
 [tool.poe.tasks]
-start = "python manage.py runserver"
-dev = "python manage.py runserver --debug"
+start = "uv run gunicorn rating.wsgi --workers 4"
+dev = "uv run python manage.py runserver --settings=rating.settings --traceback"
 venv-create = "uv venv"
 venv-activate = "source .venv/bin/activate"
 sync = "uv sync"
@@ -31,6 +32,18 @@ typecheck = "basedpyright ."
 update = "uv lock --upgrade"
 format = "ruff format ."
 lint = "ruff check --fix ."
+migrate = "uv run manage.py migrate"
+create-migrations = "uv run manage.py makemigrations"
+reset-db = "sh -c 'uv run manage.py flush --noinput && uv run manage.py migrate'"
+
+# Django Service Startup Process:
+# 1) source .venv/bin/activate  # Activate virtual environment
+# 2) uv sync                     # Install Python packages
+# 3) poe create-db               # Create PostgreSQL database (if not already)
+# 4) poe create-migrations       # Create Django migrations
+# 5) poe migrate                 # Apply Django migrations
+# 6) poe dev                     # Start development server
+#    or poe start                # Start production server
 
 [tool.ruff]
 line-length = 120
