@@ -25,13 +25,14 @@ public class SecurityConfig {
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
-            authz -> authz
-                .requestMatchers("/health")
-                .permitAll()
-                .requestMatchers("/api/checkout/**", "/api/refund/**")
-                .authenticated()
-                .anyRequest()
-                .denyAll())
+            authz ->
+                authz
+                    .requestMatchers("/health")
+                    .permitAll()
+                    .requestMatchers("/api/checkout/**", "/api/refund/**")
+                    .authenticated()
+                    .anyRequest()
+                    .denyAll())
         .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
     return http.build();

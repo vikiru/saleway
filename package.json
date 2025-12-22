@@ -10,8 +10,8 @@
 		"format:ts": "biome check --write",
 		"lint:python": "ruff check services/**/*.py",
 		"format:python": "ruff check services/**/*.py --fix && ruff format services/**/*.py",
-		"lint:java": "cd services/payment && mvn checkstyle:check",
-		"format:java": "cd services/payment && mvn google-java-format:format",
+		"lint:java": "cd services/payment && mvn validate",
+		"format:java": "cd services/payment && mvn fmt:format",
 		"bruno:product": "cd services/product/.bruno/product-collection && bru run",
 		"bruno:order": "cd services/order/.bruno/order-collection && bru run",
 		"bruno:user": "cd services/user/.bruno/user-collection && bru run",
@@ -19,7 +19,7 @@
 		"bruno:payment": "cd services/payment/.bruno/payment-collection && bru run",
 		"bruno:cart": "cd services/cart/.bruno/cart-collection && bru run",
 		"unused": "knip",
-    "postinstall": "lefthook install"
+		"postinstall": "lefthook install"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.7",
