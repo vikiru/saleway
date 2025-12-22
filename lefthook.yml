@@ -14,7 +14,7 @@ pre-commit:
       run: pnpm lint:python {staged_files}
     - name: Validate Java
       glob: "*.java"
-      run: pnpm lint:java {staged_files}
+      run: pnpm lint:java
 commit-msg:
   jobs:
     - name: Validate commit-msg with commitlint
