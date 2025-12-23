@@ -3,6 +3,7 @@ import { logger } from '@/config/logger';
 import type { CartItem } from '@/generated/prisma';
 import * as CartService from '@/services/index';
 import type { UserRequest } from '@/types/UserRequest';
+import type { ServiceResponse } from '@/types/ApiResponse';
 
 export async function addCartItemsToCart(req: UserRequest, res: Response) {
   const { userId } = req.params;
@@ -10,10 +11,19 @@ export async function addCartItemsToCart(req: UserRequest, res: Response) {
   try {
     const cart = await CartService.addCartItemsToCart(userId, cartItems);
     logger.info('Successfully added items to the cart.');
-    return res.status(201).json(cart);
+    const response: ServiceResponse<typeof cart> = {
+      success: true,
+      message: 'Items added to cart successfully',
+      data: cart
+    };
+    return res.status(201).json(response);
   } catch (error) {
     logger.error(`An error occurred while adding items to the cart: ${error}`);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    const response = {
+      success: false,
+      error: 'Internal Server Error'
+    };
+    return res.status(500).json(response);
   }
 }
 
@@ -23,14 +33,28 @@ export async function createCart(req: UserRequest, res: Response) {
     const existingCart = await CartService.retrieveCartByUserId(userId);
     if (existingCart) {
       logger.info(`Cart for user ${userId} already exists.`);
-      return res.status(200).json(existingCart);
+      const response: ServiceResponse<typeof existingCart> = {
+        success: true,
+        message: 'Cart retrieved successfully',
+        data: existingCart
+      };
+      return res.status(200).json(response);
     }
     const cart = await CartService.createCartForUser(userId);
     logger.info('Successfully created cart.');
-    return res.status(201).json(cart);
+    const response: ServiceResponse<typeof cart> = {
+      success: true,
+      message: 'Cart created successfully',
+      data: cart
+    };
+    return res.status(201).json(response);
   } catch (error) {
     logger.error(`An error occurred while creating the cart: ${error}`);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    const response = {
+      success: false,
+      error: 'Internal Server Error'
+    };
+    return res.status(500).json(response);
   }
 }
 
@@ -39,12 +63,25 @@ export async function deleteCartByUserId(req: UserRequest, res: Response) {
   try {
     const cart = await CartService.deleteCartByUserId(userId);
     if (!cart) {
-      return res.status(404).json({ message: 'Cart not found.' });
+      const response = {
+        success: false,
+        error: 'Cart not found'
+      };
+      return res.status(404).json(response);
     }
-    return res.status(200).json({ message: 'Cart deleted successfully.' });
+    const response = {
+      success: true,
+      message: 'Cart deleted successfully',
+      data: { message: 'Cart deleted successfully.' }
+    };
+    return res.status(200).json(response);
   } catch (error) {
     logger.error(`An error occurred while deleting the cart: ${error}`);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    const response = {
+      success: false,
+      error: 'Internal Server Error'
+    };
+    return res.status(500).json(response);
   }
 }
 
@@ -53,13 +90,26 @@ export async function deleteCartItemById(req: UserRequest, res: Response) {
   try {
     const cart = await CartService.deleteCartItemById(userId, cartItemId);
     if (!cart) {
-      return res.status(404).json({ message: 'Item not found in cart.' });
+      const response = {
+        success: false,
+        error: 'Item not found in cart'
+      };
+      return res.status(404).json(response);
     }
     logger.info('Successfully deleted item from cart.');
-    return res.status(200).json(cart);
+    const response: ServiceResponse<typeof cart> = {
+      success: true,
+      message: 'Item deleted from cart successfully',
+      data: cart
+    };
+    return res.status(200).json(response);
   } catch (error) {
     logger.error(`An error occurred while deleting item from cart: ${error}`);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    const response = {
+      success: false,
+      error: 'Internal Server Error'
+    };
+    return res.status(500).json(response);
   }
 }
 
@@ -68,13 +118,26 @@ export async function retrieveCartByUserId(req: UserRequest, res: Response) {
   try {
     const cart = await CartService.retrieveCartByUserId(userId);
     if (!cart) {
-      return res.status(404).json({ message: 'Cart not found.' });
+      const response = {
+        success: false,
+        error: 'Cart not found'
+      };
+      return res.status(404).json(response);
     }
     logger.info('Successfully retrieved cart.');
-    return res.status(200).json(cart);
+    const response: ServiceResponse<typeof cart> = {
+      success: true,
+      message: 'Cart retrieved successfully',
+      data: cart
+    };
+    return res.status(200).json(response);
   } catch (error) {
     logger.error(`An error occurred while retrieving the cart: ${error}`);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    const response = {
+      success: false,
+      error: 'Internal Server Error'
+    };
+    return res.status(500).json(response);
   }
 }
 
@@ -84,12 +147,25 @@ export async function updateCartItemById(req: UserRequest, res: Response) {
   try {
     const cart = await CartService.updateCartItemById(userId, updatedItem);
     if (!cart) {
-      return res.status(404).json({ message: 'Item not found in cart.' });
+      const response = {
+        success: false,
+        error: 'Item not found in cart'
+      };
+      return res.status(404).json(response);
     }
     logger.info('Successfully updated item in cart.');
-    return res.status(200).json(cart);
+    const response: ServiceResponse<typeof cart> = {
+      success: true,
+      message: 'Item updated in cart successfully',
+      data: cart
+    };
+    return res.status(200).json(response);
   } catch (error) {
     logger.error(`An error occurred while updating item in cart: ${error}`);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    const response = {
+      success: false,
+      error: 'Internal Server Error'
+    };
+    return res.status(500).json(response);
   }
 }

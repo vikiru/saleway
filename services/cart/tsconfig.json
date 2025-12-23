@@ -17,7 +17,6 @@
 		"jsx": "preserve",
 		"forceConsistentCasingInFileNames": true,
 		"removeComments": true,
-		"verbatimModuleSyntax": true,
 		"paths": {
 			"@/config/*": ["./config/*"],
 			"@/controllers/*": ["./controllers/*"],
