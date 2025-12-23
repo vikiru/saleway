@@ -1,5 +1,14 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "project": [
+    "frontend/tsconfig.json",
+    "services/cart/tsconfig.json"
+  ],
+  "entry": [
+    "frontend/**/*.{js,mjs,cjs,ts,jsx,tsx,css}",
+    "services/cart/**/*.{js,mjs,cjs,ts,jsx,tsx,css}",
+    "*.{js,mjs,cjs,ts,jsx,tsx}"
+  ],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
   "assist": {
     "actions": {
       "source": {
@@ -14,28 +14,32 @@
   "files": {
     "ignoreUnknown": true,
     "includes": [
-      "frontend/**/*.{ts,tsx,js,jsx,cjs,mjs}",
+      "frontend/src/**/*.ts",
+      "frontend/src/**/*.tsx",
+      "frontend/src/**/*.js",
+      "frontend/src/**/*.jsx",
+      "frontend/src/**/*.cjs",
+      "frontend/src/**/*.mjs",
+      "!frontend/src/lib/db/migrations/*",
       "**/*.mjs",
       "**/*.cjs",
       "*.config.mjs",
       "*.config.cjs",
       "*.config.ts",
       "*.config.js",
+      "**/*.json",
+      "**/*.css",
       "!**/.wrangler",
-      "!/**/.next",
-      "!/**/node_modules",
-      "!/frontend/node_modules",
-      "!/**/dist",
-      "!/**/build",
-      "!/**/public",
-      "!/**/out",
-      "!/**/.git",
-      "!/**/.github",
-      "!/**/*.css",
-      "!/**/*.html",
-      "!/**/*.json",
-      "!/**/*.md",
-      "!/**/*.mdx"
+      "!**/.next",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/build",
+      "!**/public",
+      "!**/out",
+      "!**/.git",
+      "!**/.github",
+      "!**/*.md",
+      "!**/*.mdx"
     ]
   },
   "formatter": {
@@ -48,7 +52,7 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
-    "lineWidth": 80,
+    "lineWidth": 120,
     "useEditorconfig": true
   },
   "javascript": {
@@ -62,7 +66,31 @@
       "semicolons": "always",
       "trailingCommas": "all"
     },
-    "jsxRuntime": "reactClassic"
+    "jsxRuntime": "transparent"
+  },
+  "json": {
+    "parser": {
+      "allowComments": false,
+      "allowTrailingCommas": false
+    },
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
+  "css": {
+    "parser": {
+      "cssModules": false,
+      "tailwindDirectives": true
+    },
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
+    }
   },
   "linter": {
     "domains": {
@@ -74,15 +102,20 @@
     "rules": {
       "recommended": true,
       "a11y": "info",
+      "complexity": "off",
+      "performance": "info",
+      "nursery": "off",
+      "style": {
+        "noDefaultExport": "off",
+        "useNamingConvention": "off"
+      },
       "suspicious": {
         "noConsole": "off",
-        "noReactSpecificProps": "off"
+        "noReactSpecificProps": "off",
+        "noShorthandPropertyOverrides": "off"
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
-      },
-      "nursery": {
-        "recommended": false
       },
       "correctness": {
         "noUndeclaredDependencies": "off",

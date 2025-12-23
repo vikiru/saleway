@@ -1,9 +1,11 @@
 {
 	"compilerOptions": {
-		"target": "ES2017",
+		"target": "esnext",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": true,
+		"skipDefaultLibCheck": true,
 		"skipLibCheck": true,
+		"incremental": true,
 		"strict": true,
 		"noEmit": true,
 		"esModuleInterop": true,
@@ -12,7 +14,9 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
-		"incremental": true,
+		"forceConsistentCasingInFileNames": true,
+		"removeComments": true,
+		"verbatimModuleSyntax": true,
 		"plugins": [
 			{
 				"name": "next"
@@ -20,14 +24,10 @@
 		],
 		"paths": {
 			"@/*": ["./src/*"],
-			"@/config/*": ["./src/config/*"],
 			"@/lib/*": ["./src/lib/*"],
-			"@/hooks/*": ["./src/hooks/*"],
-			"@/types/*": ["./src/types/*"],
-			"@/gemini/*": ["./src/gemini/*"],
-			"@/components/*": ["./src/components/*"]
+			"@/features/*": ["./src/features/*"]
 		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-	"exclude": ["node_modules"]
+	"include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "*.config.ts", ".next/types/**/*.ts"],
+	"exclude": ["node_modules", ".next", ".git", "dist"]
 }
