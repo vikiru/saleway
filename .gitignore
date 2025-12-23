@@ -1,6 +1,11 @@
 # Extra
-todos.md
 .vscode/
+todos.md
+
+!frontend/lib/
+!frontend/src/lib/
+!frontend/src/types/
+
 
 # Logs
 logs
@@ -151,6 +156,7 @@ eggs/
 .eggs/
 lib/
 lib64/
+!frontend/lib/
 parts/
 sdist/
 var/

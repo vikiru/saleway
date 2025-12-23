@@ -1,3 +1,7 @@
+.biomecache
+.clerk
+src/data/*.json
+
 ###----------------###
 ###  TopTal: node  ###
 ###----------------###
