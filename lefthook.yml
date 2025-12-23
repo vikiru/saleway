@@ -6,13 +6,13 @@
 pre-commit:
   parallel: true
   jobs:
-    - name: Lint files with Biome.js
+    - name: Lint TypeScript files with Biome.js
       glob: "*.{js,mjs,cjs,ts,jsx,tsx}"
       run: pnpm lint:ts --colors=off {staged_files}
-    - name: Lint files with Ruff
+    - name: Lint Python files with Ruff
       glob: "*.py"
       run: pnpm lint:python {staged_files}
-    - name: Validate Java
+    - name: Lint Java files with Checkstyle
       glob: "*.java"
       run: pnpm lint:java
 commit-msg:
