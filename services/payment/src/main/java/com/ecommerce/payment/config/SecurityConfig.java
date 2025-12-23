@@ -30,7 +30,7 @@ public class SecurityConfig {
                     .requestMatchers("/health")
                     .permitAll()
                     .requestMatchers("/api/checkout/**", "/api/refund/**")
-                    .authenticated()
+                    .permitAll()
                     .anyRequest()
                     .denyAll())
         .cors(cors -> cors.configurationSource(corsConfigurationSource()));

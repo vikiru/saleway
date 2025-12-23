@@ -72,4 +72,4 @@ cors.allowed.origins=http://localhost:3000
 - **Insufficient funds**: `4000 0000 0000 9995`
 - **Expired card**: `4000 0000 0000 0069`
 
-The service will start on port 8083 by default.
+The service will start on port 8080 by default.
