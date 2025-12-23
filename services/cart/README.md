@@ -52,6 +52,8 @@ DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
 - `DELETE /api/cart/items/{itemId}` - Remove item from cart
 - `DELETE /api/cart` - Clear cart
 
+The service will start on port 3000 by default.
+
 ## Development
 
 ```bash

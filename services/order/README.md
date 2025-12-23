@@ -57,6 +57,8 @@ DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
 - `POST /orders/{id}/items` - Add item to order
 - `GET /orders/user/{user_id}` - Get user orders
 
+The service will start on port 5000 by default.
+
 ## Development
 
 ```bash

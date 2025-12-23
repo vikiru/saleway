@@ -59,6 +59,8 @@ DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
 - `DELETE /api/ratings/{id}` - Delete rating
 - `GET /api/ratings/product/{product_id}` - Get product ratings
 
+The service will start on port 8002 by default.
+
 ## Development
 
 ```bash

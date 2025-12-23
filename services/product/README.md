@@ -59,6 +59,8 @@ DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
 - `GET /products/search/{name}` - Search products
 - `GET /health` - Health check
 
+The service will start on port 8000 by default.
+
 ## Development
 
 ```bash

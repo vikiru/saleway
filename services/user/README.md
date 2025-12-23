@@ -61,6 +61,8 @@ DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
 - `POST /api/auth/login` - User login
 - `POST /api/auth/logout` - User logout
 
+The service will start on port 8001 by default.
+
 ## Development
 
 ```bash
