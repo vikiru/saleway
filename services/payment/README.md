@@ -1,10 +1,37 @@
 # Payment Service
 
-Stripe payment processing service for the e-commerce platform.
+Spring Boot-based payment processing service with Stripe integration.
 
-## Configuration
+## Features
+- Stripe Checkout Sessions
+- Payment processing and refunds
 
-Set the following properties in your `src/main/resources/application.properties` file:
+## Tech Stack
+- **Framework**: Spring Boot
+- **Payment**: Stripe Java SDK
+- **Build Tool**: Maven
+
+## Setup
+
+### Spring Boot Service Startup Process:
+1. Install Java 17+ and Maven
+2. Set environment variables (see below)
+3. Build the application: `./mvnw clean compile`
+4. Start development server: `./mvnw spring-boot:run`
+
+```bash
+# Alternative manual setup
+# Install dependencies and build
+./mvnw clean install
+
+# Configure application properties
+# Edit src/main/resources/application.properties with your Stripe keys
+
+# Start the application
+./mvnw spring-boot:run
+```
+
+## Environment Variables
 
 ```properties
 stripe.api.key=sk_test_your_test_key_here
@@ -14,49 +41,29 @@ cors.allowed.origins=http://localhost:3000
 
 ## API Endpoints
 
-All success/error responses follow the `ApiResponse` wrapper structure.
+- `POST /api/checkout/create-session` - Create Stripe checkout session
+- `GET /api/refund/verify?sessionId={id}` - Verify session for refund
+- `POST /api/refund/process` - Process refund
+- `GET /health` - Health check
 
-### Create Checkout Session
-- **POST** `/api/checkout/create-session`
-- **Body**:
-  ```json
-  {
-    "lineItems": [
-      {
-        "name": "Apex Pro Ultra",
-        "description": "High-performance sneakers",
-        "unitAmount": 8000, // amount in cents
-        "currency": "cad",
-        "quantity": 1,
-        "image": "Some image url here"
-      }
-    ],
-    "successUrl": "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",
-    "cancelUrl": "http://localhost:3000/cart",
-    "customerEmail": "customer@example.com",
-    "metadata": { "orderId": "ORD-123" }
-  }
-  ```
-- **Returns**: `sessionId` and `url` for redirect.
+## Development
 
-### Verify Session (Refund Step 1)
-- **GET** `/api/refund/verify?sessionId=cs_test_abc`
-- **Returns**: Validates session and retrieves `paymentIntentId`.
+```bash
+# Run service
+./mvnw spring-boot:run
 
-### Process Refund (Refund Step 2)
-- **POST** `/api/refund/process`
-- **Body**:
-  ```json
-  {
-    "paymentIntentId": "pi_123...",
-    "amount": 12000,
-    "reason": "order_creation_failed"
-  }
-  ```
+# Lint code
+./mvnw validate
 
-### Health Check
-- **GET** `/health`
-- **Returns**: `{ "status": "UP", "message": "Payment service is up and running" }`
+# Format code
+./mvnw fmt:format
+
+# Build/compile
+./mvnw clean compile
+
+# Generate IDE files
+./mvnw eclipse:eclipse
+```
 
 ## Test Cards
 
@@ -64,14 +71,5 @@ All success/error responses follow the `ApiResponse` wrapper structure.
 - **Card declined**: `4000 0000 0000 0002`
 - **Insufficient funds**: `4000 0000 0000 9995`
 - **Expired card**: `4000 0000 0000 0069`
-
-## Development Scripts
-
-Use the following commands with the Maven wrapper:
-
-- **Run Service**: `./mvnw spring-boot:run`
-- **Format Code**: `./mvnw fmt:format` (Uses Google Java Format)
-- **Build/Compile**: `./mvnw clean compile`
-- **Generate IDE Files**: `./mvnw eclipse:eclipse` (Generates Eclipse project files for IDEs/editors)
 
 The service will start on port 8083 by default.
