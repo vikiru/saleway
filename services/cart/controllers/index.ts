@@ -3,7 +3,8 @@ import { logger } from '@/config/logger';
 import type { CartItem } from '@/generated/prisma';
 import * as CartService from '@/services/index';
 import type { UserRequest } from '@/types/UserRequest';
-import type { ServiceResponse } from '@/types/ApiResponse';
+import type { ServiceResponse } from '@/types/ServiceResponse';
+import type { Cart } from '@/types/Cart';
 
 export async function addCartItemsToCart(req: UserRequest, res: Response) {
   const { userId } = req.params;
@@ -11,7 +12,7 @@ export async function addCartItemsToCart(req: UserRequest, res: Response) {
   try {
     const cart = await CartService.addCartItemsToCart(userId, cartItems);
     logger.info('Successfully added items to the cart.');
-    const response: ServiceResponse<typeof cart> = {
+    const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Items added to cart successfully',
       data: cart
@@ -33,7 +34,7 @@ export async function createCart(req: UserRequest, res: Response) {
     const existingCart = await CartService.retrieveCartByUserId(userId);
     if (existingCart) {
       logger.info(`Cart for user ${userId} already exists.`);
-      const response: ServiceResponse<typeof existingCart> = {
+      const response: ServiceResponse<Cart | undefined> = {
         success: true,
         message: 'Cart retrieved successfully',
         data: existingCart
@@ -42,7 +43,7 @@ export async function createCart(req: UserRequest, res: Response) {
     }
     const cart = await CartService.createCartForUser(userId);
     logger.info('Successfully created cart.');
-    const response: ServiceResponse<typeof cart> = {
+    const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Cart created successfully',
       data: cart
@@ -97,7 +98,7 @@ export async function deleteCartItemById(req: UserRequest, res: Response) {
       return res.status(404).json(response);
     }
     logger.info('Successfully deleted item from cart.');
-    const response: ServiceResponse<typeof cart> = {
+    const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Item deleted from cart successfully',
       data: cart
@@ -125,7 +126,7 @@ export async function retrieveCartByUserId(req: UserRequest, res: Response) {
       return res.status(404).json(response);
     }
     logger.info('Successfully retrieved cart.');
-    const response: ServiceResponse<typeof cart> = {
+    const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Cart retrieved successfully',
       data: cart
@@ -154,7 +155,7 @@ export async function updateCartItemById(req: UserRequest, res: Response) {
       return res.status(404).json(response);
     }
     logger.info('Successfully updated item in cart.');
-    const response: ServiceResponse<typeof cart> = {
+    const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Item updated in cart successfully',
       data: cart

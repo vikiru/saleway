@@ -8,7 +8,7 @@ import { env } from '@/config/index';
 import { logger } from '@/config/logger';
 
 const morganStream = {
-  write: (message: any) => logger.http(message),
+  write: (message: string) => logger.http(message),
 };
 
 const skip = () => {
