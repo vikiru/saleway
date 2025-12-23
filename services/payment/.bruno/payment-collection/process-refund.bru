@@ -1,0 +1,21 @@
+meta {
+  name: Process Refund (Refund Step 2)
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/api/refund/process
+}
+
+body {
+  {
+    "paymentIntentId": "pi_123...",
+    "amount": 12000,
+    "reason": "order_creation_failed"
+  }
+}
+
+headers {
+  content-type: application/json
+}

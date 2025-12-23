@@ -1,0 +1,19 @@
+meta {
+  name: Verify Session (Refund Step 1)
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/refund/verify
+}
+
+body {
+  {
+    "sessionId": "cs_test_abc"
+  }
+}
+
+headers {
+  content-type: application/json
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Create Checkout Session
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/api/checkout/create-session
+}
+
+body {
+  {
+    "lineItems": [
+      {
+        "name": "Apex Pro Ultra",
+        "description": "High-performance sneakers",
+        "unitAmount": 8000,
+        "currency": "cad",
+        "quantity": 1,
+        "image": "https://example.com/image.jpg"
+      }
+    ],
+    "successUrl": "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",
+    "cancelUrl": "http://localhost:3000/cart",
+    "customerEmail": "customer@example.com"
+  }
+}
+
+headers {
+  content-type: application/json
+}
