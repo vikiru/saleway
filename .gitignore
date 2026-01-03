@@ -1,6 +1,9 @@
 # Extra
-.vscode/
+.vscode
+.windsurf
+
 todos.md
+*.md
 
 !frontend/lib/
 !frontend/src/lib/
