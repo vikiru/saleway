@@ -2,10 +2,7 @@ import { logger } from '@/config/logger';
 import { prisma } from '@/data/index';
 import type { CartItem } from '@/generated/prisma';
 
-export async function addCartItemsToCart(
-  userId: string,
-  cartItems: CartItem[]
-) {
+export async function addCartItemsToCart(userId: string, cartItems: CartItem[]) {
   try {
     const cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) {
@@ -59,9 +56,7 @@ export async function createCartForUser(userId: string) {
     logger.info('Successfully created cart.');
     return cart;
   } catch (error) {
-    logger.error(
-      `An error occurred while creating the cart, for ${userId} : ${error}`
-    );
+    logger.error(`An error occurred while creating the cart, for ${userId} : ${error}`);
   }
 }
 
@@ -78,14 +73,10 @@ export async function deleteCartByUserId(userId: string) {
       data: { totalPrice: 0 },
       include: { items: true },
     });
-    logger.info(
-      'Successfully deleted all items from cart and reset total price.'
-    );
+    logger.info('Successfully deleted all items from cart and reset total price.');
     return updatedCart;
   } catch (error) {
-    logger.error(
-      `An error occurred while deleting the cart, for ${userId} : ${error}`
-    );
+    logger.error(`An error occurred while deleting the cart, for ${userId} : ${error}`);
   }
 }
 
@@ -131,16 +122,11 @@ export async function retrieveCartByUserId(userId: string) {
     });
     return cart;
   } catch (error) {
-    logger.error(
-      `An error occurred while retrieving the cart, for ${userId} : ${error}`
-    );
+    logger.error(`An error occurred while retrieving the cart, for ${userId} : ${error}`);
   }
 }
 
-export async function updateCartItemById(
-  userId: string,
-  updatedItem: CartItem
-) {
+export async function updateCartItemById(userId: string, updatedItem: CartItem) {
   try {
     const cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) {
@@ -164,10 +150,7 @@ export async function updateCartItemById(
     const updatedCart = await prisma.cart.update({
       where: { userId },
       data: {
-        totalPrice:
-          Number(totalPrice) -
-          Number(itemPrice) +
-          Number(updatedItem.totalPrice),
+        totalPrice: Number(totalPrice) - Number(itemPrice) + Number(updatedItem.totalPrice),
       },
       include: { items: true },
     });

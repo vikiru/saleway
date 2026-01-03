@@ -41,17 +41,13 @@ const loggingColours = {
 const consoleFormat = winston.format.combine(
   winston.format.colorize({ all: true }),
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  winston.format.printf(
-    info => `${info.timestamp} ${info.level}: ${info.message}`
-  )
+  winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
 );
 
 const fileFormat = winston.format.combine(
   winston.format.uncolorize(),
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  winston.format.printf(
-    info => `${info.timestamp} ${info.level}: ${info.message}`
-  )
+  winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
 );
 
 const loggingTransports = {

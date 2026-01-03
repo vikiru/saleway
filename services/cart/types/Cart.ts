@@ -1,5 +1,5 @@
-import type { Cart as DBCart, CartItem } from '@/generated/prisma';
+import type { CartItem, Cart as DbCart } from '@/generated/prisma';
 
-export type Cart = DBCart & {
+export type Cart = DbCart & {
   items?: CartItem[];
 };
