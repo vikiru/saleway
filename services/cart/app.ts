@@ -19,9 +19,7 @@ app.set('trust proxy', env.NODE_ENV === 'production' ? 1 : 0);
 app.use(`/api/${apiVersionString}`, CartRouter);
 
 app.listen(env.PORT, () => {
-  logger.info(
-    `Cart Service running on http://localhost:${env.PORT}/api/${apiVersionString}`
-  );
+  logger.info(`Cart Service running on http://localhost:${env.PORT}/api/${apiVersionString}`);
 });
 
 // TODO: Add data dupe similar to orders service to cart service for products, cleanup any routes

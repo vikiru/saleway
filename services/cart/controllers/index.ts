@@ -2,9 +2,9 @@ import type { Response } from 'express';
 import { logger } from '@/config/logger';
 import type { CartItem } from '@/generated/prisma';
 import * as CartService from '@/services/index';
-import type { UserRequest } from '@/types/UserRequest';
-import type { ServiceResponse } from '@/types/ServiceResponse';
 import type { Cart } from '@/types/Cart';
+import type { ServiceResponse } from '@/types/ServiceResponse';
+import type { UserRequest } from '@/types/UserRequest';
 
 export async function addCartItemsToCart(req: UserRequest, res: Response) {
   const { userId } = req.params;
@@ -15,14 +15,14 @@ export async function addCartItemsToCart(req: UserRequest, res: Response) {
     const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Items added to cart successfully',
-      data: cart
+      data: cart,
     };
     return res.status(201).json(response);
   } catch (error) {
     logger.error(`An error occurred while adding items to the cart: ${error}`);
     const response = {
       success: false,
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     };
     return res.status(500).json(response);
   }
@@ -37,7 +37,7 @@ export async function createCart(req: UserRequest, res: Response) {
       const response: ServiceResponse<Cart | undefined> = {
         success: true,
         message: 'Cart retrieved successfully',
-        data: existingCart
+        data: existingCart,
       };
       return res.status(200).json(response);
     }
@@ -46,14 +46,14 @@ export async function createCart(req: UserRequest, res: Response) {
     const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Cart created successfully',
-      data: cart
+      data: cart,
     };
     return res.status(201).json(response);
   } catch (error) {
     logger.error(`An error occurred while creating the cart: ${error}`);
     const response = {
       success: false,
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     };
     return res.status(500).json(response);
   }
@@ -66,21 +66,21 @@ export async function deleteCartByUserId(req: UserRequest, res: Response) {
     if (!cart) {
       const response = {
         success: false,
-        error: 'Cart not found'
+        error: 'Cart not found',
       };
       return res.status(404).json(response);
     }
     const response = {
       success: true,
       message: 'Cart deleted successfully',
-      data: { message: 'Cart deleted successfully.' }
+      data: { message: 'Cart deleted successfully.' },
     };
     return res.status(200).json(response);
   } catch (error) {
     logger.error(`An error occurred while deleting the cart: ${error}`);
     const response = {
       success: false,
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     };
     return res.status(500).json(response);
   }
@@ -93,7 +93,7 @@ export async function deleteCartItemById(req: UserRequest, res: Response) {
     if (!cart) {
       const response = {
         success: false,
-        error: 'Item not found in cart'
+        error: 'Item not found in cart',
       };
       return res.status(404).json(response);
     }
@@ -101,14 +101,14 @@ export async function deleteCartItemById(req: UserRequest, res: Response) {
     const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Item deleted from cart successfully',
-      data: cart
+      data: cart,
     };
     return res.status(200).json(response);
   } catch (error) {
     logger.error(`An error occurred while deleting item from cart: ${error}`);
     const response = {
       success: false,
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     };
     return res.status(500).json(response);
   }
@@ -121,7 +121,7 @@ export async function retrieveCartByUserId(req: UserRequest, res: Response) {
     if (!cart) {
       const response = {
         success: false,
-        error: 'Cart not found'
+        error: 'Cart not found',
       };
       return res.status(404).json(response);
     }
@@ -129,14 +129,14 @@ export async function retrieveCartByUserId(req: UserRequest, res: Response) {
     const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Cart retrieved successfully',
-      data: cart
+      data: cart,
     };
     return res.status(200).json(response);
   } catch (error) {
     logger.error(`An error occurred while retrieving the cart: ${error}`);
     const response = {
       success: false,
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     };
     return res.status(500).json(response);
   }
@@ -150,7 +150,7 @@ export async function updateCartItemById(req: UserRequest, res: Response) {
     if (!cart) {
       const response = {
         success: false,
-        error: 'Item not found in cart'
+        error: 'Item not found in cart',
       };
       return res.status(404).json(response);
     }
@@ -158,14 +158,14 @@ export async function updateCartItemById(req: UserRequest, res: Response) {
     const response: ServiceResponse<Cart | undefined> = {
       success: true,
       message: 'Item updated in cart successfully',
-      data: cart
+      data: cart,
     };
     return res.status(200).json(response);
   } catch (error) {
     logger.error(`An error occurred while updating item in cart: ${error}`);
     const response = {
       success: false,
-      error: 'Internal Server Error'
+      error: 'Internal Server Error',
     };
     return res.status(500).json(response);
   }
