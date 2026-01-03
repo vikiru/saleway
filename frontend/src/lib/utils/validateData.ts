@@ -1,5 +1,5 @@
-import type { ResponseData } from '@/lib/types/ResponseData';
 import type { ZodType } from 'zod';
+import type { ResponseData } from '@/lib/types/ResponseData';
 
 export function validateData<T>(rawData: unknown, schema: ZodType<T>): ResponseData<T> {
   const result = schema.safeParse(rawData);

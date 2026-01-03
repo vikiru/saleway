@@ -1,184 +1,365 @@
+'use client';
+
+import { Filter, Search, Star } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+
 export default function SearchPage() {
-  const filters = {
-    price: [
-      { value: '0-25', label: 'Under $25' },
-      { value: '25-50', label: '$25 - $50' },
-      { value: '50-100', label: '$50 - $100' },
-      { value: '100-200', label: '$100 - $200' },
-      { value: '200+', label: '$200 & Above' },
-    ],
-    color: [
-      { value: 'white', label: 'White' },
-      { value: 'black', label: 'Black' },
-      { value: 'red', label: 'Red' },
-      { value: 'blue', label: 'Blue' },
-      { value: 'green', label: 'Green' },
-    ],
-    size: [
-      { value: 'xs', label: 'XS' },
-      { value: 's', label: 'S' },
-      { value: 'm', label: 'M' },
-      { value: 'l', label: 'L' },
-      { value: 'xl', label: 'XL' },
-    ],
-    category: [
-      { value: 'electronics', label: 'Electronics' },
-      { value: 'clothing', label: 'Clothing' },
-      { value: 'accessories', label: 'Accessories' },
-      { value: 'home', label: 'Home & Living' },
-    ],
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
+  const [sortBy, setSortBy] = useState('price-asc');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const ITEMS_PER_PAGE = 9;
+
+  const categories = [
+    { id: 'electronics', label: 'Electronics' },
+    { id: 'fashion', label: 'Fashion' },
+    { id: 'home', label: 'Home & Living' },
+    { id: 'accessories', label: 'Accessories' },
+  ];
+
+  const brands = [
+    { id: 'lumina', label: 'Lumina' },
+    { id: 'vortex', label: 'Vortex' },
+    { id: 'apex', label: 'Apex' },
+    { id: 'zenith', label: 'Zenith' },
+    { id: 'horizon', label: 'Horizon' },
+  ];
+
+  const products = Array.from({ length: 50 }).map((_, i) => ({
+    id: i + 1,
+    name: `Premium Product ${i + 1}`,
+    brand: i % 2 === 0 ? 'Lumina' : 'Vortex',
+    price: 99.99 + i * 10,
+    rating: 4.0 + (i % 10) * 0.1,
+    reviewCount: 50 + i * 5,
+    image: `https://placehold.co/400x400/png?text=Product+${i + 1}`,
+    category: i % 3 === 0 ? 'electronics' : 'fashion',
+  }));
+
+  const filteredProducts = products
+    .filter((product) => {
+      const min = minPrice === '' ? 0 : Number(minPrice);
+      const max = maxPrice === '' ? Infinity : Number(maxPrice);
+      const matchesPrice = product.price >= min && product.price <= max;
+
+      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+
+      const matchesBrand =
+        selectedBrands.length === 0 || selectedBrands.some((b) => b.toLowerCase() === product.brand.toLowerCase());
+
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+      return matchesPrice && matchesCategory && matchesBrand && matchesSearch;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'price-asc') return a.price - b.price;
+      if (sortBy === 'price-desc') return b.price - a.price;
+      return 0;
+    });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategories, selectedBrands, minPrice, maxPrice, sortBy]);
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredProducts.length);
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  const toggleFilter = (list: string[], setList: Function, item: string) => {
+    if (list.includes(item)) {
+      setList(list.filter((i) => i !== item));
+    } else {
+      setList([...list, item]);
+    }
   };
 
-  const products = Array(12)
-    .fill(0)
-    .map((_, i) => ({
-      id: i + 1,
-      name: 'Product ' + (i + 1),
-      price: 99.99 - i * 5,
-      rating: 4.5 - (i % 5) * 0.1,
-      reviewCount: 100 + i * 3,
-      image: `https://tailwindui.com/img/ecommerce-images/product-page-0${(i % 5) + 1}-related-product-0${(i % 3) + 1}.jpg`,
-    }));
+  const FilterSection = () => (
+    <div className="space-y-8">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Category</h3>
+        <div className="space-y-3">
+          {categories.map((category) => (
+            <div className="flex items-center space-x-2" key={category.id}>
+              <Checkbox
+                checked={selectedCategories.includes(category.id)}
+                id={`cat-${category.id}`}
+                onCheckedChange={() => toggleFilter(selectedCategories, setSelectedCategories, category.id)}
+              />
+              <label
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor={`cat-${category.id}`}
+              >
+                {category.label}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Brand</h3>
+        <div className="space-y-3">
+          {brands.map((brand) => (
+            <div className="flex items-center space-x-2" key={brand.id}>
+              <Checkbox
+                checked={selectedBrands.includes(brand.id)}
+                id={`brand-${brand.id}`}
+                onCheckedChange={() => toggleFilter(selectedBrands, setSelectedBrands, brand.id)}
+              />
+              <label
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor={`brand-${brand.id}`}
+              >
+                {brand.label}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Price Range</h3>
+        <div className="flex items-center space-x-4">
+          <div className="grid gap-1.5">
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="min-price">
+              Min
+            </label>
+            <div className="relative">
+              <span className="absolute left-2.5 top-2.5 text-sm text-muted-foreground">$</span>
+              <Input
+                className="pl-6"
+                id="min-price"
+                onChange={(e) => setMinPrice(e.target.value)}
+                placeholder="0"
+                type="number"
+                value={minPrice}
+              />
+            </div>
+          </div>
+          <div className="grid gap-1.5">
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="max-price">
+              Max
+            </label>
+            <div className="relative">
+              <span className="absolute left-2.5 top-2.5 text-sm text-muted-foreground">$</span>
+              <Input
+                className="pl-6"
+                id="max-price"
+                onChange={(e) => setMaxPrice(e.target.value)}
+                placeholder="∞"
+                type="number"
+                value={maxPrice}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative z-10 flex items-baseline justify-between pt-12 pb-6 border-b border-gray-200">
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-            New Arrivals
-          </h1>
-          <div
-            className="flex items-center
-          "
-          >
-            <div className="relative inline-block text-left">
-              <div className="group inline-flex justify-between text-sm font-medium text-gray-700 hover:text-gray-900">
-                <span>Sort</span>
-                <svg
-                  className="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clipRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </div>
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-6 pt-12 gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">Shop All</h1>
+          </div>
+
+          <div className="flex items-center space-x-4 flex-1 justify-end">
+            <div className="relative w-full max-w-sm">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                className="pl-8"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                type="search"
+                value={searchQuery}
+              />
             </div>
-            <button
-              className="p-2 -m-2 ml-4 sm:ml-6 text-gray-400 hover:text-gray-500 lg:hidden"
-              type="button"
-            >
-              <span className="sr-only">Filters</span>
-              <svg
-                aria-hidden="true"
-                className="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  clipRule="evenodd"
-                  d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                  fillRule="evenodd"
-                />
-              </svg>
-            </button>
+
+            <Select onValueChange={setSortBy} value={sortBy}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="price-asc">Price: Low to High</SelectItem>
+                <SelectItem value="price-desc">Price: High to Low</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <div className="lg:hidden">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="icon" variant="outline">
+                    <Filter className="h-4 w-4" />
+                    <span className="sr-only">Filters</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="h-full max-h-screen overflow-y-auto sm:max-w-xs">
+                  <DialogHeader>
+                    <DialogTitle>Filters</DialogTitle>
+                  </DialogHeader>
+                  <div className="mt-4">
+                    <FilterSection />
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
 
-        <section className="pt-6 pb-24">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
-            <form className="hidden lg:block">
-              <h3 className="sr-only">Categories</h3>
+        <div className="pt-6 pb-24 lg:grid lg:grid-cols-4 lg:gap-x-8">
+          <aside className="hidden lg:block">
+            <FilterSection />
+          </aside>
 
-              {Object.entries(filters).map(([sectionName, sectionItems]) => (
-                <div
-                  className="border-b border-gray-200 py-6"
-                  key={sectionName}
-                >
-                  <h3 className="-my-3 flow-root">
-                    <div className="py-3 bg-white w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500">
-                      <span className="font-medium text-gray-900 capitalize">
-                        {sectionName}
-                      </span>
-                    </div>
-                  </h3>
-                  <div className="pt-6">
-                    <div className="space-y-4">
-                      {sectionItems.map((option) => (
-                        <div className="flex items-center" key={option.value}>
-                          <input
-                            className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
-                            defaultValue={option.value}
-                            id={`filter-${sectionName}-${option.value}`}
-                            name={`${sectionName}[]`}
-                            type="checkbox"
-                          />
-                          <label
-                            className="ml-3 text-sm text-gray-600"
-                            htmlFor={`filter-${sectionName}-${option.value}`}
-                          >
-                            {option.label}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </form>
+          <div className="mt-6 lg:mt-0 lg:col-span-3">
+            <p className="text-sm text-muted-foreground mb-4">
+              Showing {filteredProducts.length > 0 ? startIndex + 1 : 0}-{endIndex} of {filteredProducts.length} items
+            </p>
 
-            <div className="lg:col-span-3">
-              <div className="bg-white">
-                <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-                  <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8">
-                    {products.map((product) => (
-                      <a
-                        className="group"
-                        href={`/products/${product.id}`}
-                        key={product.id}
-                      >
-                        <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-                          <img
-                            alt={product.name}
-                            className="w-full h-full object-center object-cover group-hover:opacity-75"
-                            src={product.image}
-                          />
+            <ScrollArea className="h-[calc(100vh-300px)] pr-4">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                {currentProducts.map((product) => (
+                  <Link className="group" href={`/products/${product.id}`} key={product.id}>
+                    <Card className="h-full overflow-hidden transition-all hover:shadow-lg border-0 bg-transparent ring-0 shadow-none hover:bg-card">
+                      <div className="aspect-square w-full overflow-hidden rounded-xl bg-gray-100 relative">
+                        <img
+                          alt={product.name}
+                          className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                          src={product.image}
+                        />
+                      </div>
+                      <CardContent className="p-4">
+                        <h3 className="text-sm font-medium text-foreground">{product.name}</h3>
+                        <p className="mt-1 text-sm text-muted-foreground">{product.brand}</p>
+                        <div className="mt-2 flex items-center gap-2">
+                          <div className="flex text-yellow-500">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                className={`h-3 w-3 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}`}
+                                key={i}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs text-muted-foreground">({product.reviewCount})</span>
                         </div>
-                        <h3 className="mt-4 text-sm text-gray-700">
-                          {product.name}
-                        </h3>
-                        <p className="mt-1 text-lg font-medium text-gray-900">
-                          ${product.price.toFixed(2)}
-                        </p>
-                        <div className="mt-1 flex items-center">
-                          {[0, 1, 2, 3, 4].map((rating) => (
-                            <svg
-                              className={`h-5 w-5 ${rating < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-200'}`}
-                              fill="currentColor"
-                              key={rating}
-                              viewBox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                          ))}
-                          <span className="ml-2 text-sm text-gray-600">
-                            {product.reviewCount} reviews
-                          </span>
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                </div>
+                        <div className="mt-2 font-semibold text-lg">${product.price.toFixed(2)}</div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
               </div>
-            </div>
+
+              {filteredProducts.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">No products found matching your filters.</p>
+                  <Button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setMinPrice('');
+                      setMaxPrice('');
+                      setSelectedCategories([]);
+                      setSelectedBrands([]);
+                    }}
+                    variant="link"
+                  >
+                    Clear all filters
+                  </Button>
+                </div>
+              )}
+            </ScrollArea>
+
+            {filteredProducts.length > ITEMS_PER_PAGE && (
+              <div className="mt-8">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage > 1) setCurrentPage(currentPage - 1);
+                        }}
+                      />
+                    </PaginationItem>
+
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                      const page = i + 1;
+                      if (
+                        totalPages > 5 &&
+                        (page < currentPage - 1 || page > currentPage + 1) &&
+                        page !== 1 &&
+                        page !== totalPages
+                      ) {
+                        if (page === currentPage - 2 || page === currentPage + 2) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationEllipsis />
+                            </PaginationItem>
+                          );
+                        }
+                        return null;
+                      }
+
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            href="#"
+                            isActive={currentPage === page}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setCurrentPage(page);
+                            }}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    })}
+
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                        }}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
           </div>
-        </section>
+        </div>
       </div>
     </div>
   );

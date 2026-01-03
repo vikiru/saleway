@@ -44,11 +44,7 @@ interface Order {
   };
 }
 
-export default function OrderDetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function OrderDetailsPage({ params }: { params: { id: string } }) {
   const order: Order = {
     id: params.id,
     number: `#${params.id.padStart(8, '0')}`,
@@ -83,8 +79,7 @@ export default function OrderDetailsPage({
         name: 'Wireless Headphones',
         price: '$99.00',
         quantity: 1,
-        image:
-          'https://tailwindui.com/img/ecommerce-images/order-history-page-03-product-01.jpg',
+        image: 'https://tailwindui.com/img/ecommerce-images/order-history-page-03-product-01.jpg',
         status: 'delivered',
         statusDetail: 'Delivered on Oct 18, 2023',
       },
@@ -93,8 +88,7 @@ export default function OrderDetailsPage({
         name: 'Leather Wallet',
         price: '$49.00',
         quantity: 1,
-        image:
-          'https://tailwindui.com/img/ecommerce-images/order-history-page-03-product-02.jpg',
+        image: 'https://tailwindui.com/img/ecommerce-images/order-history-page-03-product-02.jpg',
         status: 'delivered',
         statusDetail: 'Delivered on Oct 18, 2023',
       },
@@ -124,9 +118,7 @@ export default function OrderDetailsPage({
 
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                Order {order.number}
-              </h1>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Order {order.number}</h1>
               <p className="mt-2 text-sm text-gray-500">
                 Placed on{' '}
                 <time dateTime={order.date}>
@@ -153,12 +145,8 @@ export default function OrderDetailsPage({
             <h2 className="text-lg font-medium text-gray-900">Order status</h2>
             <div className="mt-4">
               <div className="flex items-center">
-                <div
-                  className={`h-2 w-2 rounded-full ${statusStyles[order.status].split(' ')[0]}`}
-                ></div>
-                <p className="ml-3 text-sm font-medium text-gray-900">
-                  {order.statusDetail}
-                </p>
+                <div className={`h-2 w-2 rounded-full ${statusStyles[order.status].split(' ')[0]}`}></div>
+                <p className="ml-3 text-sm font-medium text-gray-900">{order.statusDetail}</p>
               </div>
             </div>
           </div>
@@ -171,24 +159,14 @@ export default function OrderDetailsPage({
                   <li className="p-4" key={item.id}>
                     <div className="flex items-start">
                       <div className="flex-shrink-0 h-16 w-16 rounded-md overflow-hidden">
-                        <img
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                          src={item.image}
-                        />
+                        <img alt={item.name} className="w-full h-full object-cover" src={item.image} />
                       </div>
                       <div className="ml-4 flex-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-sm font-medium text-gray-900">
-                            {item.name}
-                          </h3>
-                          <p className="ml-4 text-sm font-medium text-gray-900">
-                            {item.price}
-                          </p>
+                          <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                          <p className="ml-4 text-sm font-medium text-gray-900">{item.price}</p>
                         </div>
-                        <p className="mt-1 text-sm text-gray-500">
-                          Qty {item.quantity}
-                        </p>
+                        <p className="mt-1 text-sm text-gray-500">Qty {item.quantity}</p>
                         <div className="mt-2">
                           <span
                             className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
@@ -226,48 +204,34 @@ export default function OrderDetailsPage({
 
           <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
             <div>
-              <h2 className="text-lg font-medium text-gray-900">
-                Shipping address
-              </h2>
+              <h2 className="text-lg font-medium text-gray-900">Shipping address</h2>
               <div className="mt-4 text-sm text-gray-500">
                 <p>{order.shippingAddress.name}</p>
                 <p>{order.shippingAddress.street}</p>
                 <p>
-                  {order.shippingAddress.city}, {order.shippingAddress.state}{' '}
-                  {order.shippingAddress.zip}
+                  {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zip}
                 </p>
                 <p>{order.shippingAddress.country}</p>
               </div>
             </div>
 
             <div>
-              <h2 className="text-lg font-medium text-gray-900">
-                Payment information
-              </h2>
+              <h2 className="text-lg font-medium text-gray-900">Payment information</h2>
               <div className="mt-4">
                 <p className="text-sm text-gray-500">
-                  {order.payment.cardType} ending in{' '}
-                  {order.payment.cardLastFour}
+                  {order.payment.cardType} ending in {order.payment.cardLastFour}
                 </p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Expires {order.payment.expDate}
-                </p>
+                <p className="mt-1 text-sm text-gray-500">Expires {order.payment.expDate}</p>
               </div>
             </div>
           </div>
 
           <div className="mt-8 border-t border-gray-200 pt-8">
-            <h2 className="text-lg font-medium text-gray-900">
-              Customer information
-            </h2>
+            <h2 className="text-lg font-medium text-gray-900">Customer information</h2>
             <div className="mt-4">
               <p className="text-sm text-gray-500">{order.customer.name}</p>
-              <p className="mt-1 text-sm text-gray-500">
-                {order.customer.email}
-              </p>
-              <p className="mt-1 text-sm text-gray-500">
-                {order.customer.phone}
-              </p>
+              <p className="mt-1 text-sm text-gray-500">{order.customer.email}</p>
+              <p className="mt-1 text-sm text-gray-500">{order.customer.phone}</p>
             </div>
           </div>
         </div>

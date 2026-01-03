@@ -1,6 +1,6 @@
 'use client';
 import { UserButton as ClerkButton, useUser } from '@clerk/nextjs';
-import { House, ShoppingCart, LucideUser } from 'lucide-react';
+import { House, LucideUser, ShoppingCart } from 'lucide-react';
 
 export default function UserButton() {
   const { user } = useUser();
