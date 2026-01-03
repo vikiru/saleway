@@ -96,6 +96,11 @@
     "domains": {
       "next": "recommended",
       "project": "none",
+      "solid": "none",
+      "vue": "none",
+      "test": "none",
+      "turborepo": "none",
+      "qwik": "none",
       "react": "recommended"
     },
     "enabled": true,
