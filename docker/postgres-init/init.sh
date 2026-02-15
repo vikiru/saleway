@@ -1,0 +1,56 @@
+#!/bin/bash
+set -e
+
+echo "Initializing PostgreSQL databases and users..."
+
+# Cart Database
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+	    CREATE DATABASE ${CART_DB_NAME};
+	    CREATE USER ${CART_DB_USER} WITH PASSWORD $$${CART_DB_PASSWORD}$$;
+	    GRANT ALL PRIVILEGES ON DATABASE ${CART_DB_NAME} TO ${CART_DB_USER};
+	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${CART_DB_USER};
+EOSQL
+
+echo "Created cart database and user" >/dev/null
+
+# Order Database
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+	    CREATE DATABASE ${ORDER_DB_NAME};
+	    CREATE USER ${ORDER_DB_USER} WITH PASSWORD $$${ORDER_DB_PASSWORD}$$;
+	    GRANT ALL PRIVILEGES ON DATABASE ${ORDER_DB_NAME} TO ${ORDER_DB_USER};
+	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${ORDER_DB_USER};
+EOSQL
+
+echo "Created order database and user" >/dev/null
+
+# Product Database
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+	    CREATE DATABASE ${PRODUCT_DB_NAME};
+	    CREATE USER ${PRODUCT_DB_USER} WITH PASSWORD $$${PRODUCT_DB_PASSWORD}$$;
+	    GRANT ALL PRIVILEGES ON DATABASE ${PRODUCT_DB_NAME} TO ${PRODUCT_DB_USER};
+	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${PRODUCT_DB_USER};
+EOSQL
+
+echo "Created product database and user" >/dev/null
+
+# Rating Database
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+	    CREATE DATABASE ${RATING_DB_NAME};
+	    CREATE USER ${RATING_DB_USER} WITH PASSWORD $$${RATING_DB_PASSWORD}$$;
+	    GRANT ALL PRIVILEGES ON DATABASE ${RATING_DB_NAME} TO ${RATING_DB_USER};
+	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${RATING_DB_USER};
+EOSQL
+
+echo "Created rating database and user" >/dev/null
+
+# User Database
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+	    CREATE DATABASE ${USER_DB_NAME};
+	    CREATE USER ${USER_DB_USER} WITH PASSWORD $$${USER_DB_PASSWORD}$$;
+	    GRANT ALL PRIVILEGES ON DATABASE ${USER_DB_NAME} TO ${USER_DB_USER};
+	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${USER_DB_USER};
+EOSQL
+
+echo "Created user database and user" >/dev/null
+
+echo "Database initialization complete!" >/dev/null
