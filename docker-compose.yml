@@ -1,0 +1,228 @@
+services:
+  # PostgreSQL - Single instance with 5 databases
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce-postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_ADMIN_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD}
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres-init/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_ADMIN_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+  # Cart Service (Node.js + Prisma)
+  cart:
+    build:
+      context: ./services/cart
+      dockerfile: Dockerfile
+    container_name: ecommerce-cart
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 8080
+      DATABASE_URL: postgresql://${CART_DB_USER}:${CART_DB_PASSWORD}@postgres:5432/${CART_DB_NAME}
+    ports:
+      - "8080:8080"
+    networks:
+      - ecommerce-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  # Order Service (Python Flask)
+  order:
+    build:
+      context: ./services/order
+      dockerfile: Dockerfile
+    container_name: ecommerce-order
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PYTHON_ENV: ${PYTHON_ENV:-production}
+      PORT: 5000
+      DATABASE_URL: postgresql://${ORDER_DB_USER}:${ORDER_DB_PASSWORD}@postgres:5432/${ORDER_DB_NAME}
+    ports:
+      - "5000:5000"
+    networks:
+      - ecommerce-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/health')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  # Payment Service (Java Spring Boot - No Database, uses Stripe)
+  payment:
+    build:
+      context: ./services/payment
+      dockerfile: Dockerfile
+    container_name: ecommerce-payment
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SERVER_PORT: 8081
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
+    ports:
+      - "8081:8081"
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # Product Service (Python FastAPI)
+  product:
+    build:
+      context: ./services/product
+      dockerfile: Dockerfile
+    container_name: ecommerce-product
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PYTHON_ENV: ${PYTHON_ENV:-production}
+      PORT: 8000
+      DATABASE_URL: postgresql://${PRODUCT_DB_USER}:${PRODUCT_DB_PASSWORD}@postgres:5432/${PRODUCT_DB_NAME}
+    ports:
+      - "8000:8000"
+    networks:
+      - ecommerce-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  # Rating Service (Python Django)
+  rating:
+    build:
+      context: ./services/rating
+      dockerfile: Dockerfile
+    container_name: ecommerce-rating
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DJANGO_SETTINGS_MODULE: rating.settings.production
+      PORT: 8001
+      DATABASE_URL: postgresql://${RATING_DB_USER}:${RATING_DB_PASSWORD}@postgres:5432/${RATING_DB_NAME}
+    ports:
+      - "8001:8001"
+    networks:
+      - ecommerce-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  # User Service (Python Django)
+  user:
+    build:
+      context: ./services/user
+      dockerfile: Dockerfile
+    container_name: ecommerce-user
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DJANGO_SETTINGS_MODULE: user.settings.production
+      PORT: 8002
+      DATABASE_URL: postgresql://${USER_DB_USER}:${USER_DB_PASSWORD}@postgres:5432/${USER_DB_NAME}
+    ports:
+      - "8002:8002"
+    networks:
+      - ecommerce-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8002/health')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  ecommerce-network:
+    driver: bridge
