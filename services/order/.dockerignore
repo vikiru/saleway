@@ -1,0 +1,68 @@
+# Dependencies
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv
+env
+ENV
+
+# Build outputs
+build
+dist
+*.egg-info
+
+# Environment files
+.env
+.env.local
+.env.*
+!.env.example
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing and documentation
+tests
+test
+*.test.py
+pytest.ini
+coverage
+.coverage
+htmlcov
+README.md
+*.md
+
+# Docker files
+Dockerfile
+Dockerfile.prod
+.dockerignore
+docker-compose*.yml
+
+# API testing
+.bruno
+
+# Logs
+*.log
+logs
+
+# Temporary files
+tmp
+temp
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Flask specific
+instance
+.webassets-cache
