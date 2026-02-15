@@ -1,0 +1,61 @@
+# Dependencies
+node_modules
+.pnpm-store
+pnpm-debug.log
+
+# Build outputs
+dist
+build
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing and documentation
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+coverage
+README.md
+*.md
+
+# Docker files
+Dockerfile
+Dockerfile.prod
+.dockerignore
+docker-compose*.yml
+
+# API testing
+.bruno
+
+# Logs
+*.log
+logs
+npm-debug.log*
+
+# Temporary files
+tmp
+temp
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Prisma (generated files will be created in container)
+prisma/migrations/migration_lock.toml
