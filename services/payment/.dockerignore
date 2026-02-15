@@ -1,0 +1,68 @@
+# Build outputs
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Maven
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Environment files
+.env
+.env.local
+.env.*
+!.env.example
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# IDE and editor files
+.vscode
+.idea
+*.iml
+*.ipr
+*.iws
+*.swp
+*.swo
+*~
+
+# Testing and documentation
+test
+tests
+src/test
+README.md
+*.md
+
+# Docker files
+Dockerfile
+Dockerfile.prod
+.dockerignore
+docker-compose*.yml
+
+# API testing
+.bruno
+
+# Logs
+*.log
+logs
+
+# Temporary files
+tmp
+temp
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Java specific
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
