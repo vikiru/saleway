@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/checkout")
+@RequestMapping("/api/v1/checkout")
 public class CheckoutController {
 
   @Autowired private CheckoutService checkoutService;

@@ -8,11 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HealthController {
 
-  @GetMapping("/health")
+  @GetMapping("/api/v1/health")
   public ResponseEntity<Map<String, String>> health() {
-    return ResponseEntity.ok(
-        Map.of(
-            "status", "UP",
-            "message", "Payment service is up and running"));
+    return ResponseEntity.ok(Map.of("message", "Payment service is running."));
   }
 }

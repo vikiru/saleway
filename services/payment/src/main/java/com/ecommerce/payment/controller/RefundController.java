@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/refund")
+@RequestMapping("/api/v1/refund")
 public class RefundController {
 
   @Autowired private RefundService refundService;

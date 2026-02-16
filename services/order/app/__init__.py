@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_compress import Compress
 from flask_cors import CORS
 
@@ -11,6 +11,10 @@ def create_app():
 
     Compress(app)
     CORS(app)
+
+    @app.route('/api/v1/health')
+    def health_check():
+        return jsonify({'message': 'Order service is running.'})
 
     from orders import orders_bp
 
