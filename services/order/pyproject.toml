@@ -5,14 +5,14 @@ description = "An order microservice for a fake e-commerce website."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-  "flask>=3.1.2",
-  "flask-cors>=6.0.1",
-  "psycopg2-binary>=2.9.11",
-  "pydantic>=2.12.5",
-  "python-dotenv>=1.2.1",
-  "sqlmodel>=0.0.27",
-  "loguru>=0.7.3",
-  "flask-compress>=1.23",
+    "alembic>=1.14.0",
+    "flask>=3.0.0",
+    "flask-compress>=1.23",
+    "flask-cors>=5.0.0",
+    "loguru>=0.7.2",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.0",
+    "sqlmodel>=0.0.22",
 ]
 
 [dependency-groups]
@@ -31,14 +31,15 @@ update = "uv lock --upgrade"
 typecheck = "basedpyright ."
 format = "ruff format ."
 lint = "ruff check --fix ."
-init-db = "uv run database.py"
+migrate = "alembic upgrade head"
+create-migration = "alembic revision --autogenerate -m"
 create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABASE order_service;\""
 
 # Flask Service Startup Process:
 # 1) source .venv/bin/activate  # Activate virtual environment
 # 2) uv sync                     # Install Python packages
 # 3) poe create-db               # Create PostgreSQL database (if not already)
-# 4) poe init-db                 # Initialize database with tables
+# 4) poe migrate                 # Run Alembic migrations
 # 5) poe dev                     # Start development server
 #    or poe start                # Start production server
 
