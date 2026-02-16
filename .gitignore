@@ -2,6 +2,10 @@
 .vscode
 .windsurf
 
+.astro
+.docusaurus
+dist
+build
 todos.md
 *.md
 
@@ -341,3 +345,26 @@ replay_pid*
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+openspec
+.gemini
+.qwen
+.kilocode
+.opencode
+.claude
+.continue
+.trae
+.cline 
+.agent
+.amazonq
+.augment
+.clinerules
+.codebuddy
+.codex
+.cospec
+.crush
+.cursor
+.factory
+.iflow
+.qoder
+.roo
