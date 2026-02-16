@@ -1,56 +1,40 @@
 #!/bin/bash
 set -e
 
-echo "Initializing PostgreSQL databases and users..."
+psql -v ON_ERROR_STOP=1 \
+	-v cart_password="${CART_DB_PASSWORD}" \
+	-v order_password="${ORDER_DB_PASSWORD}" \
+	-v product_password="${PRODUCT_DB_PASSWORD}" \
+	-v rating_password="${RATING_DB_PASSWORD}" \
+	-v user_password="${USER_DB_PASSWORD}" \
+	--username "$POSTGRES_USER" <<-EOSQL
+		    -- Cart database
+		    CREATE DATABASE cart_db;
+		    CREATE USER cart_user WITH PASSWORD :'cart_password';
+		    GRANT ALL PRIVILEGES ON DATABASE cart_db TO cart_user;
+		    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO cart_user;
 
-# Cart Database
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-	    CREATE DATABASE ${CART_DB_NAME};
-	    CREATE USER ${CART_DB_USER} WITH PASSWORD $$${CART_DB_PASSWORD}$$;
-	    GRANT ALL PRIVILEGES ON DATABASE ${CART_DB_NAME} TO ${CART_DB_USER};
-	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${CART_DB_USER};
-EOSQL
+		    -- Order database
+		    CREATE DATABASE order_db;
+		    CREATE USER order_user WITH PASSWORD :'order_password';
+		    GRANT ALL PRIVILEGES ON DATABASE order_db TO order_user;
+		    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO order_user;
 
-echo "Created cart database and user" >/dev/null
+		    -- Product database
+		    CREATE DATABASE product_db;
+		    CREATE USER product_user WITH PASSWORD :'product_password';
+		    GRANT ALL PRIVILEGES ON DATABASE product_db TO product_user;
+		    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO product_user;
 
-# Order Database
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-	    CREATE DATABASE ${ORDER_DB_NAME};
-	    CREATE USER ${ORDER_DB_USER} WITH PASSWORD $$${ORDER_DB_PASSWORD}$$;
-	    GRANT ALL PRIVILEGES ON DATABASE ${ORDER_DB_NAME} TO ${ORDER_DB_USER};
-	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${ORDER_DB_USER};
-EOSQL
+		    -- Rating database
+		    CREATE DATABASE rating_db;
+		    CREATE USER rating_user WITH PASSWORD :'rating_password';
+		    GRANT ALL PRIVILEGES ON DATABASE rating_db TO rating_user;
+		    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO rating_user;
 
-echo "Created order database and user" >/dev/null
-
-# Product Database
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-	    CREATE DATABASE ${PRODUCT_DB_NAME};
-	    CREATE USER ${PRODUCT_DB_USER} WITH PASSWORD $$${PRODUCT_DB_PASSWORD}$$;
-	    GRANT ALL PRIVILEGES ON DATABASE ${PRODUCT_DB_NAME} TO ${PRODUCT_DB_USER};
-	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${PRODUCT_DB_USER};
-EOSQL
-
-echo "Created product database and user" >/dev/null
-
-# Rating Database
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-	    CREATE DATABASE ${RATING_DB_NAME};
-	    CREATE USER ${RATING_DB_USER} WITH PASSWORD $$${RATING_DB_PASSWORD}$$;
-	    GRANT ALL PRIVILEGES ON DATABASE ${RATING_DB_NAME} TO ${RATING_DB_USER};
-	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${RATING_DB_USER};
-EOSQL
-
-echo "Created rating database and user" >/dev/null
-
-# User Database
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-	    CREATE DATABASE ${USER_DB_NAME};
-	    CREATE USER ${USER_DB_USER} WITH PASSWORD $$${USER_DB_PASSWORD}$$;
-	    GRANT ALL PRIVILEGES ON DATABASE ${USER_DB_NAME} TO ${USER_DB_USER};
-	    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${USER_DB_USER};
-EOSQL
-
-echo "Created user database and user" >/dev/null
-
-echo "Database initialization complete!" >/dev/null
+		    -- User database
+		    CREATE DATABASE user_db;
+		    CREATE USER user_service WITH PASSWORD :'user_password';
+		    GRANT ALL PRIVILEGES ON DATABASE user_db TO user_service;
+		    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO user_service;
+	EOSQL
