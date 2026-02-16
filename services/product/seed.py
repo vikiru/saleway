@@ -2,10 +2,9 @@ import json
 import os
 from decimal import Decimal
 
-from sqlalchemy import text
-from sqlmodel import Session
+from sqlmodel import Session, select
 
-from database import engine, init_db
+from database import engine
 from models import Product, ProductImage
 
 
@@ -15,25 +14,16 @@ def load_products_from_json(file_path: str):
 
 
 def seed_database():
-    init_db()
+    # Check if already seeded (idempotent)
+    with Session(engine) as session:
+        existing = session.exec(select(Product)).first()
+        if existing:
+            print('Database already seeded, skipping...')
+            return
 
-    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-    data_file_path = os.path.join(
-        project_root,
-        'services',
-        'product',
-        'data',
-        'generated_products.json',
-    )
+    data_file_path = os.path.join(os.path.dirname(__file__), 'data', 'generated_products.json')
     products_data = load_products_from_json(data_file_path)
     print(f'Loaded {len(products_data)} products from generated_products.json')
-
-    with Session(engine) as session:
-        session.query(ProductImage).delete()
-        session.query(Product).delete()
-        session.execute(text('ALTER SEQUENCE product_id_seq RESTART WITH 1'))
-        session.execute(text('ALTER SEQUENCE productimage_id_seq RESTART WITH 1'))
-        session.commit()
 
     with Session(engine) as session:
         for product_data in products_data:
