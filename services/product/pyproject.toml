@@ -5,15 +5,13 @@ description = "A product microservice for a fake e-commerce website."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-  "brotli-asgi>=1.4.0",
-  "dotenv>=0.9.9",
-  "fastapi>=0.116.1",
-  "google-genai>=1.25.0",
-  "httpx>=0.28.1",
-  "loguru>=0.7.3",
-  "psycopg2-binary>=2.9.11",
-  "sqlmodel>=0.0.24",
-  "uvicorn>=0.35.0",
+    "alembic>=1.14.0",
+    "fastapi>=0.115.6",
+    "loguru>=0.7.3",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.0",
+    "sqlmodel>=0.0.22",
+    "uvicorn>=0.34.0",
 ]
 
 [dependency-groups]
@@ -33,7 +31,8 @@ typecheck = "basedpyright ."
 update = "uv lock --upgrade"
 format = "ruff format ."
 lint = "ruff check --fix ."
-init-db = "uv run database.py"
+migrate = "alembic upgrade head"
+create-migration = "alembic revision --autogenerate -m"
 seed = "uv run seed.py"
 create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABASE product_service;\""
 
@@ -41,7 +40,7 @@ create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABAS
 # 1) source .venv/bin/activate  # Activate virtual environment
 # 2) uv sync                     # Install Python packages
 # 3) poe create-db               # Create PostgreSQL database (if not already)
-# 4) poe init-db                 # Initialize database with tables
+# 4) poe migrate                 # Run Alembic migrations
 # 5) poe seed                    # Seed database with sample data
 # 6) poe dev                     # Start development server
 #    or poe start                # Start production server
