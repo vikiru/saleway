@@ -46,6 +46,7 @@ create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABAS
 [tool.ruff]
 line-length = 120
 fix = true
+extend-exclude = ["alembic/versions/"]
 
 [tool.ruff.lint]
 select = [
