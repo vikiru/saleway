@@ -36,5 +36,10 @@ psql -v ON_ERROR_STOP=1 \
 		    CREATE DATABASE user_db;
 		    CREATE USER user_service WITH PASSWORD :'user_password';
 		    GRANT ALL PRIVILEGES ON DATABASE user_db TO user_service;
-		    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO user_service;
+		    -- Grant schema permissions (required for migrations)
+		GRANT CREATE ON SCHEMA public TO cart_user;
+		GRANT CREATE ON SCHEMA public TO order_user;
+		GRANT CREATE ON SCHEMA public TO product_user;
+		GRANT CREATE ON SCHEMA public TO rating_user;
+		GRANT CREATE ON SCHEMA public TO user_service;
 	EOSQL
