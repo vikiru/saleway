@@ -165,7 +165,7 @@ services:
     env_file:
       - .env
     environment:
-      DJANGO_SETTINGS_MODULE: rating.settings.production
+      DJANGO_SETTINGS_MODULE: rating.settings
       PORT: 8001
       DATABASE_URL: postgresql://rating_user:${RATING_DB_PASSWORD}@postgres:5432/rating_db
     ports:
@@ -197,7 +197,7 @@ services:
     env_file:
       - .env
     environment:
-      DJANGO_SETTINGS_MODULE: user.settings.production
+      DJANGO_SETTINGS_MODULE: user.settings
       PORT: 8002
       DATABASE_URL: postgresql://user_service:${USER_DB_PASSWORD}@postgres:5432/user_db
     ports:
