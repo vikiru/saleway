@@ -15,7 +15,7 @@ from services import (
     update_order_status,
 )
 
-orders_bp = Blueprint('orders', __name__, url_prefix='/orders')
+orders_bp = Blueprint('orders', __name__, url_prefix='/api/v1/orders')
 
 
 @orders_bp.route('', methods=['POST'])

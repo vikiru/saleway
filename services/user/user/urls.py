@@ -16,13 +16,20 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import path
 
 from .api import api
 
 API_VERSION = 'v1'
 
+
+def health_check(request):
+    return JsonResponse({'message': 'User service is running.'})
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', api.urls),
+    path('api/v1/health', health_check),
+    path('api/v1/', api.urls),
 ]

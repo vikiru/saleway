@@ -4,6 +4,10 @@ import * as CartController from '@/controllers/index';
 
 const router = Router();
 
+router.get('/health', (req, res) => {
+  res.json({ message: 'Cart service is running.' });
+});
+
 router.get('/cart/user/:userId', CartController.retrieveCartByUserId);
 router.post('/cart/user/:userId', CartController.createCart);
 router.post('/cart/user/:userId/item', CartController.addCartItemsToCart);
