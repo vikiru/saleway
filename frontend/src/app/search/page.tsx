@@ -81,7 +81,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedCategories, selectedBrands, minPrice, maxPrice, sortBy]);
+  }, []);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
