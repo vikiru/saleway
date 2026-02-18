@@ -1,7 +1,7 @@
 import type { ZodType } from 'zod';
-import type { ResponseData } from '@/lib/types/ResponseData';
+import type { ServiceResponse } from '@/lib/types/ServiceResponse';
 
-export function validateData<T>(rawData: unknown, schema: ZodType<T>): ResponseData<T> {
+export function validateData<T>(rawData: unknown, schema: ZodType<T>): ServiceResponse<T> {
   const result = schema.safeParse(rawData);
   if (!result.success) {
     console.error(`Validation failed: ${result.error}`);
