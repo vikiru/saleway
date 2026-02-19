@@ -13,7 +13,7 @@ export async function fetchProductRatings(productId: number, signal?: AbortSigna
   return handleResponse(response);
 }
 
-export async function fetchUserRatings(userId: number, signal?: AbortSignal): Promise<UserReviewsResponse> {
+export async function fetchUserRatings(userId: string, signal?: AbortSignal): Promise<UserReviewsResponse> {
   const response = await fetch(`${RATING_SERVICE_URL}/reviews/user/${userId}`, { signal });
   return handleResponse(response);
 }

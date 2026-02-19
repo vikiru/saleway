@@ -10,9 +10,9 @@ export function useProductRatings(productId: number) {
   });
 }
 
-export function useUserRatings(userId: number) {
+export function useUserRatings(userId: string) {
   return useQuery({
-    queryKey: userRatingsQueryKey(String(userId)),
+    queryKey: userRatingsQueryKey(userId),
     queryFn: ({ signal }) => fetchUserRatings(userId, signal),
     enabled: !!userId,
   });

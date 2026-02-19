@@ -1,7 +1,7 @@
 export type OrderStatus = 'pending' | 'completed' | 'cancelled' | 'delivered';
 
 export interface OrderCreate {
-  userId: number;
+  userId: string;
   items: OrderItemCreate[];
   purchaseDate: string;
   totalPrice: number;
@@ -33,7 +33,7 @@ export interface OrderItem {
 
 export interface Order {
   id: number;
-  userId: number;
+  userId: string;
   purchaseDate: string;
   expectedDeliveryDate: string;
   totalPrice: number;
