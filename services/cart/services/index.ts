@@ -160,3 +160,83 @@ export async function updateCartItemById(userId: string, updatedItem: CartItem) 
     logger.error('An error occurred while updating item from cart.');
   }
 }
+
+export async function syncCartByUserId(
+  userId: string,
+  items: Array<{ productId: string; quantity: number; unitPrice: number }>
+) {
+  try {
+    let cart = await prisma.cart.findUnique({
+      where: { userId },
+      include: { items: true },
+    });
+
+    if (!cart) {
+      cart = await prisma.cart.create({
+        data: { userId },
+        include: { items: true },
+      });
+    }
+
+    const existingProductIds = new Set(cart.items.map(i => i.productId));
+    const syncProductIds = new Set(items.map(i => i.productId));
+
+    await prisma.$transaction(async tx => {
+      for (const item of items) {
+        if (item.quantity <= 0) {
+          if (existingProductIds.has(item.productId)) {
+            await tx.cartItem.deleteMany({
+              where: { cartId: cart!.cartId, productId: item.productId },
+            });
+          }
+          continue;
+        }
+
+        const itemTotalPrice = Number(item.unitPrice) * item.quantity;
+
+        if (existingProductIds.has(item.productId)) {
+          await tx.cartItem.updateMany({
+            where: { cartId: cart!.cartId, productId: item.productId },
+            data: {
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              totalPrice: itemTotalPrice,
+            },
+          });
+        } else {
+          await tx.cartItem.create({
+            data: {
+              cartId: cart!.cartId,
+              productId: item.productId,
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              totalPrice: itemTotalPrice,
+            },
+          });
+        }
+      }
+
+      for (const existingItem of cart!.items) {
+        if (!syncProductIds.has(existingItem.productId)) {
+          await tx.cartItem.delete({
+            where: { cartItemId: existingItem.cartItemId },
+          });
+        }
+      }
+
+      const allItems = await tx.cartItem.findMany({ where: { cartId: cart!.cartId } });
+      const totalPrice = allItems.reduce((sum, i) => sum + Number(i.totalPrice), 0);
+
+      await tx.cart.update({
+        where: { userId },
+        data: { totalPrice },
+      });
+    });
+
+    logger.info('Successfully synced cart.');
+    return { success: true };
+  } catch (error) {
+    logger.error(`An error occurred while syncing cart: ${error}`);
+    return { success: false };
+  }
+}

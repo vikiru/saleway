@@ -170,3 +170,31 @@ export async function updateCartItemById(req: UserRequest, res: Response) {
     return res.status(500).json(response);
   }
 }
+
+export async function syncCart(req: UserRequest, res: Response) {
+  const { userId } = req.params;
+  const { items } = req.body;
+  try {
+    const result = await CartService.syncCartByUserId(userId, items);
+    if (!result.success) {
+      const response = {
+        success: false,
+        error: 'Failed to sync cart',
+      };
+      return res.status(500).json(response);
+    }
+    logger.info('Successfully synced cart.');
+    const response = {
+      success: true,
+      message: 'Cart synced successfully',
+    };
+    return res.status(200).json(response);
+  } catch (error) {
+    logger.error(`An error occurred while syncing cart: ${error}`);
+    const response = {
+      success: false,
+      error: 'Internal Server Error',
+    };
+    return res.status(500).json(response);
+  }
+}
