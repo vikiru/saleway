@@ -19,9 +19,18 @@ export function useUpdateCartItem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ userId, cartItemId, quantity }: { userId: string; cartItemId: string; quantity: number }) =>
-      updateCartItem(userId, cartItemId, quantity),
-    onMutate: async ({ userId, cartItemId, quantity }) => {
+    mutationFn: ({
+      userId,
+      cartItemId,
+      quantity,
+      unitPrice,
+    }: {
+      userId: string;
+      cartItemId: string;
+      quantity: number;
+      unitPrice: number;
+    }) => updateCartItem(userId, cartItemId, quantity, unitPrice),
+    onMutate: async ({ userId, cartItemId, quantity, unitPrice }) => {
       await queryClient.cancelQueries({ queryKey: cartQueryKey(userId) });
       const previousCart = queryClient.getQueryData<CartResponse>(cartQueryKey(userId));
 

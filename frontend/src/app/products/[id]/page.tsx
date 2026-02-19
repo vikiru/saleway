@@ -15,11 +15,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { useCartStore } from '@/lib/stores/Cart';
 
 export default function ProductDetailsPage() {
   const [qty, setQty] = useState(1);
+  const addItem = useCartStore((state) => state.addItem);
 
   const product = {
+    id: 'prod_001',
     name: 'Elegant Leather Satchel',
     price: 192.0,
     rating: 4.8,
@@ -125,7 +128,11 @@ export default function ProductDetailsPage() {
                 </Button>
               </div>
 
-              <Button className="flex-1 h-10" size="lg">
+              <Button
+                className="flex-1 h-10"
+                onClick={() => addItem({ productId: product.id, quantity: qty, unitPrice: product.price })}
+                size="lg"
+              >
                 <ShoppingCart className="mr-2 h-5 w-5" />
                 Add to cart
               </Button>
