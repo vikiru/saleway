@@ -41,7 +41,7 @@ def retrieve_review_by_product_id(request, product_id: int) -> SuccessResponse[d
 
 
 @api.get('/reviews/users/{user_id}')
-def retrieve_reviews_by_user_id(request, user_id: int) -> SuccessResponse[dict]:
+def retrieve_reviews_by_user_id(request, user_id: str) -> SuccessResponse[dict]:
     try:
         response = get_reviews_by_user(user_id)
         if not response.data:

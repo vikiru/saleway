@@ -19,7 +19,7 @@ class OrderStatus(PythonEnum):
 
 
 class OrderCreate(BaseModel):
-    user_id: int
+    user_id: str
     items: list[dict]
     purchase_date: datetime
     total_price: Decimal
@@ -51,7 +51,7 @@ class OrderItemRead(BaseModel):
 
 class OrderRead(BaseModel):
     id: int
-    user_id: int
+    user_id: str
     purchase_date: str
     expected_delivery_date: str
     total_price: float
@@ -63,7 +63,7 @@ class OrderRead(BaseModel):
 
 class Order(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    user_id: int
+    user_id: str
     purchase_date: datetime
     expected_delivery_date: datetime
     total_price: Decimal

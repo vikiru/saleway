@@ -166,8 +166,8 @@ def get_order_route(order_id: int):
         ), 500
 
 
-@orders_bp.route('/user/<int:user_id>', methods=['GET'])
-def get_orders_by_user_route(user_id: int):
+@orders_bp.route('/user/<string:user_id>', methods=['GET'])
+def get_orders_by_user_route(user_id: str):
     try:
         with get_session() as session:
             orders = get_orders_by_user_id(session=session, user_id=user_id)

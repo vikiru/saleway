@@ -55,7 +55,7 @@ def remove_item_from_order(session: Session, order_id: int, item_id: int):
 
 def create_order(
     session: Session,
-    user_id: int,
+    user_id: str,
     items_data: list[dict],
     purchase_date: datetime,
     total_price: Decimal,
@@ -109,7 +109,7 @@ def get_order_by_id(session: Session, order_id: int):
         raise Exception(f'Failed to get order by ID: {str(e)}') from e
 
 
-def get_orders_by_user_id(session: Session, user_id: int):
+def get_orders_by_user_id(session: Session, user_id: str):
     try:
         statement = select(Order).options(selectinload(Order.items)).where(Order.user_id == user_id)
         orders = session.exec(statement).all()

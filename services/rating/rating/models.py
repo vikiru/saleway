@@ -6,7 +6,7 @@ from ninja import Schema
 
 
 class UserReview(models.Model):
-    user_id = models.IntegerField()
+    user_id = models.CharField(max_length=255)
     product_id = models.IntegerField()
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
@@ -26,7 +26,7 @@ class UserReview(models.Model):
 
 
 class UserReviewInput(Schema):
-    user_id: int
+    user_id: str
     product_id: int
     review: str
     rating: int
@@ -48,7 +48,7 @@ class UserReviewInput(Schema):
 
 class UserReviewOutput(Schema):
     id: int
-    user_id: int
+    user_id: str
     product_id: int
     title: str
     author: str

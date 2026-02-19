@@ -14,7 +14,7 @@ def get_review_by_id(product_id: int, review_id: int) -> ServiceResponse:
         return ServiceResponse(data={}, error=str(e))
 
 
-def get_reviews_by_user(user_id: int) -> ServiceResponse:
+def get_reviews_by_user(user_id: str) -> ServiceResponse:
     try:
         reviews = UserReview.objects.filter(user_id=user_id)
         if not reviews:
