@@ -1,71 +1,54 @@
 'use client';
 
-import { ArrowRight, Minus, Plus, Trash2 } from 'lucide-react';
+import { ArrowRight, Loader2, Minus, Plus, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { fetchProduct } from '@/lib/api/product';
+import { useCartStore } from '@/lib/stores/Cart';
+import type { Product } from '@/lib/types/product';
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Wireless Headphones',
-      price: 99.99,
-      quantity: 1,
-      image: 'https://placehold.co/200x200/png?text=Headphones',
-    },
-    {
-      id: 2,
-      name: 'Leather Wallet',
-      price: 49.99,
-      quantity: 1,
-      image: 'https://placehold.co/200x200/png?text=Wallet',
-    },
-    {
-      id: 3,
-      name: 'Smart Watch',
-      price: 199.99,
-      quantity: 1,
-      image: 'https://placehold.co/200x200/png?text=Watch',
-    },
-    {
-      id: 4,
-      name: 'Running Shoes',
-      price: 129.99,
-      quantity: 1,
-      image: 'https://placehold.co/200x200/png?text=Shoes',
-    },
-    {
-      id: 5,
-      name: 'Sunglasses',
-      price: 159.99,
-      quantity: 1,
-      image: 'https://placehold.co/200x200/png?text=Sunglasses',
-    },
-  ]);
+  const { items, updateItem, removeItem, getTotalPrice } = useCartStore();
+  const [products, setProducts] = useState<Map<string, Product>>(new Map());
+  const [loading, setLoading] = useState(true);
 
-  const updateQuantity = (id: number, delta: number) => {
-    setCartItems((items) =>
-      items.map((item) => {
-        if (item.id === id) {
-          const newQuantity = Math.max(1, item.quantity + delta);
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      }),
-    );
-  };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      const productMap = new Map<string, Product>();
+      const uniqueProductIds = [...new Set(items.map((item) => item.productId))];
 
-  const removeItem = (id: number) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
+      await Promise.all(
+        uniqueProductIds.map(async (productId) => {
+          try {
+            const response = await fetchProduct(Number(productId));
+            if (response.success && response.data) {
+              productMap.set(productId, response.data);
+            }
+          } catch {
+            // ignore
+          }
+        }),
+      );
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      setProducts(productMap);
+      setLoading(false);
+    };
+
+    if (items.length > 0) {
+      fetchProducts();
+    } else {
+      setLoading(false);
+    }
+  }, [items]);
+
+  const subtotal = getTotalPrice();
   const tax = subtotal * 0.1;
-  const shipping = 15.0;
+  const shipping = items.length > 0 ? 15.0 : 0;
   const total = subtotal + tax + shipping;
 
   return (
@@ -75,68 +58,83 @@ export default function CartPage() {
 
         <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start">
           <div className="lg:col-span-7">
-            {cartItems.length === 0 ? (
+            {items.length === 0 ? (
               <div className="text-center py-12 border rounded-lg border-dashed">
                 <p className="text-muted-foreground mb-4">Your cart is empty</p>
                 <Link href="/products">
                   <Button variant="outline">Start Shopping</Button>
                 </Link>
               </div>
+            ) : loading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
             ) : (
               <ScrollArea className="h-[600px] pr-4">
                 <div className="space-y-6">
-                  {cartItems.map((item) => (
-                    <Card className="overflow-hidden" key={item.id}>
-                      <div className="p-4 sm:flex sm:items-center sm:justify-between sm:space-x-4">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex-shrink-0">
-                            <img alt={item.name} className="h-24 w-24 rounded-md object-cover" src={item.image} />
+                  {items.map((item) => {
+                    const product = products.get(item.productId);
+                    return (
+                      <Card className="overflow-hidden" key={item.cartItemId}>
+                        <div className="p-4 sm:flex sm:items-center sm:justify-between sm:space-x-4">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                alt={product?.name || item.productId}
+                                className="h-24 w-24 rounded-md object-cover"
+                                src={
+                                  product?.image?.imageUrl || `https://placehold.co/200x200/png?text=${item.productId}`
+                                }
+                              />
+                            </div>
+                            <div>
+                              <h3 className="text-base font-medium text-foreground">
+                                <Link className="hover:underline" href={`/products/${item.productId}`}>
+                                  {product?.name || item.productId}
+                                </Link>
+                              </h3>
+                              <p className="mt-1 text-sm font-medium text-muted-foreground">
+                                ${item.unitPrice.toFixed(2)}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-base font-medium text-foreground">
-                              <Link className="hover:underline" href={`/products/${item.id}`}>
-                                {item.name}
-                              </Link>
-                            </h3>
-                            <p className="mt-1 text-sm font-medium text-muted-foreground">${item.price.toFixed(2)}</p>
-                          </div>
-                        </div>
 
-                        <div className="mt-4 flex items-center justify-between sm:mt-0">
-                          <div className="flex items-center border rounded-md mx-4">
+                          <div className="mt-4 flex items-center justify-between sm:mt-0">
+                            <div className="flex items-center border rounded-md mx-4">
+                              <Button
+                                className="h-8 w-8 rounded-none border-r"
+                                disabled={item.quantity <= 1}
+                                onClick={() => updateItem(item.cartItemId, item.quantity - 1)}
+                                size="icon"
+                                variant="ghost"
+                              >
+                                <Minus className="h-3 w-3" />
+                              </Button>
+                              <div className="w-10 text-center text-sm font-medium">{item.quantity}</div>
+                              <Button
+                                className="h-8 w-8 rounded-none border-l"
+                                onClick={() => updateItem(item.cartItemId, item.quantity + 1)}
+                                size="icon"
+                                variant="ghost"
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
+                            </div>
+
                             <Button
-                              className="h-8 w-8 rounded-none border-r"
-                              disabled={item.quantity <= 1}
-                              onClick={() => updateQuantity(item.id, -1)}
+                              className="text-muted-foreground hover:text-destructive"
+                              onClick={() => removeItem(item.cartItemId)}
                               size="icon"
                               variant="ghost"
                             >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <div className="w-10 text-center text-sm font-medium">{item.quantity}</div>
-                            <Button
-                              className="h-8 w-8 rounded-none border-l"
-                              onClick={() => updateQuantity(item.id, 1)}
-                              size="icon"
-                              variant="ghost"
-                            >
-                              <Plus className="h-3 w-3" />
+                              <Trash2 className="h-5 w-5" />
+                              <span className="sr-only">Remove</span>
                             </Button>
                           </div>
-
-                          <Button
-                            className="text-muted-foreground hover:text-destructive"
-                            onClick={() => removeItem(item.id)}
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <Trash2 className="h-5 w-5" />
-                            <span className="sr-only">Remove</span>
-                          </Button>
                         </div>
-                      </div>
-                    </Card>
-                  ))}
+                      </Card>
+                    );
+                  })}
                 </div>
               </ScrollArea>
             )}
