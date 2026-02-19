@@ -1,8 +1,8 @@
 import { ORDER_SERVICE_URL } from '@/lib/routes';
-import type { OrderCreate, OrderItemCreate, OrderResponse, OrdersResponse } from '@/lib/types/order';
+import type { OrderCreate, OrderResponse, OrdersResponse } from '@/lib/types/order';
 import { handleResponse } from './fetch';
 
-export async function fetchUserOrders(userId: number, signal?: AbortSignal): Promise<OrdersResponse> {
+export async function fetchUserOrders(userId: string, signal?: AbortSignal): Promise<OrdersResponse> {
   const response = await fetch(`${ORDER_SERVICE_URL}/orders/user/${userId}`, { signal });
   return handleResponse(response);
 }

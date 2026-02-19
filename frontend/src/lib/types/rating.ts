@@ -1,6 +1,6 @@
 export interface UserReview {
   id: number;
-  userId: number;
+  userId: string;
   productId: number;
   title: string;
   author: string;
@@ -11,7 +11,7 @@ export interface UserReview {
 }
 
 export interface UserReviewCreate {
-  userId: number;
+  userId: string;
   productId: number;
   title: string;
   author: string;

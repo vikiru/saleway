@@ -1,5 +1,5 @@
 export interface EcommerceUser {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   username: string;
@@ -12,11 +12,11 @@ export interface EcommerceUser {
 }
 
 export interface EcommerceUserCreate {
+  clerkUserId: string;
   firstName: string;
   lastName: string;
   username: string;
   email: string;
-  password: string;
 }
 
 export interface EcommerceUserUpdate {
@@ -27,13 +27,8 @@ export interface EcommerceUserUpdate {
   password?: string;
 }
 
-export interface UserCredentials {
-  email: string;
-  password: string;
-}
-
 export interface UserProfile {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   username: string;
