@@ -1,22 +1,34 @@
 from .definitions import ServiceResponse
-from .models import EcommerceUser as EcommerceUserModel, EcommerceUserInput
+from .models import EcommerceUser as EcommerceUserModel, EcommerceUserInput, EcommerceUserCreate
 from utils.user import extract_user
 
 
-def create_user(first_name, last_name, username, email, password) -> ServiceResponse:
+def create_user(payload: EcommerceUserCreate) -> ServiceResponse:
     try:
-        if get_user_by_email(email) or get_user_by_username(username):
+        if get_user_by_email(payload.email):
             return ServiceResponse(
                 data={},
-                error='User already exists. Please enter a different username or email.',
+                error='User with this email already exists.',
+            )
+
+        if get_user_by_username(payload.username):
+            return ServiceResponse(
+                data={},
+                error='User with this username already exists.',
+            )
+
+        if get_user_by_clerk_id(payload.clerk_user_id):
+            return ServiceResponse(
+                data={},
+                error='User with this Clerk ID already exists.',
             )
 
         user = EcommerceUserModel.objects.create(
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            email=email,
-            password=password,
+            clerk_user_id=payload.clerk_user_id,
+            first_name=payload.first_name,
+            last_name=payload.last_name,
+            username=payload.username,
+            email=payload.email,
         )
         data = extract_user(user)
         return ServiceResponse(data=data, error='')
@@ -24,9 +36,9 @@ def create_user(first_name, last_name, username, email, password) -> ServiceResp
         return ServiceResponse(data={}, error=str(e))
 
 
-def modify_user(id: int, updated_user: EcommerceUserInput) -> ServiceResponse:
+def modify_user(clerk_user_id: str, updated_user: EcommerceUserInput) -> ServiceResponse:
     try:
-        user = EcommerceUserModel.objects.filter(id=id).first()
+        user = get_user_by_clerk_id(clerk_user_id)
         if not user:
             return ServiceResponse(data={}, error='User not found')
 
@@ -42,9 +54,9 @@ def modify_user(id: int, updated_user: EcommerceUserInput) -> ServiceResponse:
         return ServiceResponse(data={}, error=str(e))
 
 
-def remove_user(id: int) -> ServiceResponse:
+def remove_user(clerk_user_id: str) -> ServiceResponse:
     try:
-        user = EcommerceUserModel.objects.filter(id=id).first()
+        user = get_user_by_clerk_id(clerk_user_id)
 
         if not user:
             return ServiceResponse(data={}, error='User not found')
@@ -54,6 +66,10 @@ def remove_user(id: int) -> ServiceResponse:
         return ServiceResponse(data={}, error='')
     except Exception as e:
         return ServiceResponse(data={}, error=str(e))
+
+
+def get_user_by_clerk_id(clerk_user_id: str) -> EcommerceUserModel:
+    return EcommerceUserModel.objects.filter(clerk_user_id=clerk_user_id).first()
 
 
 def get_user_by_id(id: int) -> EcommerceUserModel:
