@@ -347,6 +347,9 @@ replay_pid*
 *.vsix
 
 openspec
+.github/prompts
+.github/skills
+.cospec
 .gemini
 .qwen
 .kilocode
@@ -359,12 +362,14 @@ openspec
 .amazonq
 .augment
 .clinerules
+.pi
+.kiro
 .codebuddy
 .codex
-.cospec
 .crush
 .cursor
 .factory
 .iflow
 .qoder
 .roo
+.ruff_cache
