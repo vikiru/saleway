@@ -1,44 +1,16 @@
+import { handleResponse } from '@/lib/api/fetch';
 import { RATING_SERVICE_URL } from '@/lib/routes';
-import type {
-  ProductReviewsResponse,
-  ReviewResponse,
-  UserReviewCreate,
-  UserReviewsResponse,
-  UserReviewUpdate,
-} from '@/lib/types/rating';
-import { handleResponse } from './fetch';
+import type { ProductReviewsResponse, UserReviewsResponse } from '@/lib/types/rating';
 
-export async function fetchProductRatings(productId: number, signal?: AbortSignal): Promise<ProductReviewsResponse> {
-  const response = await fetch(`${RATING_SERVICE_URL}/reviews/product/${productId}`, { signal });
+export async function getProductReviews(
+  productId: number | string,
+  signal?: AbortSignal,
+): Promise<ProductReviewsResponse> {
+  const response = await fetch(`${RATING_SERVICE_URL}/products/${productId}/reviews`, { signal });
   return handleResponse(response);
 }
 
-export async function fetchUserRatings(userId: string, signal?: AbortSignal): Promise<UserReviewsResponse> {
+export async function getUserReviews(userId: string, signal?: AbortSignal): Promise<UserReviewsResponse> {
   const response = await fetch(`${RATING_SERVICE_URL}/reviews/user/${userId}`, { signal });
-  return handleResponse(response);
-}
-
-export async function createRating(review: UserReviewCreate): Promise<ReviewResponse> {
-  const response = await fetch(`${RATING_SERVICE_URL}/reviews`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(review),
-  });
-  return handleResponse(response);
-}
-
-export async function updateRating(reviewId: number, review: UserReviewUpdate): Promise<ReviewResponse> {
-  const response = await fetch(`${RATING_SERVICE_URL}/reviews/${reviewId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(review),
-  });
-  return handleResponse(response);
-}
-
-export async function deleteRating(reviewId: number): Promise<ReviewResponse> {
-  const response = await fetch(`${RATING_SERVICE_URL}/reviews/${reviewId}`, {
-    method: 'DELETE',
-  });
   return handleResponse(response);
 }

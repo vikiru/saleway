@@ -3,7 +3,8 @@
 import { useAuth } from '@clerk/nextjs';
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-import { fetchCart, syncCart } from '@/lib/api/cart';
+import { getCart } from '@/lib/api/cart';
+import { syncCart } from '@/lib/server/actions/carts';
 import { useCartStore } from '@/lib/stores/Cart';
 
 export function useCartSync() {
@@ -19,7 +20,7 @@ export function useCartSync() {
 
   useEffect(() => {
     if (isSignedIn && userId) {
-      fetchCart(userId)
+      getCart(userId)
         .then((cart) => {
           if (cart?.data?.items && cart.data.items.length > 0) {
             setCart(

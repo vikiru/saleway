@@ -9,9 +9,7 @@ export async function addCartItemsToCart(userId: string, cartItems: CartItem[]) 
       throw new Error(`Cart not found for ${userId}.`);
     }
     const cartId = cart.cartId;
-    const totalPrice = cartItems.reduce((acc, curr) => {
-      return acc + Number(curr.totalPrice);
-    }, 0);
+    const totalPrice = cartItems.reduce((acc, curr) => acc + Number(curr.totalPrice), 0);
 
     await prisma.cartItem.createMany({
       data: cartItems.map(cartItem => ({
@@ -107,7 +105,7 @@ export async function deleteCartItemById(userId: string, itemId: string) {
     });
     logger.info('Successfully deleted item from cart.');
     return updatedCart;
-  } catch (error) {
+  } catch {
     logger.error('An error occurred while deleting item from cart.');
   }
 }
@@ -156,7 +154,7 @@ export async function updateCartItemById(userId: string, updatedItem: CartItem) 
     });
     logger.info('Successfully updated item from cart.');
     return updatedCart;
-  } catch (error) {
+  } catch {
     logger.error('An error occurred while updating item from cart.');
   }
 }
@@ -186,7 +184,7 @@ export async function syncCartByUserId(
         if (item.quantity <= 0) {
           if (existingProductIds.has(item.productId)) {
             await tx.cartItem.deleteMany({
-              where: { cartId: cart!.cartId, productId: item.productId },
+              where: { cartId: cart?.cartId, productId: item.productId },
             });
           }
           continue;
@@ -196,7 +194,7 @@ export async function syncCartByUserId(
 
         if (existingProductIds.has(item.productId)) {
           await tx.cartItem.updateMany({
-            where: { cartId: cart!.cartId, productId: item.productId },
+            where: { cartId: cart?.cartId, productId: item.productId },
             data: {
               quantity: item.quantity,
               unitPrice: item.unitPrice,
@@ -206,7 +204,7 @@ export async function syncCartByUserId(
         } else {
           await tx.cartItem.create({
             data: {
-              cartId: cart!.cartId,
+              cartId: cart?.cartId,
               productId: item.productId,
               quantity: item.quantity,
               unitPrice: item.unitPrice,
@@ -216,7 +214,7 @@ export async function syncCartByUserId(
         }
       }
 
-      for (const existingItem of cart!.items) {
+      for (const existingItem of cart?.items) {
         if (!syncProductIds.has(existingItem.productId)) {
           await tx.cartItem.delete({
             where: { cartItemId: existingItem.cartItemId },
@@ -224,7 +222,7 @@ export async function syncCartByUserId(
         }
       }
 
-      const allItems = await tx.cartItem.findMany({ where: { cartId: cart!.cartId } });
+      const allItems = await tx.cartItem.findMany({ where: { cartId: cart?.cartId } });
       const totalPrice = allItems.reduce((sum, i) => sum + Number(i.totalPrice), 0);
 
       await tx.cart.update({

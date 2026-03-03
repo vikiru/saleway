@@ -84,15 +84,9 @@ const requestLogger = winston.createLogger({
 });
 
 const logger = {
-  info: (parameters: string) => {
-    return infoLogger.info(parameters);
-  },
-  error: (parameters: string) => {
-    return errorLogger.error(parameters);
-  },
-  http: (parameters: string) => {
-    return requestLogger.http(parameters);
-  },
+  info: (parameters: string) => infoLogger.info(parameters),
+  error: (parameters: string) => errorLogger.error(parameters),
+  http: (parameters: string) => requestLogger.http(parameters),
 };
 
 if (env.NODE_ENV === 'development') {
