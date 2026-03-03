@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getProduct } from '@/lib/api/product';
 import { useCartStore } from '@/lib/stores/Cart';
 import type { Product } from '@/lib/types/product';
-import { CartItemList } from './CartItemList';
+import { CartItemList } from '@/lib/components/features/cart/CartItemList';
 
 export function CartItemListContainer() {
   const items = useCartStore((state) => state.items);

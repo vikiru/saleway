@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getProduct, getProducts } from '@/lib/api/product';
-import { productKeys } from './keys';
+import { productKeys } from '@/lib/queries/keys';
 
 export function useProduct(productId: string) {
   return useQuery({

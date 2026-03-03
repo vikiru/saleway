@@ -1,7 +1,7 @@
 'use client';
 
 import { Toaster } from '@/components/ui/sonner';
-import { ReactQueryProvider } from './ReactQueryProvider';
+import { ReactQueryProvider } from '@/lib/providers/ReactQueryProvider';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

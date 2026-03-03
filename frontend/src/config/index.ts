@@ -1,6 +1,6 @@
 import z from 'zod';
 import '../../../envConfig.ts';
-import { validateData } from '../lib/utils/validateData';
+import { validateData } from '@/lib/utils/validateData';
 
 const envSchema = z.object({
   NODE_ENV: z
