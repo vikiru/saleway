@@ -1,24 +1,62 @@
+'use client';
+
 import { ArrowRight, Package } from 'lucide-react';
 import Link from 'next/link';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-type Order = {
-  id: string;
-  number: string;
-  date: string;
-  total: string;
-  status: string;
-  items: number;
-};
+import { useOrders } from '@/lib/queries/order';
+import type { OrderStatus } from '@/lib/types/order';
 
 type RecentOrdersProps = {
-  orders: Order[];
+  userId: string;
 };
 
-export function RecentOrders({ orders }: RecentOrdersProps) {
+export function RecentOrders({ userId }: RecentOrdersProps) {
+  const { data: response, isLoading, error } = useOrders(userId);
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Orders</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">Loading orders...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error || !response?.success || !response.data) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Orders</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">Unable to load recent orders.</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const orders = response.data.slice(0, 5);
+
+  if (orders.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Orders</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">No orders yet.</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -41,14 +79,15 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">Order #{order.number}</p>
+                  <p className="text-sm font-medium leading-none">Order #{order.id}</p>
                   <p className="text-xs text-muted-foreground">
-                    {order.date} · {order.items} {order.items === 1 ? 'item' : 'items'}
+                    {new Date(order.purchaseDate).toLocaleDateString()} · {order.items.length}{' '}
+                    {order.items.length === 1 ? 'item' : 'items'}
                   </p>
                 </div>
               </div>
               <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
-                <div className="font-medium">{order.total}</div>
+                <div className="font-medium">${order.totalPrice.toLocaleString()}</div>
                 <Badge className={getStatusColor(order.status)} variant="secondary">
                   {order.status}
                 </Badge>
@@ -67,14 +106,16 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
   );
 }
 
-function getStatusColor(status: string) {
-  switch (status.toLowerCase()) {
+function getStatusColor(status: OrderStatus) {
+  switch (status) {
     case 'delivered':
       return 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-300';
-    case 'shipped':
-      return 'bg-blue-100 text-blue-800 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300';
-    case 'processing':
+    case 'completed':
+      return 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-300';
+    case 'pending':
       return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300';
+    case 'cancelled':
+      return 'bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900 dark:text-red-300';
     default:
       return 'bg-gray-100 text-gray-800 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300';
   }
