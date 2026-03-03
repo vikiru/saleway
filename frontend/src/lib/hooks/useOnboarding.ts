@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
 import { onboardingSchema } from '@/lib/schema/onboarding';
-import { createUser } from '@/lib/server/actions/user';
+import { createUser } from '@/lib/server/actions/users';
+import type { EcommerceUserCreate } from '@/lib/types/user';
 
 export function useOnboarding() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export function useOnboarding() {
   });
 
   const onSubmit = async (values: z.infer<typeof onboardingSchema>) => {
-    const result = await createUser(values);
+    const result = await createUser(values as EcommerceUserCreate);
 
     if (!result.success) {
       toast.error(result.error || 'Failed to create profile');

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/server/auth';
 import { findUserById } from '@/lib/server/user';
-import { OnboardingForm } from './OnboardingForm';
+import { OnboardingForm } from '../OnboardingForm';
 
 export default async function OnboardingPage() {
   const userId = await getCurrentUser();

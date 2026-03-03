@@ -1,3 +1,4 @@
+import { handleResponse } from '@/lib/api/fetch';
 import { PAYMENT_SERVICE_URL } from '@/lib/routes';
 import type {
   CheckoutSessionRequest,
@@ -6,7 +7,6 @@ import type {
   RefundResponse,
   VerifySessionResponse,
 } from '@/lib/types/payment';
-import { handleResponse } from './fetch';
 
 export async function createCheckout(request: CheckoutSessionRequest): Promise<CheckoutSessionResponse> {
   const response = await fetch(`${PAYMENT_SERVICE_URL}/checkout`, {

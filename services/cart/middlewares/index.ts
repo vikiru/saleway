@@ -11,9 +11,7 @@ const morganStream = {
   write: (message: string) => logger.http(message),
 };
 
-const skip = () => {
-  return env.NODE_ENV !== 'development';
-};
+const skip = () => env.NODE_ENV !== 'development';
 
 const morganMiddleware = morgan('dev', {
   stream: morganStream,
