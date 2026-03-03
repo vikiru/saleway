@@ -1,5 +1,5 @@
-import { queryClient } from './client';
-import { cartKeys, orderKeys, productKeys, ratingKeys, userKeys } from './keys';
+import { queryClient } from '@/lib/queries/client';
+import { cartKeys, orderKeys, productKeys, ratingKeys, userKeys } from '@/lib/queries/keys';
 
 export const revalidate = {
   cart: {
