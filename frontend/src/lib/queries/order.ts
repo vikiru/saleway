@@ -1,19 +1,33 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchOrder, fetchUserOrders } from '@/lib/api/order';
-import { orderQueryKey, userOrdersQueryKey } from '@/lib/queries/keys';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { getOrder, getOrders } from '@/lib/api/order';
+import { orderKeys } from './keys';
 
-export function useUserOrders(userId: string) {
+export function useOrder(orderId: string) {
   return useQuery({
-    queryKey: userOrdersQueryKey(userId),
-    queryFn: ({ signal }) => fetchUserOrders(userId, signal),
+    queryKey: orderKeys.single(orderId),
+    queryFn: ({ signal }) => getOrder(orderId, signal),
+    enabled: !!orderId,
+  });
+}
+
+export function useOrders(userId: string) {
+  return useQuery({
+    queryKey: orderKeys.byUser(userId),
+    queryFn: ({ signal }) => getOrders(userId, signal),
     enabled: !!userId,
   });
 }
 
-export function useOrder(orderId: number) {
-  return useQuery({
-    queryKey: orderQueryKey(String(orderId)),
-    queryFn: ({ signal }) => fetchOrder(orderId, signal),
-    enabled: !!orderId,
+export function useSuspenseOrder(orderId: string) {
+  return useSuspenseQuery({
+    queryKey: orderKeys.single(orderId),
+    queryFn: ({ signal }) => getOrder(orderId, signal),
+  });
+}
+
+export function useSuspenseOrders(userId: string) {
+  return useSuspenseQuery({
+    queryKey: orderKeys.byUser(userId),
+    queryFn: ({ signal }) => getOrders(userId, signal),
   });
 }

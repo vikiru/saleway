@@ -1,19 +1,33 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchProductRatings, fetchUserRatings } from '@/lib/api/rating';
-import { productRatingsQueryKey, userRatingsQueryKey } from '@/lib/queries/keys';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { getProductReviews, getUserReviews } from '@/lib/api/rating';
+import { ratingKeys } from './keys';
 
-export function useProductRatings(productId: number) {
+export function useProductReviews(productId: string) {
   return useQuery({
-    queryKey: productRatingsQueryKey(String(productId)),
-    queryFn: ({ signal }) => fetchProductRatings(productId, signal),
+    queryKey: ratingKeys.byProduct(productId),
+    queryFn: ({ signal }) => getProductReviews(productId, signal),
     enabled: !!productId,
   });
 }
 
-export function useUserRatings(userId: string) {
+export function useUserReviews(userId: string) {
   return useQuery({
-    queryKey: userRatingsQueryKey(userId),
-    queryFn: ({ signal }) => fetchUserRatings(userId, signal),
+    queryKey: ratingKeys.byUser(userId),
+    queryFn: ({ signal }) => getUserReviews(userId, signal),
     enabled: !!userId,
+  });
+}
+
+export function useSuspenseProductReviews(productId: string) {
+  return useSuspenseQuery({
+    queryKey: ratingKeys.byProduct(productId),
+    queryFn: ({ signal }) => getProductReviews(productId, signal),
+  });
+}
+
+export function useSuspenseUserReviews(userId: string) {
+  return useSuspenseQuery({
+    queryKey: ratingKeys.byUser(userId),
+    queryFn: ({ signal }) => getUserReviews(userId, signal),
   });
 }

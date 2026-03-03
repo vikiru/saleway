@@ -1,11 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchUser } from '@/lib/api/user';
-import { userQueryKey } from '@/lib/queries/keys';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { getUser } from '@/lib/api/user';
+import { userKeys } from './keys';
 
 export function useUser(userId: string) {
   return useQuery({
-    queryKey: userQueryKey(userId),
-    queryFn: ({ signal }) => fetchUser(userId, signal),
+    queryKey: userKeys.single(userId),
+    queryFn: ({ signal }) => getUser(userId, signal),
     enabled: !!userId,
+  });
+}
+
+export function useSuspenseUser(userId: string) {
+  return useSuspenseQuery({
+    queryKey: userKeys.single(userId),
+    queryFn: ({ signal }) => getUser(userId, signal),
   });
 }
