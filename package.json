@@ -1,8 +1,8 @@
 {
-  "name": "ecommerce",
+  "name": "saleway",
+  "description": "A fake Ecommerce web app using microservice architecture.",
   "version": "0.0.1",
   "private": true,
-  "description": "A fake Ecommerce web app using microservice architecture.",
   "license": "MIT",
   "author": "Visakan Kirubakaran",
   "scripts": {

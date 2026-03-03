@@ -1,4 +1,4 @@
-<h1 align="center">Boilerplate Repository <br> Future Projects 🚀 </h1>
+<h1 align="center">Saleway</h1>
 
 <div align="center" id="badges">
 <br/>
