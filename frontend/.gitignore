@@ -249,3 +249,6 @@ next-env.d.ts
 ### NextJS ###
 
 # End of https://www.toptal.com/developers/gitignore/api/nextjs
+
+# clerk configuration (can include secrets)
+/.clerk/
