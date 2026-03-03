@@ -1,26 +1,32 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchProduct, fetchProducts, searchProducts } from '@/lib/api/product';
-import { productQueryKey, productsQueryKey } from '@/lib/queries/keys';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { getProduct, getProducts } from '@/lib/api/product';
+import { productKeys } from './keys';
 
-export function useProducts() {
+export function useProduct(productId: string) {
   return useQuery({
-    queryKey: productsQueryKey(),
-    queryFn: ({ signal }) => fetchProducts(signal),
-  });
-}
-
-export function useProduct(productId: number) {
-  return useQuery({
-    queryKey: productQueryKey(String(productId)),
-    queryFn: ({ signal }) => fetchProduct(productId, signal),
+    queryKey: productKeys.single(productId),
+    queryFn: () => getProduct(productId),
     enabled: !!productId,
   });
 }
 
-export function useProductSearch(query: string, category?: string, brand?: string, page = 1, pageSize = 10) {
+export function useProducts() {
   return useQuery({
-    queryKey: productsQueryKey({ query, category, brand, page, pageSize }),
-    queryFn: ({ signal }) => searchProducts(query, category, brand, page, pageSize, signal),
-    enabled: query.length > 0,
+    queryKey: productKeys.all(),
+    queryFn: () => getProducts(),
+  });
+}
+
+export function useSuspenseProduct(productId: string) {
+  return useSuspenseQuery({
+    queryKey: productKeys.single(productId),
+    queryFn: () => getProduct(productId),
+  });
+}
+
+export function useSuspenseProducts() {
+  return useSuspenseQuery({
+    queryKey: productKeys.all(),
+    queryFn: () => getProducts(),
   });
 }
