@@ -31,4 +31,4 @@ ENV PORT=8000
 EXPOSE 8000
 
 ENTRYPOINT ["./entrypoint.sh"]
-CMD [".venv/bin/gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "rating_service.wsgi:application"]
+CMD [".venv/bin/gunicorn", "--bind", "0.0.0.0:8001", "--workers", "2", "rating.wsgi:application"]

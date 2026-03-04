@@ -5,7 +5,7 @@ FROM node:22-slim AS base
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Install OpenSSL for Prisma
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl wget && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
 RUN groupadd -g 1001 nodejs && useradd -u 1001 -g nodejs -s /bin/sh appuser
