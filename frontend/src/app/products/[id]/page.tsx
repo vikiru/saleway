@@ -1,4 +1,4 @@
-import { getProduct } from '@/lib/api/product';
+import { getProduct, getProducts } from '@/lib/api/product';
 import { ProductBreadcrumb } from '@/lib/components/features/products/ProductBreadcrumb';
 import { ProductDescription } from '@/lib/components/features/products/ProductDescription';
 import { ProductGallery } from '@/lib/components/features/products/ProductGallery';
@@ -17,6 +17,15 @@ interface Review {
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateStaticParams() {
+  const productsResponse = getProducts();
+  const products = productsResponse.data || [];
+
+  return products.map((product) => ({
+    id: String(product.id),
+  }));
 }
 
 export default async function ProductDetailsPage({ params }: ProductPageProps) {
@@ -42,7 +51,7 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
     rating: 4,
     comment:
       'This product exceeded my expectations. The quality is amazing and it arrived faster than I thought. Highly recommended!',
-    createdAt: new Date(Date.now() - (i + 1) * 2 * 24 * 60 * 60 * 1000).toISOString(),
+    createdAt: new Date('2024-03-01T10:00:00Z').toISOString(),
   }));
 
   const productInfoProps = {
@@ -58,7 +67,7 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
         <ProductBreadcrumb productName={product.name} />
 
         <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-          <ProductGallery imageUrl={product.image.imageUrl} name={product.name} />
+          <ProductGallery image_url={product.image?.image_url} name={product.name} />
 
           <div>
             <ProductRating rating={4.8} reviewCount={24} />
