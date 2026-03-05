@@ -2,8 +2,8 @@
 
 import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/lib/components/ui/button';
+import { Card, CardContent } from '@/lib/components/ui/card';
 
 export default function SuccessPage() {
   return (

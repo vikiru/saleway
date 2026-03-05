@@ -1,8 +1,8 @@
 'use server';
 
+import type { ReviewResponse, UserReviewCreate, UserReviewUpdate } from '@/features/rating/types/rating';
 import { handleResponse } from '@/lib/api/fetch';
 import { RATING_SERVICE_URL } from '@/lib/routes';
-import type { ReviewResponse, UserReviewCreate, UserReviewUpdate } from '@/lib/types/rating';
 
 export async function createReview(review: UserReviewCreate): Promise<ReviewResponse> {
   const response = await fetch(`${RATING_SERVICE_URL}/products/${review.productId}/reviews`, {

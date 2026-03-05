@@ -1,13 +1,9 @@
 import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/lib/server/auth';
+import { getCurrentUser } from '@/features/user/actions/auth';
 import { SIGNIN_ROUTE } from '@/lib/constants/routes';
-import { CheckoutSuccessClient } from '@/app/(protected)/checkout/success/CheckoutSuccessClient';
+import { CheckoutSuccessPage } from '@/pages/checkout/ui/CheckoutSuccessPage';
 
-export default async function CheckoutSuccessPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ session_id?: string }>;
-}) {
+export default async function Page({ searchParams }: { searchParams: Promise<{ session_id?: string }> }) {
   const userId = await getCurrentUser();
   if (!userId) {
     redirect(SIGNIN_ROUTE);
@@ -19,5 +15,5 @@ export default async function CheckoutSuccessPage({
     redirect(SIGNIN_ROUTE);
   }
 
-  return <CheckoutSuccessClient userId={userId} sessionId={session_id} />;
+  return <CheckoutSuccessPage sessionId={session_id} userId={userId} />;
 }

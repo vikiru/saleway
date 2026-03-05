@@ -1,5 +1,5 @@
 import { ThemeProvider } from 'next-themes';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from '@/lib/components/ui/sonner';
 import { ReactQueryProvider } from '@/lib/providers/ReactQueryProvider';
 
 export function Providers({ children }: { children: React.ReactNode }) {

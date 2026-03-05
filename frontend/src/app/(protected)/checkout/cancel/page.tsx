@@ -1,10 +1,10 @@
-import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/lib/server/auth';
-import { SIGNIN_ROUTE, CART_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
 import { ArrowLeft, XCircle } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/features/user/actions/auth';
+import { Button } from '@/lib/components/ui/button';
+import { Card, CardContent } from '@/lib/components/ui/card';
+import { CART_ROUTE, SEARCH_ROUTE, SIGNIN_ROUTE } from '@/lib/constants/routes';
 
 export default async function CheckoutCancelPage() {
   const userId = await getCurrentUser();

@@ -1,18 +1,13 @@
 import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/lib/server/auth';
+import { getCurrentUser } from '@/features/user/actions/auth';
 import { SIGNIN_ROUTE } from '@/lib/constants/routes';
-import { getProduct } from '@/lib/api/product';
-import { CheckoutClient } from '@/app/(protected)/checkout/CheckoutClient';
+import { CheckoutPage } from '@/pages/checkout/ui/CheckoutPage';
 
-export default async function CheckoutPage() {
+export default async function Page() {
   const userId = await getCurrentUser();
   if (!userId) {
     redirect(SIGNIN_ROUTE);
   }
 
-  return <CheckoutPageWrapper userId={userId} />;
-}
-
-async function CheckoutPageWrapper({ userId }: { userId: string }) {
-  return <CheckoutClient userId={userId} initialCartItems={[]} />;
+  return <CheckoutPage initialCartItems={[]} userId={userId} />;
 }

@@ -1,8 +1,8 @@
 'use server';
 
+import type { CartItemCreateInput, CartResponse } from '@/features/cart/types/cart';
 import { handleResponse } from '@/lib/api/fetch';
 import { CART_SERVICE_URL } from '@/lib/routes';
-import type { CartItemCreateInput, CartResponse } from '@/lib/types/cart';
 
 export async function createCartItem(userId: string, item: CartItemCreateInput): Promise<CartResponse> {
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/item`, {

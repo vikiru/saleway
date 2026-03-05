@@ -1,8 +1,13 @@
 'use server';
 
+import type {
+  EcommerceUserCreate,
+  EcommerceUserUpdate,
+  UserProfileResponse,
+  UserResponse,
+} from '@/features/user/types/user';
 import { handleResponse } from '@/lib/api/fetch';
 import { USER_SERVICE_URL } from '@/lib/routes';
-import type { EcommerceUserCreate, EcommerceUserUpdate, UserProfileResponse, UserResponse } from '@/lib/types/user';
 
 export async function createUser(data: EcommerceUserCreate): Promise<UserResponse> {
   const response = await fetch(`${USER_SERVICE_URL}/users`, {
