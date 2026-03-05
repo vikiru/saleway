@@ -1,13 +1,7 @@
-'use client';
-
 import { Filter, Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { FilterSection } from '@/features/product/components/FilterSection';
-import { ProductGrid } from '@/features/product/components/ProductGrid';
-import type { Product, ProductWithRating } from '@/features/product/types/product';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import { Button } from '@/lib/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/lib/components/ui/dialog';
-import { Input } from '@/lib/components/ui/input';
 import {
   Pagination,
   PaginationContent,
@@ -18,56 +12,62 @@ import {
   PaginationPrevious,
 } from '@/lib/components/ui/pagination';
 import { ScrollArea } from '@/lib/components/ui/scroll-area';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/lib/components/ui/select';
+import { FilterSection } from '@/features/product/components/FilterSection';
+import { ProductGrid } from '@/features/product/components/ProductGrid';
+import { SearchInput } from '@/features/product/components/SearchInput';
+import { SortSelect } from '@/features/product/components/SortSelect';
+import type { ProductWithRating } from '@/features/product/types/product';
+import { getProducts } from '@/features/product/api/product';
+import { SEARCH_ROUTE } from '@/lib/constants/routes';
+import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 9;
 
 interface SearchPageProps {
-  initialProducts: Product[];
+  products: ProductWithRating[];
+  totalProducts: number;
+  searchParams: {
+    q?: string;
+    category?: string;
+    brand?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    sortBy?: string;
+    page?: string;
+  };
 }
 
-export function SearchPage({ initialProducts }: SearchPageProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [sortBy, setSortBy] = useState('price-asc');
-  const [currentPage, setCurrentPage] = useState(1);
+export function SearchPage({ products, totalProducts, searchParams }: SearchPageProps) {
+  const allProductsResponse = getProducts();
+  const allProducts = allProductsResponse.data || [];
 
-  const categories = Array.from(new Set(initialProducts.map((p) => p.category)))
+  const categories = Array.from(new Set(allProducts.map((p) => p.category)))
     .sort()
     .map((cat) => ({ id: cat, label: cat.charAt(0).toUpperCase() + cat.slice(1) }));
 
-  const brands = Array.from(new Set(initialProducts.map((p) => p.brand)))
+  const brands = Array.from(new Set(allProducts.map((p) => p.brand)))
     .sort()
     .map((brand) => ({ id: brand.toLowerCase(), label: brand }));
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, []);
-
-  const filteredProducts = (
-    initialProducts.filter((product) => {
-      const min = minPrice === '' ? 0 : Number(minPrice);
-      const max = maxPrice === '' ? Infinity : Number(maxPrice);
-      const matchesPrice = product.price >= min && product.price <= max;
-      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
-      const matchesBrand =
-        selectedBrands.length === 0 || selectedBrands.some((b) => b.toLowerCase() === product.brand.toLowerCase());
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesPrice && matchesCategory && matchesBrand && matchesSearch;
-    }) as ProductWithRating[]
-  ).sort((a, b) => {
-    if (sortBy === 'price-asc') return a.price - b.price;
-    if (sortBy === 'price-desc') return b.price - a.price;
-    return 0;
-  });
-
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
+  const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredProducts.length);
-  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+  const endIndex = Math.min(startIndex + products.length, totalProducts);
+
+  const selectedCategories = searchParams.category ? searchParams.category.split(',') : [];
+  const selectedBrands = searchParams.brand ? searchParams.brand.split(',') : [];
+
+  const createPageUrl = (page: number) => {
+    const params = new URLSearchParams();
+    if (searchParams.q) params.set('q', searchParams.q);
+    if (searchParams.category) params.set('category', searchParams.category);
+    if (searchParams.brand) params.set('brand', searchParams.brand);
+    if (searchParams.minPrice) params.set('minPrice', searchParams.minPrice);
+    if (searchParams.maxPrice) params.set('maxPrice', searchParams.maxPrice);
+    if (searchParams.sortBy) params.set('sortBy', searchParams.sortBy);
+    params.set('page', String(page));
+    return `${SEARCH_ROUTE}?${params.toString()}`;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -78,26 +78,8 @@ export function SearchPage({ initialProducts }: SearchPageProps) {
           </div>
 
           <div className="flex items-center space-x-4 flex-1 justify-end">
-            <div className="relative w-full max-w-sm">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                className="pl-8"
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products..."
-                type="search"
-                value={searchQuery}
-              />
-            </div>
-
-            <Select onValueChange={setSortBy} value={sortBy}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="price-asc">Price: Low to High</SelectItem>
-                <SelectItem value="price-desc">Price: High to Low</SelectItem>
-              </SelectContent>
-            </Select>
+            <SearchInput defaultValue={searchParams.q} />
+            <SortSelect defaultValue={searchParams.sortBy} />
 
             <div className="lg:hidden">
               <Dialog>
@@ -115,12 +97,8 @@ export function SearchPage({ initialProducts }: SearchPageProps) {
                     <FilterSection
                       brands={brands}
                       categories={categories}
-                      maxPrice={maxPrice}
-                      minPrice={minPrice}
-                      onBrandsChange={setSelectedBrands}
-                      onCategoriesChange={setSelectedCategories}
-                      onMaxPriceChange={setMaxPrice}
-                      onMinPriceChange={setMinPrice}
+                      maxPrice={searchParams.maxPrice || ''}
+                      minPrice={searchParams.minPrice || ''}
                       selectedBrands={selectedBrands}
                       selectedCategories={selectedCategories}
                     />
@@ -136,12 +114,8 @@ export function SearchPage({ initialProducts }: SearchPageProps) {
             <FilterSection
               brands={brands}
               categories={categories}
-              maxPrice={maxPrice}
-              minPrice={minPrice}
-              onBrandsChange={setSelectedBrands}
-              onCategoriesChange={setSelectedCategories}
-              onMaxPriceChange={setMaxPrice}
-              onMinPriceChange={setMinPrice}
+              maxPrice={searchParams.maxPrice || ''}
+              minPrice={searchParams.minPrice || ''}
               selectedBrands={selectedBrands}
               selectedCategories={selectedCategories}
             />
@@ -149,47 +123,42 @@ export function SearchPage({ initialProducts }: SearchPageProps) {
 
           <div className="mt-6 lg:mt-0 lg:col-span-3">
             <p className="text-sm text-muted-foreground mb-4">
-              Showing {filteredProducts.length > 0 ? startIndex + 1 : 0}-{endIndex} of {filteredProducts.length} items
+              Showing {totalProducts > 0 ? startIndex + 1 : 0}-{endIndex} of {totalProducts} items
             </p>
 
             <ScrollArea className="h-[calc(100vh-300px)] pr-4">
-              <ProductGrid products={currentProducts} />
+              <ProductGrid products={products} />
 
-              {filteredProducts.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">No products found matching your filters.</p>
-                  <Button
-                    onClick={() => {
-                      setSearchQuery('');
-                      setMinPrice('');
-                      setMaxPrice('');
-                      setSelectedCategories([]);
-                      setSelectedBrands([]);
-                    }}
-                    variant="link"
-                  >
-                    Clear all filters
-                  </Button>
-                </div>
+              {totalProducts === 0 && (
+                <Empty className="py-12 border-none">
+                  <EmptyHeader>
+                    <div className="bg-muted flex size-12 items-center justify-center rounded-full mb-4">
+                      <Search className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <EmptyTitle>No products found</EmptyTitle>
+                    <EmptyDescription>We couldn't find any products matching your current filters.</EmptyDescription>
+                  </EmptyHeader>
+                  <EmptyContent>
+                    <Link href={SEARCH_ROUTE}>
+                      <Button variant="outline">Clear all filters</Button>
+                    </Link>
+                  </EmptyContent>
+                </Empty>
               )}
             </ScrollArea>
 
-            {filteredProducts.length > ITEMS_PER_PAGE && (
+            {totalProducts > ITEMS_PER_PAGE && (
               <div className="mt-8">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (currentPage > 1) setCurrentPage(currentPage - 1);
-                        }}
-                      />
+                      <PaginationPrevious href={currentPage > 1 ? createPageUrl(currentPage - 1) : '#'} />
                     </PaginationItem>
 
                     {Array.from({ length: totalPages }).map((_, i) => {
                       const page = i + 1;
+                      const isCurrent = currentPage === page;
+
                       if (
                         totalPages > 5 &&
                         (page < currentPage - 1 || page > currentPage + 1) &&
@@ -208,14 +177,7 @@ export function SearchPage({ initialProducts }: SearchPageProps) {
 
                       return (
                         <PaginationItem key={page}>
-                          <PaginationLink
-                            href="#"
-                            isActive={currentPage === page}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setCurrentPage(page);
-                            }}
-                          >
+                          <PaginationLink href={createPageUrl(page)} isActive={isCurrent}>
                             {page}
                           </PaginationLink>
                         </PaginationItem>
@@ -223,13 +185,7 @@ export function SearchPage({ initialProducts }: SearchPageProps) {
                     })}
 
                     <PaginationItem>
-                      <PaginationNext
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-                        }}
-                      />
+                      <PaginationNext href={currentPage < totalPages ? createPageUrl(currentPage + 1) : '#'} />
                     </PaginationItem>
                   </PaginationContent>
                 </Pagination>

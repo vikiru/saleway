@@ -1,4 +1,5 @@
 import { ArrowLeft, Package } from 'lucide-react';
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useOrder } from '@/features/order/queries/order';
@@ -14,7 +15,7 @@ const statusStyles: Record<string, string> = {
   shipped: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
 };
 
-export function OrderDetailsPage({ id, userId }: { id: string; userId: string }) {
+export function OrderDetailsPage({ id }: { id: string }) {
   const { data: orderResponse, isLoading, error } = useOrder(id);
 
   if (isLoading) {
@@ -76,10 +77,15 @@ export function OrderDetailsPage({ id, userId }: { id: string; userId: string })
             </CardHeader>
             <CardContent>
               {order.items.length === 0 ? (
-                <div className="flex flex-col items-center py-8 text-center">
-                  <Package className="h-8 w-8 text-muted-foreground mb-2" />
-                  <p>No items in this order.</p>
-                </div>
+                <Empty className="py-8 border-none">
+                  <EmptyHeader>
+                    <div className="bg-muted flex size-10 items-center justify-center rounded-lg mb-2">
+                      <Package className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <EmptyTitle>No items found</EmptyTitle>
+                    <EmptyDescription>This order doesn't seem to have any items.</EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
               ) : (
                 <ul className="divide-y text-sm">
                   {order.items.map((item) => (

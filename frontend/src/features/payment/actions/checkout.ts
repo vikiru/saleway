@@ -2,17 +2,17 @@
 
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { z } from 'zod';
-import { useCartStore } from '@/features/cart/store/Cart';
+import type { CartItem } from '@/features/cart/types/cart';
 import type { OrderResponse } from '@/features/order/types/order';
 import { createCheckout as createCheckoutApi, verifySession } from '@/features/payment/api/payment';
 import { getProduct } from '@/features/product/api/product';
 import { createOrder } from '@/lib/server/actions/orders';
 
-export const CheckoutSessionSchema = z.object({
+const CheckoutSessionSchema = z.object({
   sessionId: z.string().min(1, 'Session ID required'),
 });
 
-export async function createCheckoutSession() {
+export async function createCheckoutSession(cart: CartItem[]) {
   const { userId } = await auth();
   if (!userId) {
     throw new Error('Must be authenticated to checkout');
@@ -22,8 +22,7 @@ export async function createCheckoutSession() {
   const user = await client.users.getUser(userId);
   const customerEmail = user.emailAddresses[0]?.emailAddress || '';
 
-  const cart = useCartStore.getState().items;
-  if (cart.length === 0) {
+  if (!cart || cart.length === 0) {
     throw new Error('Cart is empty');
   }
 
@@ -55,7 +54,7 @@ export async function createCheckoutSession() {
   return result;
 }
 
-export async function verifyCheckoutSession(sessionId: string) {
+export async function verifyCheckoutSession(sessionId: string, cart: CartItem[]) {
   const { userId } = await auth();
   if (!userId) {
     throw new Error('Must be authenticated');
@@ -72,7 +71,9 @@ export async function verifyCheckoutSession(sessionId: string) {
     throw new Error('Payment not completed');
   }
 
-  const cart = useCartStore.getState().items;
+  if (!cart || cart.length === 0) {
+    throw new Error('Cart is empty for verification');
+  }
 
   const orderItems = await Promise.all(
     cart.map(async (item) => {
@@ -105,8 +106,6 @@ export async function verifyCheckoutSession(sessionId: string) {
     console.error('Failed to create order after payment:', err);
     throw new Error('Payment successful but failed to create order. Please contact support.');
   }
-
-  useCartStore.getState().clearCart();
 
   return order;
 }

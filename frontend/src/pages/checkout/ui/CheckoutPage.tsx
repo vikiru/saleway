@@ -1,11 +1,11 @@
 'use client';
 
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, ShoppingBag } from 'lucide-react';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useCartStore } from '@/features/cart/store/Cart';
-import type { CartItem } from '@/features/cart/types/cart';
 import { createCheckoutSession } from '@/features/payment/actions/checkout';
 import type { Product } from '@/features/product/types/product';
 import { Button } from '@/lib/components/ui/button';
@@ -14,27 +14,36 @@ import { Separator } from '@/lib/components/ui/separator';
 import { CART_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
 
 interface CheckoutPageProps {
-  userId: string;
-  initialCartItems: (CartItem & { product: Product })[];
+  products: Product[];
 }
 
-export function CheckoutPage({ initialCartItems }: CheckoutPageProps) {
+export function CheckoutPage({ products }: CheckoutPageProps) {
   const { items, getTotalPrice } = useCartStore();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (items.length === 0 && initialCartItems.length === 0) {
+  const cartWithProducts = items.map((item) => ({
+    ...item,
+    product: products.find((p) => String(p.id) === item.productId),
+  }));
+
+  if (items.length === 0) {
     return (
-      <main className="container mx-auto px-4 py-16">
-        <Card className="max-w-md mx-auto border-none shadow-none bg-muted/50">
-          <CardContent className="pt-10 pb-10 text-center">
-            <h1 className="text-xl font-semibold mb-2">Your cart is empty</h1>
-            <p className="text-muted-foreground mb-8">Add some items to your cart to proceed with checkout.</p>
+      <main className="container mx-auto px-4 py-32">
+        <Empty className="max-w-md mx-auto">
+          <EmptyHeader>
+            <div className="bg-muted flex size-12 items-center justify-center rounded-full mb-4">
+              <ShoppingBag className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <EmptyTitle>Your cart is empty</EmptyTitle>
+            <EmptyDescription>Add some items to your cart to proceed with checkout.</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
             <Link href={SEARCH_ROUTE} prefetch={false}>
               <Button size="lg">Browse Products</Button>
             </Link>
-          </CardContent>
-        </Card>
+          </EmptyContent>
+        </Empty>
       </main>
     );
   }
@@ -49,7 +58,7 @@ export function CheckoutPage({ initialCartItems }: CheckoutPageProps) {
     setError(null);
 
     try {
-      const result = await createCheckoutSession();
+      const result = await createCheckoutSession(items);
       if (result.url) {
         window.location.href = result.url;
       }
@@ -72,7 +81,7 @@ export function CheckoutPage({ initialCartItems }: CheckoutPageProps) {
 
       <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-10">
         <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">Checkout</h1>
-        <p className="text-muted-foreground">{initialCartItems.length} items in your order</p>
+        <p className="text-muted-foreground">{items.length} items in your order</p>
       </div>
 
       <div className="grid lg:grid-cols-12 gap-10 items-start">
@@ -84,7 +93,7 @@ export function CheckoutPage({ initialCartItems }: CheckoutPageProps) {
               </CardTitle>
             </CardHeader>
             <CardContent className="px-0 space-y-6">
-              {initialCartItems.map((item) => (
+              {cartWithProducts.map((item) => (
                 <div
                   className="flex gap-6 py-4 first:pt-0 last:pb-0 border-b last:border-0 border-border/50"
                   key={item.cartItemId}
@@ -133,9 +142,7 @@ export function CheckoutPage({ initialCartItems }: CheckoutPageProps) {
               </div>
               <div className="flex justify-between text-base">
                 <span className="text-muted-foreground">Shipping</span>
-                <span className="font-medium font-mono text-green-600 dark:text-green-400">
-                  {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
-                </span>
+                <span className="font-medium font-mono text-green-600 dark:text-green-400">${shipping.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-base">
                 <span className="text-muted-foreground">Estimated Tax</span>

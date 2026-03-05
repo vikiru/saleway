@@ -1,37 +1,17 @@
-'use client';
-
 import { ProductBreadcrumb } from '@/features/product/components/ProductBreadcrumb';
 import { ProductDescription } from '@/features/product/components/ProductDescription';
 import { ProductGallery } from '@/features/product/components/ProductGallery';
 import { ProductInfo } from '@/features/product/components/ProductInfo';
 import { ProductRating } from '@/features/product/components/ProductRating';
 import { ReviewsList } from '@/features/product/components/ReviewsList';
-import type { Product } from '@/features/product/types/product';
-
-interface Review {
-  id: string;
-  userId: string;
-  userName: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-}
+import type { Product, Review } from '@/features/product/types/product';
 
 interface ProductDetailsPageProps {
   product: Product;
+  reviews?: Review[];
 }
 
-export function ProductDetailsPage({ product }: ProductDetailsPageProps) {
-  const mockReviews: Review[] = Array.from({ length: 6 }, (_, i) => ({
-    id: String(i + 1),
-    userId: `user_${i + 1}`,
-    userName: `User ${i + 1}`,
-    rating: 4,
-    comment:
-      'This product exceeded my expectations. The quality is amazing and it arrived faster than I thought. Highly recommended!',
-    createdAt: new Date('2024-03-01T10:00:00Z').toISOString(),
-  }));
-
+export function ProductDetailsPage({ product, reviews = [] }: ProductDetailsPageProps) {
   const productInfoProps = {
     id: String(product.id),
     name: product.name,
@@ -48,14 +28,14 @@ export function ProductDetailsPage({ product }: ProductDetailsPageProps) {
           <ProductGallery image_url={product.image?.image_url} name={product.name} />
 
           <div>
-            <ProductRating rating={4.8} reviewCount={24} />
+            <ProductRating rating={4.8} reviewCount={reviews.length || 24} />
             <ProductInfo product={productInfoProps} />
           </div>
         </div>
 
         <ProductDescription longDescription={product.description} shortDescription={product.summary} />
 
-        <ReviewsList productId={String(product.id)} reviews={mockReviews} />
+        <ReviewsList productId={String(product.id)} reviews={reviews} />
       </div>
     </div>
   );

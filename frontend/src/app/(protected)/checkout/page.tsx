@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/features/user/actions/auth';
 import { SIGNIN_ROUTE } from '@/lib/constants/routes';
 import { CheckoutPage } from '@/pages/checkout/ui/CheckoutPage';
+import { getProducts } from '@/features/product/api/product';
 
 export default async function Page() {
   const userId = await getCurrentUser();
@@ -9,5 +10,8 @@ export default async function Page() {
     redirect(SIGNIN_ROUTE);
   }
 
-  return <CheckoutPage initialCartItems={[]} userId={userId} />;
+  const productsResponse = await getProducts();
+  const products = productsResponse.data || [];
+
+  return <CheckoutPage products={products} />;
 }

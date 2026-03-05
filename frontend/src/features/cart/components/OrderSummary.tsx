@@ -2,6 +2,7 @@
 
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useCartStore } from '@/features/cart/store/Cart';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/lib/components/ui/card';
@@ -12,11 +13,18 @@ interface OrderSummaryProps {
 }
 
 export function OrderSummary({ className }: OrderSummaryProps) {
-  const { items, getTotalPrice } = useCartStore();
+  const { items: storeItems, getTotalPrice } = useCartStore();
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) return null;
 
   const subtotal = getTotalPrice();
   const tax = subtotal * 0.1;
-  const shipping = items.length > 0 ? 15.0 : 0;
+  const shipping = storeItems.length > 0 ? 15.0 : 0;
   const total = subtotal + tax + shipping;
 
   return (
@@ -45,7 +53,7 @@ export function OrderSummary({ className }: OrderSummaryProps) {
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
         <Link className="w-full" href="/checkout">
-          <Button className="w-full" disabled={items.length === 0} size="lg">
+          <Button className="w-full" disabled={storeItems.length === 0} size="lg">
             Checkout
           </Button>
         </Link>

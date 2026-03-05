@@ -1,34 +1,19 @@
 'use client';
 
+import { useCartStore } from '@/features/cart/store/Cart';
+import type { Product } from '@/features/product/types/product';
 import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect } from 'react';
-import { CartItemListContainer } from '@/features/cart/components/CartItemListContainer';
+import { CartItemList } from '@/features/cart/components/CartItemList';
 import { OrderSummary } from '@/features/cart/components/OrderSummary';
-import { useCart } from '@/features/cart/queries/cart';
-import { useCartStore } from '@/features/cart/store/Cart';
-import { useProducts } from '@/features/product/queries/product';
 import { Button } from '@/lib/components/ui/button';
 import { CHECKOUT_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
 
-export function CartPage({ userId }: { userId: string }) {
-  const { data: productsResponse } = useProducts();
-  const { data: cartResponse } = useCart(userId);
-  const { setCart } = useCartStore();
+interface CartPageProps {
+  products: Product[];
+}
 
-  useEffect(() => {
-    if (cartResponse?.data && productsResponse?.data) {
-      const cartItems = cartResponse.data.items.map((item) => {
-        const product = productsResponse.data?.find((p) => p.id === Number(item.productId));
-        return {
-          ...item,
-          product,
-        };
-      });
-      setCart(cartItems);
-    }
-  }, [cartResponse, productsResponse, setCart]);
-
+export function CartPage({ products }: CartPageProps) {
   const { items } = useCartStore();
 
   if (items.length === 0) {
@@ -50,6 +35,11 @@ export function CartPage({ userId }: { userId: string }) {
     );
   }
 
+  const productMap = new Map<string, Product>();
+  products.forEach((p) => {
+    productMap.set(String(p.id), p);
+  });
+
   return (
     <main className="container mx-auto px-4 py-8 lg:py-12">
       <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-8">
@@ -59,7 +49,7 @@ export function CartPage({ userId }: { userId: string }) {
 
       <div className="grid lg:grid-cols-12 gap-10 items-start">
         <section className="lg:col-span-8">
-          <CartItemListContainer />
+          <CartItemList products={productMap} />
         </section>
 
         <aside className="lg:col-span-4 lg:sticky lg:top-24">
