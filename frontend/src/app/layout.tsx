@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { Footer } from '@/lib/layout/Footer';
-import { Navbar } from '@/lib/layout/Navbar';
+import { Footer } from '@/lib/components/layout/Footer';
+import { Navbar } from '@/lib/components/layout/Navbar';
 import { ClerkProvider } from '@/lib/providers/ClerkProvider';
 import { Providers } from '@/lib/providers/Providers';
 import './globals.css';

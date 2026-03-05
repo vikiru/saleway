@@ -1,12 +1,15 @@
-'use client';
-
 import { ChevronRight, Clock, Shield, Truck } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent } from '@/lib/components/ui/card';
 import { SEARCH_ROUTE } from '@/lib/constants/routes';
+import { getProducts } from '@/features/product/api/product';
+import { ProductCard } from '@/features/product/components/ProductCard';
 
 export function HomePage() {
+  const productsResponse = getProducts();
+  const featuredProducts = (productsResponse.data || []).slice(0, 4);
+
   return (
     <div className="min-h-screen bg-background">
       <section className="relative bg-background overflow-hidden border-b">
@@ -31,6 +34,24 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      {featuredProducts.length > 0 && (
+        <section className="py-24">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-12">
+              <h2 className="text-3xl font-bold tracking-tight">Featured Products</h2>
+              <Link className="text-primary hover:underline font-medium" href={SEARCH_ROUTE}>
+                View all products
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-4">

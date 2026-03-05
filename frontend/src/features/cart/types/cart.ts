@@ -1,3 +1,5 @@
+import type { Product } from '@/features/product/types/product';
+
 export interface Cart {
   cartId: string;
   userId: string;
@@ -14,6 +16,7 @@ export interface CartItem {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  product?: Product;
 }
 
 export interface CartCreateInput {

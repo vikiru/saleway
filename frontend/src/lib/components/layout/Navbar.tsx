@@ -3,8 +3,8 @@
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/lib/components/ui/button';
-import { ThemeToggle } from './ThemeToggle';
-import UserButton from './UserButton';
+import { ThemeToggle } from '@/features/user/components/ThemeToggle';
+import UserButton from '@/features/user/components/UserButton';
 
 export function Navbar() {
   return (

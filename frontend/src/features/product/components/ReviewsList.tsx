@@ -1,21 +1,13 @@
 import { ReviewCard } from '@/features/product/components/ReviewCard';
 import { Button } from '@/lib/components/ui/button';
-
-interface Review {
-  id: string;
-  userId: string;
-  userName: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-}
+import type { Review } from '@/features/product/types/product';
 
 interface ReviewsListProps {
   reviews: Review[];
   productId: string;
 }
 
-export function ReviewsList({ reviews, productId }: ReviewsListProps) {
+export function ReviewsList({ reviews }: ReviewsListProps) {
   return (
     <section className="pb-16">
       <div className="flex items-center justify-between mb-8">

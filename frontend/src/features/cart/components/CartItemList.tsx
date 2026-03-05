@@ -8,6 +8,9 @@ import type { Product } from '@/features/product/types/product';
 import { Button } from '@/lib/components/ui/button';
 import { Card } from '@/lib/components/ui/card';
 
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
+import { ShoppingBag } from 'lucide-react';
+
 interface CartItemListProps {
   products: Map<string, Product>;
 }
@@ -17,12 +20,20 @@ export function CartItemList({ products }: CartItemListProps) {
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-12 border rounded-lg border-dashed">
-        <p className="text-muted-foreground mb-4">Your cart is empty</p>
-        <Link href="/search">
-          <Button variant="outline">Start Shopping</Button>
-        </Link>
-      </div>
+      <Empty>
+        <EmptyHeader>
+          <div className="bg-muted flex size-12 items-center justify-center rounded-full mb-4">
+            <ShoppingBag className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <EmptyTitle>Your cart is empty</EmptyTitle>
+          <EmptyDescription>Looks like you haven't added anything to your cart yet.</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Link href="/search">
+            <Button variant="outline">Start Shopping</Button>
+          </Link>
+        </EmptyContent>
+      </Empty>
     );
   }
 

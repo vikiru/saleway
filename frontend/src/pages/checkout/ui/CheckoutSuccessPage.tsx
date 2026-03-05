@@ -7,13 +7,16 @@ import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent } from '@/lib/components/ui/card';
 import { CART_ROUTE, getOrderRoute, SEARCH_ROUTE } from '@/lib/constants/routes';
 
+import { useCartStore } from '@/features/cart/store/Cart';
+
 interface CheckoutSuccessPageProps {
   userId: string;
   sessionId: string;
 }
 
-export function CheckoutSuccessPage({ userId, sessionId }: CheckoutSuccessPageProps) {
+export function CheckoutSuccessPage({ sessionId }: CheckoutSuccessPageProps) {
   const router = useRouter();
+  const { items, clearCart } = useCartStore();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [error, setError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<number | null>(null);
@@ -25,16 +28,17 @@ export function CheckoutSuccessPage({ userId, sessionId }: CheckoutSuccessPagePr
       return;
     }
 
-    verifyCheckoutSession(sessionId)
+    verifyCheckoutSession(sessionId, items)
       .then((order) => {
         setOrderId(order.data?.id || null);
         setStatus('success');
+        clearCart();
       })
       .catch((err) => {
         setStatus('error');
         setError(err instanceof Error ? err.message : 'Verification failed');
       });
-  }, [sessionId]);
+  }, [sessionId, items, clearCart]);
 
   if (status === 'loading') {
     return (

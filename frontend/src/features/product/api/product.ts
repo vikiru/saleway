@@ -15,6 +15,9 @@ export function searchProducts(
   brand?: string,
   page = 1,
   pageSize = 10,
+  minPrice?: number,
+  maxPrice?: number,
+  sortBy?: string,
 ): ProductSearchResponse {
   let products = getStaticProducts().data ?? [];
 
@@ -32,6 +35,31 @@ export function searchProducts(
 
   if (brand) {
     products = products.filter((p) => p.brand.toLowerCase() === brand.toLowerCase());
+  }
+
+  if (minPrice !== undefined) {
+    products = products.filter((p) => p.price >= minPrice);
+  }
+
+  if (maxPrice !== undefined) {
+    products = products.filter((p) => p.price <= maxPrice);
+  }
+
+  if (sortBy) {
+    products = [...products].sort((a, b) => {
+      switch (sortBy) {
+        case 'price-asc':
+          return a.price - b.price;
+        case 'price-desc':
+          return b.price - a.price;
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        default:
+          return 0;
+      }
+    });
   }
 
   const start = (page - 1) * pageSize;
