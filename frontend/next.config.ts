@@ -7,6 +7,13 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'placehold.co' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'unsplash.com' },
+    ],
+  },
 };
 
 export default withBundleAnalyzer({

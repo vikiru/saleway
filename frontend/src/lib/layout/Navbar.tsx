@@ -14,6 +14,11 @@ export function Navbar() {
           <Link className="flex items-center space-x-2" href="/">
             <span className="text-xl font-bold tracking-tight text-primary">Saleway</span>
           </Link>
+          <nav className="hidden md:flex items-center gap-6">
+            <Link className="text-sm font-medium transition-colors hover:text-primary" href="/search">
+              Shop
+            </Link>
+          </nav>
         </div>
 
         <div className="flex items-center gap-4">

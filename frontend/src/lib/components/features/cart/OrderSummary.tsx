@@ -44,12 +44,14 @@ export function OrderSummary({ className }: OrderSummaryProps) {
         </div>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
-        <Button className="w-full" size="lg">
-          Checkout
-        </Button>
+        <Link className="w-full" href="/checkout">
+          <Button className="w-full" disabled={items.length === 0} size="lg">
+            Checkout
+          </Button>
+        </Link>
         <div className="text-center text-sm">
           <span className="text-muted-foreground">or </span>
-          <Link className="font-medium text-primary hover:text-primary/80 inline-flex items-center" href="/products">
+          <Link className="font-medium text-primary hover:text-primary/80 inline-flex items-center" href="/search">
             Continue Shopping <ArrowRight className="ml-1 h-3 w-3" />
           </Link>
         </div>

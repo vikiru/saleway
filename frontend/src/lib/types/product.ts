@@ -1,7 +1,7 @@
 export interface ProductImage {
   id: number;
   productId: number;
-  imageUrl: string;
+  image_url: string;
   imageAuthor: string;
   altText: string;
   attribution: string;
@@ -42,7 +42,7 @@ export interface ProductUpdate {
 
 export interface ProductImageCreate {
   productId: number;
-  imageUrl: string;
+  image_url: string;
   imageAuthor: string;
   altText: string;
   attribution: string;

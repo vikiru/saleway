@@ -19,7 +19,7 @@ export function CartItemList({ products }: CartItemListProps) {
     return (
       <div className="text-center py-12 border rounded-lg border-dashed">
         <p className="text-muted-foreground mb-4">Your cart is empty</p>
-        <Link href="/products">
+        <Link href="/search">
           <Button variant="outline">Start Shopping</Button>
         </Link>
       </div>
@@ -34,12 +34,12 @@ export function CartItemList({ products }: CartItemListProps) {
           <Card className="overflow-hidden" key={item.cartItemId}>
             <div className="p-4 sm:flex sm:items-center sm:justify-between sm:space-x-4">
               <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 relative h-24 w-24">
+                <div className="shrink-0 relative h-24 w-24">
                   <Image
                     alt={product?.name || item.productId}
                     className="rounded-md object-cover"
                     fill
-                    src={product?.image?.imageUrl || `https://placehold.co/200x200/png?text=${item.productId}`}
+                    src={product?.image?.image_url || `https://placehold.co/200x200/png?text=${item.productId}`}
                   />
                 </div>
                 <div>
