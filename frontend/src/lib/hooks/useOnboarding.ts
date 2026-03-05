@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
+import type { EcommerceUserCreate } from '@/features/user/types/user';
 import { onboardingSchema } from '@/lib/schema/onboarding';
 import { createUser } from '@/lib/server/actions/users';
-import type { EcommerceUserCreate } from '@/lib/types/user';
 
 export function useOnboarding() {
   const router = useRouter();

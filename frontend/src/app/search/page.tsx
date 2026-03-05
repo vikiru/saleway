@@ -1,9 +1,9 @@
-import { getProducts } from '@/lib/api/product';
-import SearchClient from './SearchClient';
+import { getProducts } from '@/features/product/api/product';
+import { SearchPage } from '@/pages/search/ui/SearchPage';
 
-export default async function SearchPage() {
-  const productsResponse = getProducts();
-  const products = productsResponse.data || [];
+export default async function Page() {
+  const productsResponse = await getProducts();
+  const initialProducts = productsResponse?.data || [];
 
-  return <SearchClient initialProducts={products} />;
+  return <SearchPage initialProducts={initialProducts} />;
 }

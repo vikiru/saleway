@@ -1,13 +1,13 @@
 import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/lib/server/auth';
+import { getCurrentUser } from '@/features/user/actions/auth';
 import { SIGNIN_ROUTE } from '@/lib/constants/routes';
-import { CartPageClient } from '@/app/(protected)/cart/CartPageClient';
+import { CartPage } from '@/pages/cart/ui/CartPage';
 
-export default async function CartPage() {
+export default async function Page() {
   const userId = await getCurrentUser();
   if (!userId) {
     redirect(SIGNIN_ROUTE);
   }
 
-  return <CartPageClient userId={userId} />;
+  return <CartPage userId={userId} />;
 }

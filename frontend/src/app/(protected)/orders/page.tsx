@@ -1,13 +1,13 @@
 import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/lib/server/auth';
+import { getCurrentUser } from '@/features/user/actions/auth';
 import { SIGNIN_ROUTE } from '@/lib/constants/routes';
-import { OrdersClient } from '@/app/(protected)/orders/OrdersClient';
+import { OrdersPage } from '@/pages/orders/ui/OrdersPage';
 
-export default async function OrdersPage() {
+export default async function Page() {
   const userId = await getCurrentUser();
   if (!userId) {
     redirect(SIGNIN_ROUTE);
   }
 
-  return <OrdersClient userId={userId} />;
+  return <OrdersPage userId={userId} />;
 }
