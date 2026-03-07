@@ -1,6 +1,6 @@
 'use server';
 
-import { USER_SERVICE_URL } from '@/lib/routes';
+import { USER_SERVICE_URL } from '@/lib/constants/routes';
 
 export async function findUserById(clerkUserId: string) {
   try {

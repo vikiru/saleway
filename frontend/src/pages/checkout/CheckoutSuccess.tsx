@@ -1,10 +1,10 @@
 'use client';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useCheckout } from '@/features/payment/hooks/useCheckout';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent } from '@/lib/components/ui/card';
 import { CART_ROUTE, getOrderRoute, SEARCH_ROUTE } from '@/lib/constants/routes';
-import { useCheckout } from '@/features/payment/hooks/useCheckout';
 
 interface CheckoutSuccessPageProps {
   userId: string;

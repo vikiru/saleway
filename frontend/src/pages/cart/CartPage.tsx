@@ -1,11 +1,11 @@
 'use client';
 
-import { useCartStore } from '@/features/cart/store/Cart';
-import type { Product } from '@/features/product/types/product';
 import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { CartItemList } from '@/features/cart/components/CartItemList';
 import { OrderSummary } from '@/features/cart/components/OrderSummary';
+import { useCartStore } from '@/features/cart/store/Cart';
+import type { Product } from '@/features/product/types/product';
 import { Button } from '@/lib/components/ui/button';
 import { CHECKOUT_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
 

@@ -3,7 +3,6 @@
 import { ArrowRight, Package } from 'lucide-react';
 import Link from 'next/link';
 import { useOrders } from '@/features/order/queries/order';
-import type { OrderStatus } from '@/features/order/types/order';
 import { Avatar, AvatarFallback } from '@/lib/components/ui/avatar';
 import { Badge } from '@/lib/components/ui/badge';
 import { Button } from '@/lib/components/ui/button';
@@ -29,7 +28,7 @@ export function RecentOrders({ userId }: RecentOrdersProps) {
     );
   }
 
-  if (error || !response?.success || !response.data) {
+  if (error || !response) {
     return (
       <Card>
         <CardHeader>
@@ -42,7 +41,7 @@ export function RecentOrders({ userId }: RecentOrdersProps) {
     );
   }
 
-  const orders = response.data.slice(0, 5);
+  const orders = response.slice(0, 5);
 
   if (orders.length === 0) {
     return (
@@ -81,14 +80,14 @@ export function RecentOrders({ userId }: RecentOrdersProps) {
                 <div className="grid gap-1">
                   <p className="text-sm font-medium leading-none">Order #{order.id}</p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(order.purchaseDate).toLocaleDateString()} · {order.items.length}{' '}
+                    {new Date(order.purchase_date).toLocaleDateString()} · {order.items.length}{' '}
                     {order.items.length === 1 ? 'item' : 'items'}
                   </p>
                 </div>
               </div>
               <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
-                <div className="font-medium">${order.totalPrice.toLocaleString()}</div>
-                <Badge className={getStatusColor(order.status)} variant="secondary">
+                <div className="font-medium">${order.total_price.toLocaleString()}</div>
+                <Badge data-status={order.status.toLowerCase()} variant="secondary">
                   {order.status}
                 </Badge>
               </div>
@@ -104,19 +103,4 @@ export function RecentOrders({ userId }: RecentOrdersProps) {
       </CardContent>
     </Card>
   );
-}
-
-function getStatusColor(status: OrderStatus) {
-  switch (status) {
-    case 'delivered':
-      return 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-300';
-    case 'completed':
-      return 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-300';
-    case 'pending':
-      return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300';
-    case 'cancelled':
-      return 'bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900 dark:text-red-300';
-    default:
-      return 'bg-gray-100 text-gray-800 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300';
-  }
 }

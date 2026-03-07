@@ -68,7 +68,9 @@ export async function deleteCartByUserId(userId: string) {
   try {
     return await prisma.$transaction(async tx => {
       const cart = await tx.cart.findUnique({ where: { userId } });
-      if (!cart) throw new Error(`Cart not found for ${userId}.`);
+      if (!cart) {
+        throw new Error(`Cart not found for ${userId}.`);
+      }
 
       await tx.cartItem.deleteMany({ where: { cartId: cart.cartId } });
 
@@ -90,13 +92,17 @@ export async function deleteCartItemById(userId: string, itemId: string) {
   try {
     return await prisma.$transaction(async tx => {
       const cart = await tx.cart.findUnique({ where: { userId } });
-      if (!cart) throw new Error(`Cart not found for ${userId}.`);
+      if (!cart) {
+        throw new Error(`Cart not found for ${userId}.`);
+      }
 
       const item = await tx.cartItem.findUnique({
         where: { cartItemId: itemId },
       });
 
-      if (!item) throw new Error(`Item not found for ${itemId}.`);
+      if (!item) {
+        throw new Error(`Item not found for ${itemId}.`);
+      }
 
       const itemPrice = new Prisma.Decimal(item.totalPrice);
       await tx.cartItem.delete({ where: { cartItemId: itemId } });

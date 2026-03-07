@@ -1,10 +1,9 @@
-'use client';
-
-import { Checkbox } from '@/lib/components/ui/checkbox';
-import { Input } from '@/lib/components/ui/input';
+import { X } from 'lucide-react';
+import { useSearchFilters } from '@/features/product/hooks/useSearchFilters';
 import { Button } from '@/lib/components/ui/button';
+import { Input } from '@/lib/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/lib/components/ui/select';
 import { Separator } from '@/lib/components/ui/separator';
-import { useProductFilters } from '@/features/product/hooks/useProductFilters';
 
 interface FilterItem {
   id: string;
@@ -28,57 +27,69 @@ export function FilterSection({
   minPrice: initialMinPrice,
   maxPrice: initialMaxPrice,
 }: FilterSectionProps) {
-  const { minPrice, maxPrice, setMinPrice, setMaxPrice, handleCategoryChange, handleBrandChange, handlePriceApply } =
-    useProductFilters({
-      selectedCategories,
-      selectedBrands,
+  const { minPrice, maxPrice, setMinPrice, setMaxPrice, handleFilterChange, handlePriceApply, handleReset } =
+    useSearchFilters({
       initialMinPrice,
       initialMaxPrice,
     });
 
+  const categoryValue = selectedCategories[0] || 'all';
+  const brandValue = selectedBrands[0] || 'all';
+
   return (
     <div className="space-y-8">
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Category</h3>
-        <div className="space-y-3">
-          {categories.map((category) => (
-            <div className="flex items-center space-x-2" key={category.id}>
-              <Checkbox
-                checked={selectedCategories.includes(category.id)}
-                id={`cat-${category.id}`}
-                onCheckedChange={() => handleCategoryChange(category.id)}
-              />
-              <label
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor={`cat-${category.id}`}
-              >
-                {category.label}
-              </label>
-            </div>
-          ))}
-        </div>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold tracking-tight">Filters</h3>
+        <Button
+          className="h-8 px-2 text-muted-foreground hover:text-foreground"
+          onClick={handleReset}
+          size="sm"
+          variant="ghost"
+        >
+          <X className="h-4 w-4 mr-1" />
+          Reset
+        </Button>
       </div>
 
       <Separator />
 
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Brand</h3>
-        <div className="space-y-3">
-          {brands.map((brand) => (
-            <div className="flex items-center space-x-2" key={brand.id}>
-              <Checkbox
-                checked={selectedBrands.includes(brand.id)}
-                id={`brand-${brand.id}`}
-                onCheckedChange={() => handleBrandChange(brand.id)}
-              />
-              <label
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor={`brand-${brand.id}`}
-              >
-                {brand.label}
-              </label>
-            </div>
-          ))}
+      <div className="space-y-4">
+        <div className="grid gap-2">
+          <label className="text-sm font-medium leading-none" id="category-label">
+            Category
+          </label>
+          <Select onValueChange={(v) => handleFilterChange('category', v)} value={categoryValue}>
+            <SelectTrigger aria-labelledby="category-label" className="w-full">
+              <SelectValue placeholder="All Categories" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {categories.map((cat) => (
+                <SelectItem key={cat.id} value={cat.id}>
+                  {cat.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="grid gap-2">
+          <label className="text-sm font-medium leading-none" id="brand-label">
+            Brand
+          </label>
+          <Select onValueChange={(v) => handleFilterChange('brand', v)} value={brandValue}>
+            <SelectTrigger aria-labelledby="brand-label" className="w-full">
+              <SelectValue placeholder="All Brands" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Brands</SelectItem>
+              {brands.map((brand) => (
+                <SelectItem key={brand.id} value={brand.id}>
+                  {brand.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
