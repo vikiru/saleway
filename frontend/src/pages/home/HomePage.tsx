@@ -1,14 +1,14 @@
 import { ChevronRight, Clock, Shield, Truck } from 'lucide-react';
 import Link from 'next/link';
+import { getProducts } from '@/features/product/api/product';
+import { ProductCard } from '@/features/product/components/ProductCard';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent } from '@/lib/components/ui/card';
 import { SEARCH_ROUTE } from '@/lib/constants/routes';
-import { getProducts } from '@/features/product/api/product';
-import { ProductCard } from '@/features/product/components/ProductCard';
 
 export function HomePage() {
-  const productsResponse = getProducts();
-  const featuredProducts = (productsResponse.data || []).slice(0, 4);
+  const products = getProducts();
+  const featuredProducts = products.slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background">

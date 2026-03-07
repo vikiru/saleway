@@ -1,13 +1,13 @@
-import { getProduct, getProducts } from '@/features/product/api/product';
-import { ProductDetailsPage } from '@/pages/product-details/ui/ProductDetailsPage';
 import { notFound } from 'next/navigation';
+import { getProduct, getProducts } from '@/features/product/api/product';
 import type { Review } from '@/features/product/types/product';
+import { ProductDetailsPage } from '@/pages/product-details/ProductDetailsPage';
 
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const productsResponse = getProducts();
-  return (productsResponse.data || []).map((product) => ({
+  const products = getProducts();
+  return products.map((product) => ({
     id: String(product.id),
   }));
 }
@@ -16,13 +16,13 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
   const { id } = await params;
   const numericId = parseInt(id, 10);
 
-  const productResponse = getProduct(numericId);
+  const product = getProduct(numericId);
 
-  if (!productResponse.success || !productResponse.data) {
+  if (!product) {
     notFound();
   }
 
   const reviews: Review[] = [];
 
-  return <ProductDetailsPage product={productResponse.data} reviews={reviews} />;
+  return <ProductDetailsPage product={product} reviews={reviews} />;
 }

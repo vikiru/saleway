@@ -1,5 +1,5 @@
 import { searchProducts } from '@/features/product/api/product';
-import { SearchPage } from '@/pages/search/ui/SearchPage';
+import { SearchPage } from '@/pages/search/SearchPage';
 
 interface ProductSearchProps {
   searchParams: Promise<{
@@ -26,10 +26,6 @@ export default async function Search({ searchParams }: ProductSearchProps) {
   const productsResponse = await searchProducts(query, category, brand, page, 9, minPrice, maxPrice, sortBy);
 
   return (
-    <SearchPage
-      products={productsResponse.data?.products || []}
-      totalProducts={productsResponse.data?.total || 0}
-      searchParams={params}
-    />
+    <SearchPage products={productsResponse.products} searchParams={params} totalProducts={productsResponse.total} />
   );
 }

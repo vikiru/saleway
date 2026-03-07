@@ -1,7 +1,8 @@
+'use client';
+
 import { ChevronLeft, ChevronRight, Package, Search } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
-import { useOrders } from '@/features/order/queries/order';
+import { useOrdersList } from '@/features/order/hooks/useOrdersList';
 import { Badge } from '@/lib/components/ui/badge';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/lib/components/ui/card';
@@ -9,55 +10,10 @@ import { Input } from '@/lib/components/ui/input';
 import { ScrollArea } from '@/lib/components/ui/scroll-area';
 import { getOrderRoute } from '@/lib/constants/routes';
 
-const ITEMS_PER_PAGE = 10;
-
-const statusStyles: Record<string, string> = {
-  delivered: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-  processing: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-  cancelled: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-  shipped: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-};
-
 export function OrdersPage({ userId }: { userId: string }) {
-  const { data: ordersResponse, isLoading, error } = useOrders(userId);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-
-  if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">Loading orders...</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-center text-destructive">Failed to load orders.</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  const allOrders = ordersResponse?.data || [];
-  const filteredOrders = allOrders.filter(
-    (order) =>
-      order.id.toString().includes(searchQuery) ||
-      order.items.some((item) => item.productName.toLowerCase().includes(searchQuery.toLowerCase())),
-  );
-
-  const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const orders = filteredOrders.slice(startIndex, endIndex);
+  const { orders, isLoading, error, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, totalCount } =
+    useOrdersList(userId);
+  const startIndex = (currentPage - 1) * 10;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -67,10 +23,7 @@ export function OrdersPage({ userId }: { userId: string }) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             className="pl-9"
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
-            }}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search orders..."
             value={searchQuery}
           />
@@ -110,14 +63,14 @@ export function OrdersPage({ userId }: { userId: string }) {
                           Order #{order.id}
                         </Link>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(order.purchaseDate).toLocaleDateString()} · {order.items.length}{' '}
+                          {new Date(order.purchase_date).toLocaleDateString()} · {order.items.length}{' '}
                           {order.items.length === 1 ? 'item' : 'items'}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
-                      <div className="font-medium">${order.totalPrice.toFixed(2)}</div>
-                      <Badge className={statusStyles[order.status] || ''} variant="secondary">
+                      <div className="font-medium">${order.total_price.toFixed(2)}</div>
+                      <Badge data-status={order.status.toLowerCase()} variant="secondary">
                         {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                       </Badge>
                       <Button asChild className="h-8 w-8" size="icon" variant="ghost">
@@ -133,16 +86,15 @@ export function OrdersPage({ userId }: { userId: string }) {
             </ScrollArea>
           )}
 
-          {filteredOrders.length > ITEMS_PER_PAGE && (
+          {totalCount > 10 && (
             <div className="flex items-center justify-between py-4 mt-4 border-t">
               <div className="text-sm text-muted-foreground">
-                Showing {startIndex + 1} to {Math.min(endIndex, filteredOrders.length)} of {filteredOrders.length}{' '}
-                results
+                Showing {startIndex + 1} to {Math.min(startIndex + orders.length, totalCount)} of {totalCount} results
               </div>
               <div className="flex items-center space-x-2">
                 <Button
                   disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                   size="sm"
                   variant="outline"
                 >
@@ -154,7 +106,7 @@ export function OrdersPage({ userId }: { userId: string }) {
                 </div>
                 <Button
                   disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  onClick={() => setCurrentPage(currentPage + 1)}
                   size="sm"
                   variant="outline"
                 >
