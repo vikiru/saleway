@@ -1,13 +1,13 @@
-import type { CartItemsResponse, CartResponse } from '@/features/cart/types/cart';
-import { CART_SERVICE_URL } from '@/lib/routes';
+import type { Cart, CartItem } from '@/features/cart/types/cart';
+import { CART_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 
-export async function getCart(userId: string, signal?: AbortSignal): Promise<CartResponse> {
+export async function getCart(userId: string, signal?: AbortSignal): Promise<Cart> {
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}`, { signal });
-  return handleResponse(response);
+  return handleResponse<Cart>(response);
 }
 
-export async function getCartItems(userId: string, signal?: AbortSignal): Promise<CartItemsResponse> {
+export async function getCartItems(userId: string, signal?: AbortSignal): Promise<CartItem[]> {
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}`, { signal });
-  return handleResponse(response);
+  return handleResponse<CartItem[]>(response);
 }

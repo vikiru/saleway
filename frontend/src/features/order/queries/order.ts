@@ -1,10 +1,10 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getOrder, getOrders } from '@/features/order/api/order';
-import { orderKeys } from '@/features/product/queries/keys';
+import { orderKeys } from '@/lib/queries/keys';
 
 export function useOrder(orderId: string) {
   return useQuery({
-    queryKey: orderKeys.single(orderId),
+    queryKey: orderKeys.detail(orderId),
     queryFn: ({ signal }) => getOrder(orderId, signal),
     enabled: !!orderId,
   });
@@ -20,7 +20,7 @@ export function useOrders(userId: string) {
 
 export function useSuspenseOrder(orderId: string) {
   return useSuspenseQuery({
-    queryKey: orderKeys.single(orderId),
+    queryKey: orderKeys.detail(orderId),
     queryFn: ({ signal }) => getOrder(orderId, signal),
   });
 }

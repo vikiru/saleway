@@ -32,20 +32,8 @@ export interface CartUpdateInput {
   quantity?: number;
 }
 
-export interface CartResponse {
-  success: boolean;
-  data?: Cart;
-  error?: string;
-}
+import type { ServiceResponse } from '@/shared/api/types';
 
-export interface CartItemResponse {
-  success: boolean;
-  data?: CartItem;
-  error?: string;
-}
-
-export interface CartItemsResponse {
-  success: boolean;
-  data?: CartItem[];
-  error?: string;
-}
+export type CartResponse = ServiceResponse<Cart>;
+export type CartItemResponse = ServiceResponse<CartItem>;
+export type CartItemsResponse = ServiceResponse<CartItem[]>;
