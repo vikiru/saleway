@@ -1,8 +1,8 @@
-import type { UserResponse } from '@/features/user/types/user';
-import { USER_SERVICE_URL } from '@/lib/routes';
+import type { EcommerceUser } from '@/features/user/types/user';
+import { USER_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 
-export async function getUser(userId: string, signal?: AbortSignal): Promise<UserResponse> {
+export async function getUser(userId: string, signal?: AbortSignal): Promise<EcommerceUser> {
   const response = await fetch(`${USER_SERVICE_URL}/users/${userId}`, { signal });
-  return handleResponse(response);
+  return handleResponse<EcommerceUser>(response);
 }

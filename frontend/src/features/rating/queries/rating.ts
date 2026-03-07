@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { ratingKeys } from '@/features/product/queries/keys';
 import { getProductReviews, getUserReviews } from '@/features/rating/api/rating';
+import { ratingKeys } from '@/lib/queries/keys';
 
 export function useProductReviews(productId: string) {
   return useQuery({

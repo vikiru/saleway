@@ -1,5 +1,5 @@
-import type { Product, ProductImage, ProductsResponse, ProductResponse } from '@/features/product/types/product';
 import productsData from '@/data/products.json';
+import type { Product, ProductImage } from '@/features/product/types/product';
 
 interface RawImage {
   id: number;
@@ -51,17 +51,10 @@ const mapProduct = (p: RawProduct): Product => ({
 
 const staticProducts: Product[] = (productsData.data as RawProduct[]).map(mapProduct);
 
-export function getProducts(): ProductsResponse {
-  return {
-    success: true,
-    data: staticProducts,
-  };
+export function getProducts(): Product[] {
+  return staticProducts;
 }
 
-export function getProduct(productId: number | string): ProductResponse {
-  const product = staticProducts.find((p) => p.id === Number(productId));
-  return {
-    success: true,
-    data: product,
-  };
+export function getProduct(productId: number | string): Product | undefined {
+  return staticProducts.find((p) => p.id === Number(productId));
 }

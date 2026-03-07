@@ -1,11 +1,11 @@
-import type { ProductResponse, ProductSearchResponse, ProductsResponse } from '@/features/product/types/product';
+import type { Product } from '@/features/product/types/product';
 import { getProduct as getStaticProduct, getProducts as getStaticProducts } from '@/shared/api/static';
 
-export function getProducts(): ProductsResponse {
+export function getProducts(): Product[] {
   return getStaticProducts();
 }
 
-export function getProduct(productId: number | string): ProductResponse {
+export function getProduct(productId: number | string): Product | undefined {
   return getStaticProduct(productId);
 }
 
@@ -18,8 +18,8 @@ export function searchProducts(
   minPrice?: number,
   maxPrice?: number,
   sortBy?: string,
-): ProductSearchResponse {
-  let products = getStaticProducts().data ?? [];
+): { products: Product[]; total: number; page: number; pageSize: number } {
+  let products = getStaticProducts();
 
   if (query) {
     const q = query.toLowerCase();
@@ -66,12 +66,9 @@ export function searchProducts(
   const paginatedProducts = products.slice(start, start + pageSize);
 
   return {
-    success: true,
-    data: {
-      products: paginatedProducts,
-      total: products.length,
-      page,
-      pageSize,
-    },
+    products: paginatedProducts,
+    total: products.length,
+    page,
+    pageSize,
   };
 }

@@ -1,7 +1,11 @@
+import type { SuccessResponse } from './types';
+
 export async function handleResponse<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Request failed' }));
-    throw new Error(error.error || 'Request failed');
+  const data = await response.json().catch(() => ({ success: false, error: 'Request failed' }));
+
+  if (!response.ok || data.success === false) {
+    throw new Error(data.error || 'Request failed');
   }
-  return response.json();
+
+  return (data as SuccessResponse<T>).data;
 }

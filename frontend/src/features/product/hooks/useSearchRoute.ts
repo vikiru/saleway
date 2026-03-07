@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 export function useSearchRoute() {
@@ -10,7 +10,7 @@ export function useSearchRoute() {
 
   const handleSearch = useCallback(
     (term: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString() ?? '');
       if (term) {
         params.set('q', term);
       } else {

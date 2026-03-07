@@ -11,7 +11,7 @@ export interface UserReview {
 }
 
 export interface UserReviewCreate {
-  userId: string;
+  userId?: string;
   productId: number;
   title: string;
   author: string;

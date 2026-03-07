@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 export function useSortRoute() {
@@ -10,7 +10,7 @@ export function useSortRoute() {
 
   const handleSortChange = useCallback(
     (value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString() ?? '');
       params.set('sortBy', value);
       router.push(`${pathname}?${params.toString()}`);
     },

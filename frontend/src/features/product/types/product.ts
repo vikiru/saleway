@@ -53,28 +53,18 @@ export interface ProductImageCreate {
   attribution: string;
 }
 
-export interface ProductResponse {
-  success: boolean;
-  data?: Product;
-  error?: string;
-}
+import type { ServiceResponse } from '@/shared/api/types';
 
-export interface ProductsResponse {
-  success: boolean;
-  data?: Product[];
-  error?: string;
-}
+export type ProductResponse = ServiceResponse<Product>;
 
-export interface ProductSearchResponse {
-  success: boolean;
-  data?: {
-    products: Product[];
-    total: number;
-    page: number;
-    pageSize: number;
-  };
-  error?: string;
-}
+export type ProductsResponse = ServiceResponse<Product[]>;
+
+export type ProductSearchResponse = ServiceResponse<{
+  products: Product[];
+  total: number;
+  page: number;
+  pageSize: number;
+}>;
 
 export interface Review {
   id: string;
