@@ -1,7 +1,9 @@
 'use server';
 
 import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 import { cache } from 'react';
+import { SIGNIN_ROUTE } from '@/lib/constants/routes';
 
 export const getCurrentUser = cache(async function getCurrentUser() {
   try {
@@ -12,3 +14,11 @@ export const getCurrentUser = cache(async function getCurrentUser() {
     return null;
   }
 });
+
+export const requireUser = async () => {
+  const userId = await getCurrentUser();
+  if (!userId) {
+    redirect(SIGNIN_ROUTE);
+  }
+  return userId;
+};

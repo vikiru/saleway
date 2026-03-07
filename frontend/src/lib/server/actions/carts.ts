@@ -1,10 +1,12 @@
 'use server';
 
 import type { CartItemCreateInput, CartResponse } from '@/features/cart/types/cart';
-import { handleResponse } from '@/lib/api/fetch';
-import { CART_SERVICE_URL } from '@/lib/routes';
+import { requireUser } from '@/features/user/actions/auth';
+import { CART_SERVICE_URL } from '@/lib/constants/routes';
+import { handleResponse } from '@/shared/api/fetch';
 
-export async function createCartItem(userId: string, item: CartItemCreateInput): Promise<CartResponse> {
+export async function createCartItem(item: CartItemCreateInput): Promise<CartResponse> {
+  const userId = await requireUser();
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/item`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -13,12 +15,8 @@ export async function createCartItem(userId: string, item: CartItemCreateInput):
   return handleResponse(response);
 }
 
-export async function updateCartItem(
-  userId: string,
-  cartItemId: string,
-  quantity: number,
-  unitPrice: number,
-): Promise<CartResponse> {
+export async function updateCartItem(cartItemId: string, quantity: number, unitPrice: number): Promise<CartResponse> {
+  const userId = await requireUser();
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/item/${cartItemId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -27,21 +25,24 @@ export async function updateCartItem(
   return handleResponse(response);
 }
 
-export async function removeCartItem(userId: string, cartItemId: string): Promise<CartResponse> {
+export async function removeCartItem(cartItemId: string): Promise<CartResponse> {
+  const userId = await requireUser();
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/item/${cartItemId}`, {
     method: 'DELETE',
   });
   return handleResponse(response);
 }
 
-export async function clearCart(userId: string): Promise<CartResponse> {
+export async function clearCart(): Promise<CartResponse> {
+  const userId = await requireUser();
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}`, {
     method: 'DELETE',
   });
   return handleResponse(response);
 }
 
-export async function syncCart(userId: string, items: CartItemCreateInput[]): Promise<{ success: boolean }> {
+export async function syncCart(items: CartItemCreateInput[]): Promise<{ success: boolean }> {
+  const userId = await requireUser();
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/sync`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
