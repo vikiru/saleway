@@ -1,4 +1,5 @@
 export interface PaymentCartItem {
+  productId: string;
   name: string;
   description: string;
   unitAmount: number;
@@ -44,4 +45,12 @@ export interface VerifySessionResponse {
   amount: number;
   currency: string;
   status: string;
+  metadata?: Record<string, string>;
+}
+
+export interface CartItemSnapshot {
+  productId: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
 }

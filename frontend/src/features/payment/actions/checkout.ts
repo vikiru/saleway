@@ -1,22 +1,25 @@
 'use server';
 
-import { auth, clerkClient } from '@clerk/nextjs/server';
+import { clerkClient } from '@clerk/nextjs/server';
 import { z } from 'zod';
-import type { CartItem } from '@/features/cart/types/cart';
 import type { OrderResponse } from '@/features/order/types/order';
+import { getCart } from '@/features/cart/api/cart';
 import { createCheckout as createCheckoutApi, verifySession } from '@/features/payment/api/payment';
 import { getProduct } from '@/features/product/api/product';
+import { clearCart } from '@/lib/server/actions/carts';
 import { createOrder } from '@/lib/server/actions/orders';
+import { requireUser } from '@/features/user/actions/auth';
+import type { CartItemSnapshot } from '@/features/payment/types/payment';
 
 const CheckoutSessionSchema = z.object({
   sessionId: z.string().min(1, 'Session ID required'),
 });
 
-export async function createCheckoutSession(cart: CartItem[]) {
-  const { userId } = await auth();
-  if (!userId) {
-    throw new Error('Must be authenticated to checkout');
-  }
+export async function createCheckoutSession() {
+  const userId = await requireUser();
+
+  const cartData = await getCart(userId);
+  const cart = cartData.items;
 
   const client = await clerkClient();
   const user = await client.users.getUser(userId);
@@ -28,16 +31,19 @@ export async function createCheckoutSession(cart: CartItem[]) {
 
   const lineItems = await Promise.all(
     cart.map(async (item) => {
-      const productResponse = getProduct(Number(item.productId));
-      const product = productResponse.data;
+      const product = getProduct(Number(item.productId));
+      if (!product) {
+        throw new Error(`Product not found: ${item.productId}`);
+      }
 
       return {
-        name: product?.name || 'Product',
-        description: product?.summary || '',
+        productId: String(item.productId),
+        name: product.name || 'Product',
+        description: product.summary || '',
         unitAmount: Math.round((item.unitPrice || 0) * 100),
         currency: 'usd',
         quantity: item.quantity,
-        image: product?.image?.image_url || '',
+        image: product.image?.image_url || '',
       };
     }),
   );
@@ -48,17 +54,22 @@ export async function createCheckoutSession(cart: CartItem[]) {
     successUrl: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancelUrl: `${appUrl}/checkout/cancel`,
     customerEmail,
-    metadata: { userId },
+    metadata: { 
+      userId,
+      cartSnapshot: JSON.stringify(cart.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        totalPrice: item.totalPrice || (item.unitPrice * item.quantity)
+      } satisfies CartItemSnapshot)))
+    },
   });
 
   return result;
 }
 
-export async function verifyCheckoutSession(sessionId: string, cart: CartItem[]) {
-  const { userId } = await auth();
-  if (!userId) {
-    throw new Error('Must be authenticated');
-  }
+export async function verifyCheckoutSession(sessionId: string): Promise<OrderResponse> {
+  const userId = await requireUser();
 
   const parsed = CheckoutSessionSchema.safeParse({ sessionId });
   if (!parsed.success) {
@@ -66,46 +77,60 @@ export async function verifyCheckoutSession(sessionId: string, cart: CartItem[])
   }
 
   const verification = await verifySession(sessionId);
-
-  if (verification.status !== 'complete') {
+  if (!['complete', 'succeeded'].includes(verification.status)) {
     throw new Error('Payment not completed');
   }
 
-  if (!cart || cart.length === 0) {
+  const metadata = verification.metadata;
+  let cartItemsSnapshot: CartItemSnapshot[] = [];
+
+  if (metadata?.cartSnapshot) {
+    cartItemsSnapshot = JSON.parse(metadata.cartSnapshot);
+  } else {
+    const cartData = await getCart(userId);
+    cartItemsSnapshot = cartData.items.map(item => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      totalPrice: item.totalPrice || (item.unitPrice * item.quantity)
+    }));
+  }
+
+  if (!cartItemsSnapshot || cartItemsSnapshot.length === 0) {
     throw new Error('Cart is empty for verification');
   }
 
   const orderItems = await Promise.all(
-    cart.map(async (item) => {
-      const productResponse = getProduct(Number(item.productId));
-      const product = productResponse.data;
+    cartItemsSnapshot.map(async (item) => {
+      const product = getProduct(Number(item.productId));
+      if (!product) {
+        throw new Error(`Product not found: ${item.productId}`);
+      }
 
       return {
-        productId: Number(item.productId),
-        productName: product?.name || 'Product',
-        productBrand: product?.brand || '',
-        productDescription: product?.summary || '',
-        productImage: product?.image?.image_url || '',
-        productUnitPrice: item.unitPrice,
-        productQuantity: item.quantity,
+        product_id: Number(item.productId),
+        product_name: product.name || 'Product',
+        product_brand: product.brand || '',
+        product_description: product.summary || '',
+        product_image: product.image?.image_url || '',
+        product_unit_price: item.unitPrice,
+        product_quantity: item.quantity,
       };
     }),
   );
 
-  const totalPrice = cart.reduce((sum, item) => sum + (item.totalPrice || item.unitPrice * item.quantity), 0);
+  const totalPrice = cartItemsSnapshot.reduce((sum, item) => sum + item.totalPrice, 0);
 
-  let order: OrderResponse;
-  try {
-    order = await createOrder({
-      userId,
-      items: orderItems,
-      purchaseDate: new Date().toISOString(),
-      totalPrice,
-    });
-  } catch (err) {
-    console.error('Failed to create order after payment:', err);
-    throw new Error('Payment successful but failed to create order. Please contact support.');
+  const orderResponse = await createOrder({
+    user_id: userId,
+    items: orderItems,
+    purchase_date: new Date().toISOString(),
+    total_price: totalPrice,
+  });
+
+  if (orderResponse.success) {
+    await clearCart();
   }
 
-  return order;
+  return orderResponse;
 }
