@@ -1,13 +1,14 @@
 'use server';
 
+import { requireUser } from '@/features/user/actions/auth';
 import type {
   EcommerceUserCreate,
   EcommerceUserUpdate,
   UserProfileResponse,
   UserResponse,
 } from '@/features/user/types/user';
-import { handleResponse } from '@/lib/api/fetch';
-import { USER_SERVICE_URL } from '@/lib/routes';
+import { USER_SERVICE_URL } from '@/lib/constants/routes';
+import { handleResponse } from '@/shared/api/fetch';
 
 export async function createUser(data: EcommerceUserCreate): Promise<UserResponse> {
   const response = await fetch(`${USER_SERVICE_URL}/users`, {
@@ -18,7 +19,8 @@ export async function createUser(data: EcommerceUserCreate): Promise<UserRespons
   return handleResponse(response);
 }
 
-export async function updateUser(userId: string, data: Partial<EcommerceUserUpdate>): Promise<UserProfileResponse> {
+export async function updateUser(data: Partial<EcommerceUserUpdate>): Promise<UserProfileResponse> {
+  const userId = await requireUser();
   const response = await fetch(`${USER_SERVICE_URL}/users/${userId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
