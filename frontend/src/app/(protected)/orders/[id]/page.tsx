@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/features/user/actions/auth';
 import { SIGNIN_ROUTE } from '@/lib/constants/routes';
-import { OrderDetailsPage } from '@/pages/orders/ui/OrderDetailsPage';
+import { OrderDetailsPage } from '@/pages/orders/OrderDetailsPage';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const userId = await getCurrentUser();
@@ -11,5 +11,5 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const resolvedParams = await params;
 
-  return <OrderDetailsPage id={resolvedParams.id} userId={userId} />;
+  return <OrderDetailsPage id={resolvedParams.id} />;
 }

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/features/user/actions/auth';
-import { SIGNIN_ROUTE } from '@/lib/constants/routes';
-import { CheckoutSuccessPage } from '@/pages/checkout/ui/CheckoutSuccessPage';
+import { CART_ROUTE, SIGNIN_ROUTE } from '@/lib/constants/routes';
+import { CheckoutSuccess } from '@/pages/checkout/CheckoutSuccess';
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ session_id?: string }> }) {
   const userId = await getCurrentUser();
@@ -12,8 +12,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   const { session_id } = await searchParams;
 
   if (!session_id) {
-    redirect(SIGNIN_ROUTE);
+    redirect(CART_ROUTE);
   }
 
-  return <CheckoutSuccessPage sessionId={session_id} userId={userId} />;
+  return <CheckoutSuccess sessionId={session_id} userId={userId} />;
 }

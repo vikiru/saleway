@@ -1,44 +1,18 @@
+'use client';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { verifyCheckoutSession } from '@/features/payment/actions/checkout';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent } from '@/lib/components/ui/card';
 import { CART_ROUTE, getOrderRoute, SEARCH_ROUTE } from '@/lib/constants/routes';
-
-import { useCartStore } from '@/features/cart/store/Cart';
+import { useCheckout } from '@/features/payment/hooks/useCheckout';
 
 interface CheckoutSuccessPageProps {
   userId: string;
   sessionId: string;
 }
 
-export function CheckoutSuccessPage({ sessionId }: CheckoutSuccessPageProps) {
-  const router = useRouter();
-  const { items, clearCart } = useCartStore();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-  const [error, setError] = useState<string | null>(null);
-  const [orderId, setOrderId] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!sessionId) {
-      setStatus('error');
-      setError('No session ID provided');
-      return;
-    }
-
-    verifyCheckoutSession(sessionId, items)
-      .then((order) => {
-        setOrderId(order.data?.id || null);
-        setStatus('success');
-        clearCart();
-      })
-      .catch((err) => {
-        setStatus('error');
-        setError(err instanceof Error ? err.message : 'Verification failed');
-      });
-  }, [sessionId, items, clearCart]);
+export function CheckoutSuccess({ sessionId }: CheckoutSuccessPageProps) {
+  const { status, error, orderId } = useCheckout(sessionId);
 
   if (status === 'loading') {
     return (

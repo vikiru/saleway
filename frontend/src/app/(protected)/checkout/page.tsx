@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation';
+import { getProducts } from '@/features/product/api/product';
 import { getCurrentUser } from '@/features/user/actions/auth';
 import { SIGNIN_ROUTE } from '@/lib/constants/routes';
-import { CheckoutPage } from '@/pages/checkout/ui/CheckoutPage';
-import { getProducts } from '@/features/product/api/product';
+import { CheckoutPage } from '@/pages/checkout/CheckoutPage';
 
 export default async function Page() {
   const userId = await getCurrentUser();
@@ -10,8 +10,7 @@ export default async function Page() {
     redirect(SIGNIN_ROUTE);
   }
 
-  const productsResponse = await getProducts();
-  const products = productsResponse.data || [];
+  const products = await getProducts();
 
   return <CheckoutPage products={products} />;
 }

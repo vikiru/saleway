@@ -1,19 +1,12 @@
 import { ArrowLeft, Package } from 'lucide-react';
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useOrder } from '@/features/order/queries/order';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/lib/components/ui/card';
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import { Separator } from '@/lib/components/ui/separator';
 import { ORDERS_ROUTE } from '@/lib/constants/routes';
-
-const statusStyles: Record<string, string> = {
-  delivered: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-  processing: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-  cancelled: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-  shipped: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-};
 
 export function OrderDetailsPage({ id }: { id: string }) {
   const { data: orderResponse, isLoading, error } = useOrder(id);
@@ -30,7 +23,7 @@ export function OrderDetailsPage({ id }: { id: string }) {
     );
   }
 
-  if (error || !orderResponse?.data) {
+  if (error || !orderResponse) {
     return (
       <div className="container mx-auto px-4 py-8">
         <Link href={ORDERS_ROUTE}>
@@ -48,7 +41,7 @@ export function OrderDetailsPage({ id }: { id: string }) {
     );
   }
 
-  const order = orderResponse.data;
+  const order = orderResponse;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -62,9 +55,9 @@ export function OrderDetailsPage({ id }: { id: string }) {
       <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold">Order #{order.id}</h1>
-          <p className="text-muted-foreground">Placed on {new Date(order.purchaseDate).toLocaleDateString()}</p>
+          <p className="text-muted-foreground">Placed on {new Date(order.purchase_date).toLocaleDateString()}</p>
         </div>
-        <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusStyles[order.status] || ''}`}>
+        <span className="px-3 py-1 rounded-full text-sm font-medium" data-status={order.status.toLowerCase()}>
           {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
         </span>
       </div>
@@ -92,8 +85,8 @@ export function OrderDetailsPage({ id }: { id: string }) {
                     <li className="py-4" key={item.id}>
                       <div className="flex gap-4">
                         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border">
-                          {item.productImage ? (
-                            <Image alt={item.productName} className="object-cover" fill src={item.productImage} />
+                          {item.product_image ? (
+                            <Image alt={item.product_name} className="object-cover" fill src={item.product_image} />
                           ) : (
                             <div className="h-full w-full bg-muted flex items-center justify-center">
                               <Package className="h-8 w-8 text-muted-foreground" />
@@ -101,10 +94,10 @@ export function OrderDetailsPage({ id }: { id: string }) {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate">{item.productName}</p>
-                          <p className="text-sm text-muted-foreground">Qty: {item.productQuantity}</p>
+                          <p className="font-medium truncate">{item.product_name}</p>
+                          <p className="text-sm text-muted-foreground">Qty: {item.product_quantity}</p>
                         </div>
-                        <p className="font-medium">${item.productTotalPrice.toFixed(2)}</p>
+                        <p className="font-medium">${item.product_total_price.toFixed(2)}</p>
                       </div>
                     </li>
                   ))}
@@ -122,12 +115,12 @@ export function OrderDetailsPage({ id }: { id: string }) {
             <CardContent className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span>${order.totalPrice.toFixed(2)}</span>
+                <span>${order.total_price.toFixed(2)}</span>
               </div>
               <Separator />
               <div className="flex justify-between font-medium">
                 <span>Total</span>
-                <span>${order.totalPrice.toFixed(2)}</span>
+                <span>${order.total_price.toFixed(2)}</span>
               </div>
             </CardContent>
           </Card>
