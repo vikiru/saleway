@@ -1,11 +1,11 @@
 'use client';
 
 import { ShoppingBag } from 'lucide-react';
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import Link from 'next/link';
 import { useCheckoutFlow } from '@/features/payment/hooks/useCheckoutFlow';
 import type { Product } from '@/features/product/types/product';
 import { Button } from '@/lib/components/ui/button';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import { SEARCH_ROUTE } from '@/lib/constants/routes';
 import { CheckoutHeader } from './components/CheckoutHeader';
 import { CheckoutItemsList } from './components/CheckoutItemsList';

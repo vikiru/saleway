@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UserReviewCreate, UserReviewUpdate } from '@/features/rating/types/rating';
-import { createReview, deleteReview, updateReview } from '@/lib/server/actions/reviews';
 import { ratingKeys } from '@/lib/queries/keys';
+import { createReview, deleteReview, updateReview } from '@/lib/server/actions/reviews';
 
 export function useCreateReview() {
   const queryClient = useQueryClient();

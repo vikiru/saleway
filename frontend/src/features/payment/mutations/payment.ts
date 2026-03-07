@@ -1,15 +1,25 @@
-import { useMutation } from '@tanstack/react-query';
-import { createCheckout, processRefund } from '@/features/payment/api/payment';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CheckoutSessionRequest, RefundRequest } from '@/features/payment/types/payment';
+import { cartKeys, orderKeys } from '@/lib/queries/keys';
+import { createCheckoutAction, processRefundAction } from '@/lib/server/actions/payments';
 
 export function useCheckout() {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (request: CheckoutSessionRequest) => createCheckout(request),
+    mutationFn: (request: CheckoutSessionRequest) => createCheckoutAction(request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: orderKeys.all });
+      queryClient.invalidateQueries({ queryKey: cartKeys.all });
+    },
   });
 }
 
 export function useRefund() {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (request: RefundRequest) => processRefund(request),
+    mutationFn: (request: RefundRequest) => processRefundAction(request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: orderKeys.all });
+    },
   });
 }

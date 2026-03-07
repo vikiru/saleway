@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CartItemCreateInput } from '@/features/cart/types/cart';
-import { clearCart, createCartItem, removeCartItem, syncCart, updateCartItem } from '@/lib/server/actions/carts';
 import { cartKeys } from '@/lib/queries/keys';
+import { clearCart, createCartItem, removeCartItem, syncCart, updateCartItem } from '@/lib/server/actions/carts';
 
 export function useCreateCartItem() {
   const queryClient = useQueryClient();
@@ -46,7 +46,7 @@ export function useRemoveCartItem() {
 export function useClearCart() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (userId: string) => clearCart(),
+    mutationFn: (_userId: string) => clearCart(),
     onSuccess: (_, userId) => {
       queryClient.invalidateQueries({ queryKey: cartKeys.single(userId) });
     },

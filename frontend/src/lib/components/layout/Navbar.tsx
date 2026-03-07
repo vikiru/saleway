@@ -2,9 +2,9 @@
 
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/lib/components/ui/button';
 import { ThemeToggle } from '@/features/user/components/ThemeToggle';
 import UserButton from '@/features/user/components/UserButton';
+import { Button } from '@/lib/components/ui/button';
 
 export function Navbar() {
   return (

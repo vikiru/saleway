@@ -1,6 +1,6 @@
 import { ReviewCard } from '@/features/product/components/ReviewCard';
-import { Button } from '@/lib/components/ui/button';
 import type { Review } from '@/features/product/types/product';
+import { Button } from '@/lib/components/ui/button';
 
 interface ReviewsListProps {
   reviews: Review[];

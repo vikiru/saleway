@@ -2,14 +2,14 @@
 
 import { clerkClient } from '@clerk/nextjs/server';
 import { z } from 'zod';
-import type { OrderResponse } from '@/features/order/types/order';
 import { getCart } from '@/features/cart/api/cart';
+import type { OrderResponse } from '@/features/order/types/order';
 import { createCheckout as createCheckoutApi, verifySession } from '@/features/payment/api/payment';
+import type { CartItemSnapshot } from '@/features/payment/types/payment';
 import { getProduct } from '@/features/product/api/product';
+import { requireUser } from '@/features/user/actions/auth';
 import { clearCart } from '@/lib/server/actions/carts';
 import { createOrder } from '@/lib/server/actions/orders';
-import { requireUser } from '@/features/user/actions/auth';
-import type { CartItemSnapshot } from '@/features/payment/types/payment';
 
 const CheckoutSessionSchema = z.object({
   sessionId: z.string().min(1, 'Session ID required'),
@@ -54,14 +54,19 @@ export async function createCheckoutSession() {
     successUrl: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancelUrl: `${appUrl}/checkout/cancel`,
     customerEmail,
-    metadata: { 
+    metadata: {
       userId,
-      cartSnapshot: JSON.stringify(cart.map(item => ({
-        productId: item.productId,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        totalPrice: item.totalPrice || (item.unitPrice * item.quantity)
-      } satisfies CartItemSnapshot)))
+      cartSnapshot: JSON.stringify(
+        cart.map(
+          (item) =>
+            ({
+              productId: item.productId,
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              totalPrice: item.totalPrice || item.unitPrice * item.quantity,
+            }) satisfies CartItemSnapshot,
+        ),
+      ),
     },
   });
 
@@ -88,11 +93,11 @@ export async function verifyCheckoutSession(sessionId: string): Promise<OrderRes
     cartItemsSnapshot = JSON.parse(metadata.cartSnapshot);
   } else {
     const cartData = await getCart(userId);
-    cartItemsSnapshot = cartData.items.map(item => ({
+    cartItemsSnapshot = cartData.items.map((item) => ({
       productId: item.productId,
       quantity: item.quantity,
       unitPrice: item.unitPrice,
-      totalPrice: item.totalPrice || (item.unitPrice * item.quantity)
+      totalPrice: item.totalPrice || item.unitPrice * item.quantity,
     }));
   }
 
