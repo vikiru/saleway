@@ -44,8 +44,11 @@ def create_order_route():
             ).model_dump(mode='json')
         ), 201
 
-    except ValidationError:
-        return jsonify(ErrorResponse(success=False, error='Invalid input format or missing fields.').model_dump()), 400
+    except ValidationError as e:
+        print(f'Validation Error: {e.json()}')
+        return jsonify(
+            ErrorResponse(success=False, error=f'Invalid input format or missing fields: {e.errors()}').model_dump()
+        ), 400
     except Exception:
         import traceback
 

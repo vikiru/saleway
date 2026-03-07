@@ -1,34 +1,40 @@
 import { logger } from '@/config/logger';
 import { prisma } from '@/data/index';
 import type { CartItem } from '@/generated/prisma';
+import { Prisma } from '@/generated/prisma';
 
 export async function addCartItemsToCart(userId: string, cartItems: CartItem[]) {
   try {
-    const cart = await prisma.cart.findUnique({ where: { userId } });
-    if (!cart) {
-      throw new Error(`Cart not found for ${userId}.`);
-    }
-    const cartId = cart.cartId;
-    const totalPrice = cartItems.reduce((acc, curr) => acc + Number(curr.totalPrice), 0);
+    return await prisma.$transaction(async tx => {
+      const cart = await tx.cart.findUnique({ where: { userId } });
+      if (!cart) {
+        throw new Error(`Cart not found for ${userId}.`);
+      }
 
-    await prisma.cartItem.createMany({
-      data: cartItems.map(cartItem => ({
-        ...cartItem,
-        cartId,
-      })),
-    });
+      const cartId = cart.cartId;
+      const itemsTotalPrice = cartItems.reduce(
+        (acc, curr) => acc.plus(new Prisma.Decimal(curr.totalPrice)),
+        new Prisma.Decimal(0)
+      );
 
-    const updatedCart = await prisma.cart.update({
-      where: {
-        userId,
-      },
-      data: {
-        totalPrice: Number(cart.totalPrice) + totalPrice,
-      },
-      include: { items: true },
+      await tx.cartItem.createMany({
+        data: cartItems.map(cartItem => ({
+          ...cartItem,
+          cartId,
+        })),
+      });
+
+      const updatedCart = await tx.cart.update({
+        where: { userId },
+        data: {
+          totalPrice: new Prisma.Decimal(cart.totalPrice).plus(itemsTotalPrice),
+        },
+        include: { items: true },
+      });
+
+      logger.info('Successfully added items to cart.');
+      return updatedCart;
     });
-    logger.info('Successfully added items to cart.');
-    return updatedCart;
   } catch (error) {
     logger.error(`An error occurred while adding items to cart. ${error}`);
   }
@@ -38,6 +44,7 @@ export async function createCartForUser(userId: string) {
   try {
     const existingCart = await prisma.cart.findUnique({
       where: { userId },
+      include: { items: true },
     });
 
     if (existingCart) {
@@ -46,11 +53,10 @@ export async function createCartForUser(userId: string) {
     }
 
     const cart = await prisma.cart.create({
-      data: {
-        userId,
-      },
+      data: { userId },
       include: { items: true },
     });
+
     logger.info('Successfully created cart.');
     return cart;
   } catch (error) {
@@ -60,19 +66,21 @@ export async function createCartForUser(userId: string) {
 
 export async function deleteCartByUserId(userId: string) {
   try {
-    const cart = await prisma.cart.findUnique({ where: { userId } });
-    if (!cart) {
-      throw new Error(`Cart not found for ${userId}.`);
-    }
-    const cartId = cart.cartId;
-    await prisma.cartItem.deleteMany({ where: { cartId } });
-    const updatedCart = await prisma.cart.update({
-      where: { userId },
-      data: { totalPrice: 0 },
-      include: { items: true },
+    return await prisma.$transaction(async tx => {
+      const cart = await tx.cart.findUnique({ where: { userId } });
+      if (!cart) throw new Error(`Cart not found for ${userId}.`);
+
+      await tx.cartItem.deleteMany({ where: { cartId: cart.cartId } });
+
+      const updatedCart = await tx.cart.update({
+        where: { userId },
+        data: { totalPrice: new Prisma.Decimal(0) },
+        include: { items: true },
+      });
+
+      logger.info('Successfully deleted all items from cart and reset total price.');
+      return updatedCart;
     });
-    logger.info('Successfully deleted all items from cart and reset total price.');
-    return updatedCart;
   } catch (error) {
     logger.error(`An error occurred while deleting the cart, for ${userId} : ${error}`);
   }
@@ -80,45 +88,41 @@ export async function deleteCartByUserId(userId: string) {
 
 export async function deleteCartItemById(userId: string, itemId: string) {
   try {
-    const cart = await prisma.cart.findUnique({ where: { userId } });
-    if (!cart) {
-      throw new Error(`Cart not found for ${userId}.`);
-    }
-    const cartId = cart.cartId;
-    const totalPrice = cart.totalPrice;
-    const item = await prisma.cartItem.findUnique({
-      where: { cartItemId: itemId },
-    });
+    return await prisma.$transaction(async tx => {
+      const cart = await tx.cart.findUnique({ where: { userId } });
+      if (!cart) throw new Error(`Cart not found for ${userId}.`);
 
-    if (!item) {
-      throw new Error(`Item not found for ${itemId}.`);
-    }
+      const item = await tx.cartItem.findUnique({
+        where: { cartItemId: itemId },
+      });
 
-    const itemPrice = item.totalPrice;
-    await prisma.cartItem.delete({
-      where: { cartItemId: itemId },
+      if (!item) throw new Error(`Item not found for ${itemId}.`);
+
+      const itemPrice = new Prisma.Decimal(item.totalPrice);
+      await tx.cartItem.delete({ where: { cartItemId: itemId } });
+
+      const updatedCart = await tx.cart.update({
+        where: { userId },
+        data: {
+          totalPrice: new Prisma.Decimal(cart.totalPrice).minus(itemPrice),
+        },
+        include: { items: true },
+      });
+
+      logger.info('Successfully deleted item from cart.');
+      return updatedCart;
     });
-    const updatedCart = await prisma.cart.update({
-      where: { userId },
-      data: { totalPrice: Number(totalPrice) - Number(itemPrice) },
-      include: { items: true },
-    });
-    logger.info('Successfully deleted item from cart.');
-    return updatedCart;
-  } catch {
-    logger.error('An error occurred while deleting item from cart.');
+  } catch (error) {
+    logger.error(`An error occurred while deleting item from cart. ${error}`);
   }
 }
 
 export async function retrieveCartByUserId(userId: string) {
   try {
-    const cart = await prisma.cart.findUnique({
-      where: {
-        userId,
-      },
+    return await prisma.cart.findUnique({
+      where: { userId },
       include: { items: true },
     });
-    return cart;
   } catch (error) {
     logger.error(`An error occurred while retrieving the cart, for ${userId} : ${error}`);
   }
@@ -126,36 +130,41 @@ export async function retrieveCartByUserId(userId: string) {
 
 export async function updateCartItemById(userId: string, updatedItem: CartItem) {
   try {
-    const cart = await prisma.cart.findUnique({ where: { userId } });
-    if (!cart) {
-      throw new Error(`Cart not found for ${userId}.`);
-    }
-    const cartId = cart.cartId;
-    const totalPrice = cart.totalPrice;
-    const item = await prisma.cartItem.findUnique({
-      where: { cartItemId: updatedItem.cartItemId },
-    });
+    return await prisma.$transaction(async tx => {
+      const cart = await tx.cart.findUnique({ where: { userId } });
+      if (!cart) {
+        throw new Error(`Cart not found for ${userId}.`);
+      }
 
-    if (!item) {
-      throw new Error(`Item not found for ${updatedItem.cartItemId}.`);
-    }
+      const item = await tx.cartItem.findUnique({
+        where: { cartItemId: updatedItem.cartItemId },
+      });
 
-    const itemPrice = item.totalPrice;
-    await prisma.cartItem.update({
-      where: { cartItemId: updatedItem.cartItemId },
-      data: updatedItem,
+      if (!item) {
+        throw new Error(`Item not found for ${updatedItem.cartItemId}.`);
+      }
+
+      const oldItemPrice = new Prisma.Decimal(item.totalPrice);
+      const newItemPrice = new Prisma.Decimal(updatedItem.totalPrice);
+
+      await tx.cartItem.update({
+        where: { cartItemId: updatedItem.cartItemId },
+        data: updatedItem,
+      });
+
+      const updatedCart = await tx.cart.update({
+        where: { userId },
+        data: {
+          totalPrice: new Prisma.Decimal(cart.totalPrice).minus(oldItemPrice).plus(newItemPrice),
+        },
+        include: { items: true },
+      });
+
+      logger.info('Successfully updated item from cart.');
+      return updatedCart;
     });
-    const updatedCart = await prisma.cart.update({
-      where: { userId },
-      data: {
-        totalPrice: Number(totalPrice) - Number(itemPrice) + Number(updatedItem.totalPrice),
-      },
-      include: { items: true },
-    });
-    logger.info('Successfully updated item from cart.');
-    return updatedCart;
-  } catch {
-    logger.error('An error occurred while updating item from cart.');
+  } catch (error) {
+    logger.error(`An error occurred while updating item from cart. ${error}`);
   }
 }
 
@@ -164,37 +173,37 @@ export async function syncCartByUserId(
   items: Array<{ productId: string; quantity: number; unitPrice: number }>
 ) {
   try {
-    let cart = await prisma.cart.findUnique({
-      where: { userId },
-      include: { items: true },
-    });
-
-    if (!cart) {
-      cart = await prisma.cart.create({
-        data: { userId },
+    return await prisma.$transaction(async tx => {
+      let cart = await tx.cart.findUnique({
+        where: { userId },
         include: { items: true },
       });
-    }
 
-    const existingProductIds = new Set(cart.items.map(i => i.productId));
-    const syncProductIds = new Set(items.map(i => i.productId));
+      if (!cart) {
+        cart = await tx.cart.create({
+          data: { userId },
+          include: { items: true },
+        });
+      }
 
-    await prisma.$transaction(async tx => {
+      const existingProductIds = new Set(cart.items.map(i => i.productId));
+      const syncProductIds = new Set(items.map(i => i.productId));
+
       for (const item of items) {
         if (item.quantity <= 0) {
           if (existingProductIds.has(item.productId)) {
             await tx.cartItem.deleteMany({
-              where: { cartId: cart?.cartId, productId: item.productId },
+              where: { cartId: cart.cartId, productId: item.productId },
             });
           }
           continue;
         }
 
-        const itemTotalPrice = Number(item.unitPrice) * item.quantity;
+        const itemTotalPrice = new Prisma.Decimal(item.unitPrice).mul(item.quantity);
 
         if (existingProductIds.has(item.productId)) {
           await tx.cartItem.updateMany({
-            where: { cartId: cart?.cartId, productId: item.productId },
+            where: { cartId: cart.cartId, productId: item.productId },
             data: {
               quantity: item.quantity,
               unitPrice: item.unitPrice,
@@ -204,7 +213,7 @@ export async function syncCartByUserId(
         } else {
           await tx.cartItem.create({
             data: {
-              cartId: cart?.cartId,
+              cartId: cart.cartId,
               productId: item.productId,
               quantity: item.quantity,
               unitPrice: item.unitPrice,
@@ -214,7 +223,7 @@ export async function syncCartByUserId(
         }
       }
 
-      for (const existingItem of cart?.items) {
+      for (const existingItem of cart.items) {
         if (!syncProductIds.has(existingItem.productId)) {
           await tx.cartItem.delete({
             where: { cartItemId: existingItem.cartItemId },
@@ -222,17 +231,20 @@ export async function syncCartByUserId(
         }
       }
 
-      const allItems = await tx.cartItem.findMany({ where: { cartId: cart?.cartId } });
-      const totalPrice = allItems.reduce((sum, i) => sum + Number(i.totalPrice), 0);
+      const allItems = await tx.cartItem.findMany({ where: { cartId: cart.cartId } });
+      const totalCartPrice = allItems.reduce(
+        (sum, i) => sum.plus(new Prisma.Decimal(i.totalPrice)),
+        new Prisma.Decimal(0)
+      );
 
       await tx.cart.update({
         where: { userId },
-        data: { totalPrice },
+        data: { totalPrice: totalCartPrice },
       });
-    });
 
-    logger.info('Successfully synced cart.');
-    return { success: true };
+      logger.info('Successfully synced cart.');
+      return { success: true };
+    });
   } catch (error) {
     logger.error(`An error occurred while syncing cart: ${error}`);
     return { success: false };

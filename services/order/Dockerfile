@@ -26,9 +26,9 @@ RUN chown appuser:appgroup ./entrypoint.sh && chmod +x ./entrypoint.sh
 USER appuser
 
 ENV PYTHON_ENV=production
-ENV PORT=8000
+ENV PORT=5000
 
-EXPOSE 8000
+EXPOSE 5000
 
 ENTRYPOINT ["./entrypoint.sh"]
 CMD [".venv/bin/python", "app.py"]

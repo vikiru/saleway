@@ -26,9 +26,9 @@ RUN chown appuser:appgroup ./entrypoint.sh && chmod +x ./entrypoint.sh
 USER appuser
 
 ENV PYTHON_ENV=production
-ENV PORT=8000
+ENV PORT=8002
 
-EXPOSE 8000
+EXPOSE 8002
 
 ENTRYPOINT ["./entrypoint.sh"]
 CMD [".venv/bin/gunicorn", "--bind", "0.0.0.0:8002", "--workers", "2", "user.wsgi:application"]

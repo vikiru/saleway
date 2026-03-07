@@ -62,6 +62,7 @@ class OrderRead(BaseModel):
 
 
 class Order(SQLModel, table=True):
+    __tablename__ = 'orders'
     id: int | None = Field(default=None, primary_key=True)
     user_id: str
     purchase_date: datetime
@@ -74,8 +75,9 @@ class Order(SQLModel, table=True):
 
 
 class OrderItem(SQLModel, table=True):
+    __tablename__ = 'order_items'
     id: int = Field(default=None, primary_key=True)
-    order_id: int | None = Field(default=None, foreign_key='order.id')
+    order_id: int | None = Field(default=None, foreign_key='orders.id')
     product_id: int
     product_name: str
     product_brand: str
