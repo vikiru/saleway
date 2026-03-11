@@ -1,13 +1,14 @@
 'use client';
 
-import { ArrowLeft, ShoppingCart } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { CartItemList } from '@/features/cart/components/CartItemList';
 import { OrderSummary } from '@/features/cart/components/OrderSummary';
 import { useCartStore } from '@/features/cart/store/Cart';
 import type { Product } from '@/features/product/types/product';
 import { Button } from '@/lib/components/ui/button';
-import { CHECKOUT_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
+import { SEARCH_ROUTE } from '@/lib/constants/routes';
 
 interface CartPageProps {
   products: Product[];
@@ -18,19 +19,23 @@ export function CartPage({ products }: CartPageProps) {
 
   if (items.length === 0) {
     return (
-      <main className="container mx-auto px-4 py-16 text-center">
-        <div className="flex justify-center mb-6">
-          <div className="p-4 rounded-full bg-muted">
-            <ShoppingCart className="h-12 w-12 text-muted-foreground" />
-          </div>
-        </div>
-        <h1 className="text-2xl font-bold mb-2">Your cart is empty</h1>
-        <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-          Looks like you haven't added anything to your cart yet. Explore our products and find something you love!
-        </p>
-        <Link href={SEARCH_ROUTE} prefetch={false}>
-          <Button size="lg">Browse Products</Button>
-        </Link>
+      <main className="container mx-auto px-4 min-h-[70vh] flex flex-col items-center justify-center">
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <ShoppingCart />
+            </EmptyMedia>
+            <EmptyTitle>Your cart is empty</EmptyTitle>
+            <EmptyDescription>
+              Looks like you haven't added anything to your cart yet. Explore our products and find something you love!
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Link href={SEARCH_ROUTE} prefetch={false}>
+              <Button size="lg">Browse Products</Button>
+            </Link>
+          </EmptyContent>
+        </Empty>
       </main>
     );
   }
@@ -54,21 +59,6 @@ export function CartPage({ products }: CartPageProps) {
 
         <aside className="lg:col-span-4 lg:sticky lg:top-24">
           <OrderSummary />
-          <div className="mt-6">
-            <Link href={CHECKOUT_ROUTE} prefetch={false}>
-              <Button className="w-full h-12 text-base font-semibold" size="lg">
-                Proceed to Checkout
-              </Button>
-            </Link>
-            <Link
-              className="flex items-center justify-center mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              href={SEARCH_ROUTE}
-              prefetch={false}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Continue Shopping
-            </Link>
-          </div>
         </aside>
       </div>
     </main>

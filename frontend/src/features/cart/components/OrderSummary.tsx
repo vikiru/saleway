@@ -7,6 +7,7 @@ import { useCartStore } from '@/features/cart/store/Cart';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/lib/components/ui/card';
 import { Separator } from '@/lib/components/ui/separator';
+import { CHECKOUT_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
 
 interface OrderSummaryProps {
   className?: string;
@@ -24,7 +25,7 @@ export function OrderSummary({ className }: OrderSummaryProps) {
 
   const subtotal = getTotalPrice();
   const tax = subtotal * 0.1;
-  const shipping = storeItems.length > 0 ? 15.0 : 0;
+  const shipping = 0.0; // Free Shipping Policy
   const total = subtotal + tax + shipping;
 
   return (
@@ -39,7 +40,7 @@ export function OrderSummary({ className }: OrderSummaryProps) {
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">Shipping estimate</span>
-          <span className="font-medium">${shipping.toFixed(2)}</span>
+          <span className="text-green-600 dark:text-green-400 font-bold uppercase tracking-tight text-sm">Free</span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">Tax estimate</span>
@@ -52,14 +53,14 @@ export function OrderSummary({ className }: OrderSummaryProps) {
         </div>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
-        <Link className="w-full" href="/checkout">
+        <Link className="w-full" href={CHECKOUT_ROUTE}>
           <Button className="w-full" disabled={storeItems.length === 0} size="lg">
-            Checkout
+            Proceed to Checkout
           </Button>
         </Link>
         <div className="text-center text-sm">
           <span className="text-muted-foreground">or </span>
-          <Link className="font-medium text-primary hover:text-primary/80 inline-flex items-center" href="/search">
+          <Link className="font-medium text-primary hover:text-primary/80 inline-flex items-center" href={SEARCH_ROUTE}>
             Continue Shopping <ArrowRight className="ml-1 h-3 w-3" />
           </Link>
         </div>

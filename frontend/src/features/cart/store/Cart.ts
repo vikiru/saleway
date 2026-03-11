@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { CartItem } from '@/features/cart/types/cart';
+import { toNum } from '@/shared/utils/numbers';
 
 interface AddCartItemInput {
   productId: string;
@@ -28,21 +29,25 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         set((state) => {
+          const itemQuantity = toNum(item.quantity);
+          const itemPrice = toNum(item.unitPrice);
           const existingIndex = state.items.findIndex((i) => i.productId === item.productId);
 
           if (existingIndex >= 0) {
-            state.items[existingIndex].quantity += item.quantity;
+            state.items[existingIndex].quantity = toNum(state.items[existingIndex].quantity) + itemQuantity;
             state.items[existingIndex].totalPrice =
-              state.items[existingIndex].unitPrice * state.items[existingIndex].quantity;
+              toNum(state.items[existingIndex].unitPrice) * state.items[existingIndex].quantity;
             return;
           }
 
           const cartItemId = crypto.randomUUID();
           state.items.push({
             ...item,
+            quantity: itemQuantity,
+            unitPrice: itemPrice,
             cartItemId,
             cartId: '',
-            totalPrice: item.unitPrice * item.quantity,
+            totalPrice: itemPrice * itemQuantity,
           });
         });
       },
@@ -51,8 +56,9 @@ export const useCartStore = create<CartStore>()(
         set((state) => {
           const item = state.items.find((i) => i.cartItemId === cartItemId);
           if (item) {
-            item.quantity = quantity;
-            item.totalPrice = item.unitPrice * quantity;
+            const newQuantity = toNum(quantity);
+            item.quantity = newQuantity;
+            item.totalPrice = toNum(item.unitPrice) * newQuantity;
           }
         });
       },
@@ -67,12 +73,17 @@ export const useCartStore = create<CartStore>()(
 
       setCart: (items) => {
         set((state) => {
-          state.items = items;
+          state.items = items.map((item) => ({
+            ...item,
+            quantity: toNum(item.quantity),
+            unitPrice: toNum(item.unitPrice),
+            totalPrice: toNum(item.totalPrice),
+          }));
         });
       },
 
       getTotalPrice: () => {
-        return get().items.reduce((total, item) => total + item.totalPrice, 0);
+        return get().items.reduce((total, item) => total + toNum(item.totalPrice), 0);
       },
     })),
     {

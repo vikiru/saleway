@@ -6,6 +6,8 @@ import { useCartStore } from '@/features/cart/store/Cart';
 import type { Product } from '@/features/product/types/product';
 import { Button } from '@/lib/components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
+import { ScrollArea } from '@/lib/components/ui/scroll-area';
+import { SEARCH_ROUTE } from '@/lib/constants/routes';
 import { CartItem } from './CartItem';
 
 interface CartItemListProps {
@@ -26,7 +28,7 @@ export function CartItemList({ products }: CartItemListProps) {
           <EmptyDescription>Looks like you haven't added anything to your cart yet.</EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <Link href="/search">
+          <Link href={SEARCH_ROUTE}>
             <Button variant="outline">Start Shopping</Button>
           </Link>
         </EmptyContent>
@@ -35,16 +37,18 @@ export function CartItemList({ products }: CartItemListProps) {
   }
 
   return (
-    <div className="space-y-6">
-      {items.map((item) => (
-        <CartItem
-          item={item}
-          key={item.cartItemId}
-          onRemove={removeItem}
-          onUpdateQuantity={updateItem}
-          product={products.get(item.productId)}
-        />
-      ))}
-    </div>
+    <ScrollArea className="h-[60vh] pr-4">
+      <div className="space-y-6">
+        {items.map((item) => (
+          <CartItem
+            item={item}
+            key={item.cartItemId}
+            onRemove={removeItem}
+            onUpdateQuantity={updateItem}
+            product={products.get(item.productId)}
+          />
+        ))}
+      </div>
+    </ScrollArea>
   );
 }

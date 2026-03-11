@@ -1,12 +1,24 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CartItemCreateInput } from '@/features/cart/types/cart';
 import { cartKeys } from '@/lib/queries/keys';
-import { clearCart, createCartItem, removeCartItem, syncCart, updateCartItem } from '@/lib/server/actions/carts';
+import {
+  clearCart,
+  createCartItemAction,
+  removeCartItemAction,
+  syncCart,
+  updateCartItemAction,
+} from '@/lib/server/actions/carts';
 
 export function useCreateCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ userId, item }: { userId: string; item: CartItemCreateInput }) => createCartItem(item),
+    mutationFn: async ({ userId, item }: { userId: string; item: CartItemCreateInput }) => {
+      const result = await createCartItemAction(userId, item);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data;
+    },
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({ queryKey: cartKeys.single(userId) });
     },
@@ -16,7 +28,7 @@ export function useCreateCartItem() {
 export function useUpdateCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       userId,
       cartItemId,
       quantity,
@@ -26,7 +38,13 @@ export function useUpdateCartItem() {
       cartItemId: string;
       quantity: number;
       unitPrice: number;
-    }) => updateCartItem(cartItemId, quantity, unitPrice),
+    }) => {
+      const result = await updateCartItemAction(userId, cartItemId, quantity, unitPrice);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data;
+    },
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({ queryKey: cartKeys.single(userId) });
     },
@@ -36,7 +54,13 @@ export function useUpdateCartItem() {
 export function useRemoveCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ userId, cartItemId }: { userId: string; cartItemId: string }) => removeCartItem(cartItemId),
+    mutationFn: async ({ userId, cartItemId }: { userId: string; cartItemId: string }) => {
+      const result = await removeCartItemAction(userId, cartItemId);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data;
+    },
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({ queryKey: cartKeys.single(userId) });
     },
@@ -46,7 +70,13 @@ export function useRemoveCartItem() {
 export function useClearCart() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (_userId: string) => clearCart(),
+    mutationFn: async (_userId: string) => {
+      const result = await clearCart();
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data;
+    },
     onSuccess: (_, userId) => {
       queryClient.invalidateQueries({ queryKey: cartKeys.single(userId) });
     },
@@ -56,7 +86,13 @@ export function useClearCart() {
 export function useSyncCart() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ userId, items }: { userId: string; items: CartItemCreateInput[] }) => syncCart(items),
+    mutationFn: async ({ userId: _userId, items }: { userId: string; items: CartItemCreateInput[] }) => {
+      const result = await syncCart(items);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data;
+    },
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({ queryKey: cartKeys.single(userId) });
     },
