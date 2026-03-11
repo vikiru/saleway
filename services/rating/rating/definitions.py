@@ -16,4 +16,7 @@ class ErrorResponse(BaseModel):
     error: str
 
 
-ServiceResponse = SuccessResponse[T] | ErrorResponse
+class ServiceResponse[T]:
+    def __init__(self, data: T = None, error: str = ''):
+        self.data = data
+        self.error = error
