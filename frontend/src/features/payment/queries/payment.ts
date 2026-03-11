@@ -1,11 +1,11 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { verifySession } from '@/features/payment/api/payment';
 import { paymentKeys } from '@/lib/queries/keys';
+import { verifySessionAction } from '@/lib/server/actions/payments';
 
 export function usePaymentVerify(sessionId: string) {
   return useQuery({
     queryKey: paymentKeys.verify(sessionId),
-    queryFn: ({ signal }) => verifySession(sessionId, signal),
+    queryFn: () => verifySessionAction(sessionId),
     enabled: !!sessionId,
   });
 }
@@ -13,6 +13,6 @@ export function usePaymentVerify(sessionId: string) {
 export function useSuspensePaymentVerify(sessionId: string) {
   return useSuspenseQuery({
     queryKey: paymentKeys.verify(sessionId),
-    queryFn: ({ signal }) => verifySession(sessionId, signal),
+    queryFn: () => verifySessionAction(sessionId),
   });
 }

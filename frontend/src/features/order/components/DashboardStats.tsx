@@ -2,16 +2,20 @@
 
 import { DollarSign, Package, ShoppingCart, TrendingUp } from 'lucide-react';
 import { useDashboardStats } from '@/features/order/hooks/useDashboardStats';
+import type { DashboardStatsData } from '@/features/order/utils/stats';
 import { StatsCard } from '@/features/user/components/StatsCard';
 
 type DashboardStatsProps = {
   userId: string;
+  initialStats?: DashboardStatsData;
 };
 
-export function DashboardStats({ userId }: DashboardStatsProps) {
-  const { stats, isLoading, error } = useDashboardStats(userId);
+export function DashboardStats({ userId, initialStats }: DashboardStatsProps) {
+  const { stats: fetchedStats, isLoading, error } = useDashboardStats(userId);
 
-  if (isLoading || error || !stats) {
+  const stats = initialStats || fetchedStats;
+
+  if (!stats && (isLoading || error)) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard icon={Package} title="Total Orders" value="-" />
@@ -21,6 +25,8 @@ export function DashboardStats({ userId }: DashboardStatsProps) {
       </div>
     );
   }
+
+  if (!stats) return null;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

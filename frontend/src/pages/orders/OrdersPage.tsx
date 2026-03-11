@@ -1,17 +1,18 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Package, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import Link from 'next/link';
 import { useOrdersList } from '@/features/order/hooks/useOrdersList';
 import { Badge } from '@/lib/components/ui/badge';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/lib/components/ui/card';
-import { Input } from '@/lib/components/ui/input';
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
 import { ScrollArea } from '@/lib/components/ui/scroll-area';
 import { getOrderRoute } from '@/lib/constants/routes';
+import { toNum } from '@/shared/utils/numbers';
 
 export function OrdersPage({ userId }: { userId: string }) {
-  const { orders, isLoading, error, searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages, totalCount } =
+  const { orders, isLoading, error, searchQuery, currentPage, setCurrentPage, totalPages, totalCount } =
     useOrdersList(userId);
   const startIndex = (currentPage - 1) * 10;
 
@@ -19,15 +20,6 @@ export function OrdersPage({ userId }: { userId: string }) {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <h1 className="text-2xl font-bold">My Orders</h1>
-        <div className="relative w-full md:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            className="pl-9"
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search orders..."
-            value={searchQuery}
-          />
-        </div>
       </div>
 
       <Card>
@@ -36,19 +28,26 @@ export function OrdersPage({ userId }: { userId: string }) {
         </CardHeader>
         <CardContent>
           {orders.length === 0 ? (
-            <div className="flex flex-col items-center py-12 text-center">
-              <Package className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No orders found</h3>
-              <p className="text-muted-foreground mt-1">
-                {searchQuery ? 'Try searching for something else.' : "You haven't placed any orders yet."}
-              </p>
+            <div className="flex flex-col items-center justify-center py-12">
+              <Empty className="border-none p-0">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                    <Package />
+                  </EmptyMedia>
+                  <EmptyTitle>No orders found</EmptyTitle>
+                  <EmptyDescription>
+                    {searchQuery ? 'Try searching for something else.' : "You haven't placed any orders yet."}
+                  </EmptyDescription>
+                </EmptyHeader>
+              </Empty>
             </div>
           ) : (
             <ScrollArea className="h-[calc(100vh-400px)] lg:h-auto">
               <div className="space-y-4">
                 {orders.map((order) => (
-                  <div
+                  <Link
                     className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors gap-4"
+                    href={getOrderRoute(order.id)}
                     key={order.id}
                   >
                     <div className="flex items-center gap-4 w-full sm:w-auto">
@@ -56,12 +55,7 @@ export function OrdersPage({ userId }: { userId: string }) {
                         <Package className="h-5 w-5 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <Link
-                          className="text-sm font-medium leading-none hover:underline underline-offset-4"
-                          href={getOrderRoute(order.id)}
-                        >
-                          Order #{order.id}
-                        </Link>
+                        <div className="text-sm font-medium leading-none">Order #{order.id}</div>
                         <p className="text-xs text-muted-foreground">
                           {new Date(order.purchase_date).toLocaleDateString()} · {order.items.length}{' '}
                           {order.items.length === 1 ? 'item' : 'items'}
@@ -69,18 +63,17 @@ export function OrdersPage({ userId }: { userId: string }) {
                       </div>
                     </div>
                     <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
-                      <div className="font-medium">${order.total_price.toFixed(2)}</div>
-                      <Badge data-status={order.status.toLowerCase()} variant="secondary">
-                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      <div className="font-medium">${toNum(order.total_price).toFixed(2)}</div>
+                      <Badge
+                        className="uppercase tracking-wider"
+                        data-status={order.status.toLowerCase()}
+                        variant="secondary"
+                      >
+                        {order.status}
                       </Badge>
-                      <Button asChild className="h-8 w-8" size="icon" variant="ghost">
-                        <Link href={getOrderRoute(order.id)}>
-                          <ChevronRight className="h-4 w-4" />
-                          <span className="sr-only">View Order</span>
-                        </Link>
-                      </Button>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </ScrollArea>

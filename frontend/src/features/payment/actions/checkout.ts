@@ -31,7 +31,7 @@ export async function createCheckoutSession() {
 
   const lineItems = await Promise.all(
     cart.map(async (item) => {
-      const product = getProduct(Number(item.productId));
+      const product = await getProduct(Number(item.productId));
       if (!product) {
         throw new Error(`Product not found: ${item.productId}`);
       }
@@ -61,9 +61,9 @@ export async function createCheckoutSession() {
           (item) =>
             ({
               productId: item.productId,
-              quantity: item.quantity,
-              unitPrice: item.unitPrice,
-              totalPrice: item.totalPrice || item.unitPrice * item.quantity,
+              quantity: Number(item.quantity),
+              unitPrice: Number(item.unitPrice),
+              totalPrice: Number(item.totalPrice) || Number(item.unitPrice) * Number(item.quantity),
             }) satisfies CartItemSnapshot,
         ),
       ),
@@ -102,12 +102,12 @@ export async function verifyCheckoutSession(sessionId: string): Promise<OrderRes
   }
 
   if (!cartItemsSnapshot || cartItemsSnapshot.length === 0) {
-    throw new Error('Cart is empty for verification');
+    throw new Error('No items found for order confirmation');
   }
 
   const orderItems = await Promise.all(
     cartItemsSnapshot.map(async (item) => {
-      const product = getProduct(Number(item.productId));
+      const product = await getProduct(Number(item.productId));
       if (!product) {
         throw new Error(`Product not found: ${item.productId}`);
       }
@@ -124,18 +124,20 @@ export async function verifyCheckoutSession(sessionId: string): Promise<OrderRes
     }),
   );
 
-  const totalPrice = cartItemsSnapshot.reduce((sum, item) => sum + item.totalPrice, 0);
+  const totalPrice = cartItemsSnapshot.reduce((sum, item) => sum + Number(item.totalPrice), 0);
 
-  const orderResponse = await createOrder({
+  const orderResult = await createOrder({
     user_id: userId,
     items: orderItems,
     purchase_date: new Date().toISOString(),
     total_price: totalPrice,
+    stripe_session_id: sessionId,
   });
 
-  if (orderResponse.success) {
-    await clearCart();
+  if (!orderResult.success) {
+    return { success: false, error: orderResult.error };
   }
 
-  return orderResponse;
+  await clearCart();
+  return { success: true, message: 'Order created successfully', data: orderResult.data };
 }
