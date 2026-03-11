@@ -17,7 +17,7 @@ api = NinjaAPI()
 
 
 @api.post('/users')
-def post_user(request, payload: EcommerceUserCreate) -> SuccessResponse[dict]:
+def post_user(request, payload: EcommerceUserCreate) -> SuccessResponse[dict] | ErrorResponse:
     try:
         response = create_user(payload)
 
@@ -30,7 +30,7 @@ def post_user(request, payload: EcommerceUserCreate) -> SuccessResponse[dict]:
 
 
 @api.get('/users/{user_id}')
-def get_user(request, user_id: str) -> SuccessResponse[dict]:
+def get_user(request, user_id: str) -> SuccessResponse[dict] | ErrorResponse:
     try:
         user = get_user_by_clerk_id(user_id)
 
@@ -51,7 +51,7 @@ def get_user(request, user_id: str) -> SuccessResponse[dict]:
 
 
 @api.put('/users/{user_id}')
-def update_user(request, user_id: str, payload: EcommerceUserInput) -> SuccessResponse[dict]:
+def update_user(request, user_id: str, payload: EcommerceUserInput) -> SuccessResponse[dict] | ErrorResponse:
     try:
         response = modify_user(user_id, payload)
 
@@ -64,7 +64,7 @@ def update_user(request, user_id: str, payload: EcommerceUserInput) -> SuccessRe
 
 
 @api.delete('/users/{user_id}')
-def delete_user(request, user_id: str) -> SuccessResponse[dict]:
+def delete_user(request, user_id: str) -> SuccessResponse[dict] | ErrorResponse:
     try:
         response = remove_user(user_id)
 

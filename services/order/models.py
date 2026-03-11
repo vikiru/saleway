@@ -23,6 +23,7 @@ class OrderCreate(BaseModel):
     items: list[dict]
     purchase_date: datetime
     total_price: Decimal
+    stripe_session_id: str | None = None
 
 
 class OrderItemCreate(BaseModel):
@@ -56,6 +57,7 @@ class OrderRead(BaseModel):
     expected_delivery_date: str
     total_price: float
     status: str
+    stripe_session_id: str | None = None
     created_at: str
     updated_at: str
     items: list[OrderItemRead] = []
@@ -64,7 +66,8 @@ class OrderRead(BaseModel):
 class Order(SQLModel, table=True):
     __tablename__ = 'orders'
     id: int | None = Field(default=None, primary_key=True)
-    user_id: str
+    user_id: str = Field(index=True)
+    stripe_session_id: str | None = Field(default=None, unique=True, index=True)
     purchase_date: datetime
     expected_delivery_date: datetime
     total_price: Decimal

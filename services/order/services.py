@@ -59,7 +59,13 @@ def create_order(
     items_data: list[dict],
     purchase_date: datetime,
     total_price: Decimal,
+    stripe_session_id: str | None = None,
 ):
+    if stripe_session_id:
+        existing_order = session.exec(select(Order).where(Order.stripe_session_id == stripe_session_id)).first()
+        if existing_order:
+            return serialize_order(existing_order)
+
     expected_delivery_date = purchase_date + timedelta(weeks=1)
 
     order = Order(
@@ -68,6 +74,7 @@ def create_order(
         expected_delivery_date=expected_delivery_date,
         total_price=total_price,
         status=OrderStatus.PENDING,
+        stripe_session_id=stripe_session_id,
     )
     try:
         session.add(order)
