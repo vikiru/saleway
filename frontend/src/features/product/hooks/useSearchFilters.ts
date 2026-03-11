@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useTransition } from 'react';
 
 interface UseSearchFiltersProps {
   initialMinPrice: string;
@@ -12,6 +12,7 @@ export function useSearchFilters({ initialMinPrice, initialMaxPrice }: UseSearch
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const [minPrice, setMinPrice] = useState(initialMinPrice);
   const [maxPrice, setMaxPrice] = useState(initialMaxPrice);
@@ -34,20 +35,27 @@ export function useSearchFilters({ initialMinPrice, initialMaxPrice }: UseSearch
   );
 
   const handleFilterChange = (key: string, value: string) => {
-    router.push(`${pathname ?? ''}?${createQueryString({ [key]: value, page: '1' })}`);
+    startTransition(() => {
+      router.push(`${pathname ?? ''}?${createQueryString({ [key]: value, page: '1' })}`);
+    });
   };
 
   const handlePriceApply = () => {
-    router.push(`${pathname ?? ''}?${createQueryString({ minPrice, maxPrice, page: '1' })}`);
+    startTransition(() => {
+      router.push(`${pathname ?? ''}?${createQueryString({ minPrice, maxPrice, page: '1' })}`);
+    });
   };
 
   const handleReset = () => {
-    router.push(pathname ?? '');
+    startTransition(() => {
+      router.push(pathname ?? '');
+    });
     setMinPrice('');
     setMaxPrice('');
   };
 
   return {
+    isPending,
     minPrice,
     maxPrice,
     setMinPrice,

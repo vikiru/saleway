@@ -1,3 +1,5 @@
+'use client';
+
 import { X } from 'lucide-react';
 import { useSearchFilters } from '@/features/product/hooks/useSearchFilters';
 import { Button } from '@/lib/components/ui/button';
@@ -37,21 +39,22 @@ export function FilterSection({
   const brandValue = selectedBrands[0] || 'all';
 
   return (
-    <div className="space-y-8">
+    <aside aria-label="Filters" className="space-y-8">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold tracking-tight">Filters</h3>
         <Button
+          aria-label="Reset all filters"
           className="h-8 px-2 text-muted-foreground hover:text-foreground"
           onClick={handleReset}
           size="sm"
           variant="ghost"
         >
-          <X className="h-4 w-4 mr-1" />
+          <X aria-hidden="true" className="h-4 w-4 mr-1" />
           Reset
         </Button>
       </div>
 
-      <Separator />
+      <Separator aria-hidden="true" />
 
       <div className="space-y-4">
         <div className="grid gap-2">
@@ -93,18 +96,20 @@ export function FilterSection({
         </div>
       </div>
 
-      <Separator />
+      <Separator aria-hidden="true" />
 
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Price Range</h3>
+      <fieldset className="p-0 border-none m-0">
+        <legend className="text-lg font-semibold mb-4">Price Range</legend>
         <div className="space-y-4">
           <div className="flex items-center space-x-4">
             <div className="grid gap-1.5">
               <label className="text-xs font-medium text-muted-foreground" htmlFor="min-price">
-                Min
+                Min Price
               </label>
               <div className="relative">
-                <span className="absolute left-2.5 top-2.5 text-sm text-muted-foreground">$</span>
+                <span aria-hidden="true" className="absolute left-2.5 top-2.5 text-sm text-muted-foreground">
+                  $
+                </span>
                 <Input
                   className="pl-6"
                   id="min-price"
@@ -117,10 +122,12 @@ export function FilterSection({
             </div>
             <div className="grid gap-1.5">
               <label className="text-xs font-medium text-muted-foreground" htmlFor="max-price">
-                Max
+                Max Price
               </label>
               <div className="relative">
-                <span className="absolute left-2.5 top-2.5 text-sm text-muted-foreground">$</span>
+                <span aria-hidden="true" className="absolute left-2.5 top-2.5 text-sm text-muted-foreground">
+                  $
+                </span>
                 <Input
                   className="pl-6"
                   id="max-price"
@@ -136,7 +143,7 @@ export function FilterSection({
             Apply Price
           </Button>
         </div>
-      </div>
-    </div>
+      </fieldset>
+    </aside>
   );
 }

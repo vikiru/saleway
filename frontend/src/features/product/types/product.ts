@@ -67,10 +67,25 @@ export type ProductSearchResponse = ServiceResponse<{
 }>;
 
 export interface Review {
-  id: string;
-  userId: string;
-  userName: string;
+  id: number;
+  user_id: string;
+  author: string;
   rating: number;
-  comment: string;
-  createdAt: string;
+  title: string;
+  review: string;
+  date_reviewed: string;
+  date_purchased: string;
 }
+
+export interface ReviewCreate {
+  user_id: string;
+  product_id: number;
+  rating: number;
+  title: string;
+  author: string;
+  review: string;
+  date_purchased: string;
+}
+
+export type ReviewResponse = ServiceResponse<Review>;
+export type ReviewsResponse = ServiceResponse<Review[]>;

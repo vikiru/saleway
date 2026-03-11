@@ -24,7 +24,7 @@ export function CheckoutSummary({
 }: CheckoutSummaryProps) {
   return (
     <aside aria-labelledby="summary-title" className="lg:col-span-5 lg:sticky lg:top-24">
-      <Card className="border border-border/60 shadow-sm bg-card/50 backdrop-blur-sm">
+      <Card className="border border-border/60 shadow-sm bg-card">
         <CardHeader>
           <CardTitle className="text-xl font-semibold" id="summary-title">
             Order Summary
