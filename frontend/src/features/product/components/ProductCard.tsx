@@ -31,10 +31,10 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="mt-1 text-sm text-muted-foreground">{product.brand}</p>
           <div className="mt-2 flex items-center gap-2">
             <div className="flex text-yellow-500">
-              {[...Array(5)].map((_, i) => (
+              {[1, 2, 3, 4, 5].map((star) => (
                 <Star
-                  className={`h-3 w-3 ${i < Math.floor(rating) ? 'fill-current' : 'text-muted'}`}
-                  key={`star-${product.id}-${i}`}
+                  className={`h-3 w-3 ${star <= Math.floor(rating) ? 'fill-current' : 'text-muted'}`}
+                  key={`star-${product.id}-${star}`}
                 />
               ))}
             </div>

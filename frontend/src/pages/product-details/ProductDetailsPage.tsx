@@ -1,17 +1,28 @@
+'use client';
+
 import { ProductBreadcrumb } from '@/features/product/components/ProductBreadcrumb';
 import { ProductDescription } from '@/features/product/components/ProductDescription';
 import { ProductGallery } from '@/features/product/components/ProductGallery';
 import { ProductInfo } from '@/features/product/components/ProductInfo';
 import { ProductRating } from '@/features/product/components/ProductRating';
 import { ReviewsList } from '@/features/product/components/ReviewsList';
-import type { Product, Review } from '@/features/product/types/product';
+import { useReviews } from '@/features/product/queries/rating';
+import type { Product } from '@/features/product/types/product';
 
 interface ProductDetailsPageProps {
   product: Product;
-  reviews?: Review[];
 }
 
-export function ProductDetailsPage({ product, reviews = [] }: ProductDetailsPageProps) {
+export function ProductDetailsPage({ product }: ProductDetailsPageProps) {
+  const { data: reviews = [] } = useReviews(String(product.id));
+
+  const safeReviews = Array.isArray(reviews) ? reviews : [];
+  const ratingStats = {
+    average:
+      safeReviews.length > 0 ? safeReviews.reduce((acc: number, r) => acc + r.rating, 0) / safeReviews.length : 0,
+    count: safeReviews.length,
+  };
+
   const productInfoProps = {
     id: String(product.id),
     name: product.name,
@@ -21,14 +32,14 @@ export function ProductDetailsPage({ product, reviews = [] }: ProductDetailsPage
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-none px-4 py-8 sm:px-6 lg:px-12">
         <ProductBreadcrumb productName={product.name} />
 
         <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
           <ProductGallery image_url={product.image?.image_url} name={product.name} />
 
           <div>
-            <ProductRating rating={4.8} reviewCount={reviews.length || 24} />
+            <ProductRating rating={ratingStats.average} reviewCount={ratingStats.count} />
             <ProductInfo product={productInfoProps} />
           </div>
         </div>

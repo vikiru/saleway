@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/lib/components/ui/breadcrumb';
+import { HOME_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
 
 interface ProductBreadcrumbProps {
   productName: string;
@@ -16,11 +17,11 @@ export function ProductBreadcrumb({ productName }: ProductBreadcrumbProps) {
     <Breadcrumb className="mb-8">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          <BreadcrumbLink href={HOME_ROUTE}>Home</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/search">Shop</BreadcrumbLink>
+          <BreadcrumbLink href={SEARCH_ROUTE}>Shop</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>

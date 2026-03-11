@@ -1,6 +1,9 @@
-import { getProducts } from '@/features/product/api/product';
+'use client';
+
+import { useMemo } from 'react';
 import { FilterSection } from '@/features/product/components/FilterSection';
-import type { ProductWithRating } from '@/features/product/types/product';
+import type { Product } from '@/features/product/types/product';
+import type { FilterItem } from '@/features/product/utils/filters';
 import {
   Pagination,
   PaginationContent,
@@ -14,11 +17,12 @@ import { SEARCH_ROUTE } from '@/lib/constants/routes';
 import { SearchHeader } from './components/SearchHeader';
 import { SearchResultsGrid } from './components/SearchResultsGrid';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 25;
 
 interface SearchPageProps {
-  products: ProductWithRating[];
-  totalProducts: number;
+  allProducts: Product[];
+  categories: FilterItem[];
+  brands: FilterItem[];
   searchParams: {
     q?: string;
     category?: string;
@@ -30,21 +34,58 @@ interface SearchPageProps {
   };
 }
 
-export function SearchPage({ products, totalProducts, searchParams }: SearchPageProps) {
-  const allProducts = getProducts();
-
-  const categories = Array.from(new Set(allProducts.map((p) => p.category)))
-    .sort()
-    .map((cat) => ({ id: cat, label: cat.charAt(0).toUpperCase() + cat.slice(1) }));
-
-  const brands = Array.from(new Set(allProducts.map((p) => p.brand)))
-    .sort()
-    .map((brand) => ({ id: brand.toLowerCase(), label: brand }));
-
+export function SearchPage({ allProducts, categories, brands, searchParams }: SearchPageProps) {
   const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
+
+  const filtered = useMemo(() => {
+    const q = searchParams.q?.toLowerCase() ?? '';
+    const category = searchParams.category;
+    const brand = searchParams.brand;
+    const minPrice = searchParams.minPrice ? parseFloat(searchParams.minPrice) : undefined;
+    const maxPrice = searchParams.maxPrice ? parseFloat(searchParams.maxPrice) : undefined;
+    const sortBy = searchParams.sortBy ?? 'price-asc';
+
+    let result = allProducts;
+
+    if (q) {
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.category.toLowerCase().includes(q),
+      );
+    }
+    if (category) {
+      result = result.filter((p) => category.split(',').includes(p.category));
+    }
+    if (brand) {
+      const brands = brand.split(',');
+      result = result.filter((p) => brands.includes(p.brand.toLowerCase()));
+    }
+    if (minPrice !== undefined) {
+      result = result.filter((p) => p.price >= minPrice);
+    }
+    if (maxPrice !== undefined) {
+      result = result.filter((p) => p.price <= maxPrice);
+    }
+
+    return [...result].sort((a, b) => {
+      switch (sortBy) {
+        case 'price-desc':
+          return b.price - a.price;
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        default:
+          return a.price - b.price;
+      }
+    });
+  }, [allProducts, searchParams]);
+
+  const totalProducts = filtered.length;
   const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + products.length, totalProducts);
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalProducts);
+  const pageProducts = filtered.slice(startIndex, endIndex);
 
   const selectedCategories = searchParams.category ? searchParams.category.split(',') : [];
   const selectedBrands = searchParams.brand ? searchParams.brand.split(',') : [];
@@ -74,7 +115,7 @@ export function SearchPage({ products, totalProducts, searchParams }: SearchPage
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-none px-4 py-8 sm:px-6 lg:px-12">
         <SearchHeader filterContent={filterContent} searchTerm={searchParams.q} sortBy={searchParams.sortBy} />
 
         <div className="pt-6 pb-24 lg:grid lg:grid-cols-4 lg:gap-x-8">
@@ -83,7 +124,7 @@ export function SearchPage({ products, totalProducts, searchParams }: SearchPage
           <div className="lg:col-span-3">
             <SearchResultsGrid
               endIndex={endIndex}
-              products={products}
+              products={pageProducts}
               startIndex={startIndex}
               totalProducts={totalProducts}
             />

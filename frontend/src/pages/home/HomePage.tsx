@@ -1,13 +1,16 @@
 import { ChevronRight, Clock, Shield, Truck } from 'lucide-react';
 import Link from 'next/link';
-import { getProducts } from '@/features/product/api/product';
 import { ProductCard } from '@/features/product/components/ProductCard';
+import type { Product } from '@/features/product/types/product';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent } from '@/lib/components/ui/card';
 import { SEARCH_ROUTE } from '@/lib/constants/routes';
 
-export function HomePage() {
-  const products = getProducts();
+interface HomePageProps {
+  products: Product[];
+}
+
+export function HomePage({ products }: HomePageProps) {
   const featuredProducts = products.slice(0, 4);
 
   return (
@@ -56,7 +59,7 @@ export function HomePage() {
       <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="border-none shadow-md bg-card/50 hover:bg-card transition-colors">
+            <Card className="border-none shadow-md bg-card/50 transition-colors">
               <CardContent className="flex flex-col items-center text-center p-8 space-y-4">
                 <div className="p-4 rounded-full bg-primary/10 text-primary">
                   <Truck className="h-8 w-8" />
@@ -68,7 +71,7 @@ export function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-md bg-card/50 hover:bg-card transition-colors">
+            <Card className="border-none shadow-md bg-card transition-colors">
               <CardContent className="flex flex-col items-center text-center p-8 space-y-4">
                 <div className="p-4 rounded-full bg-primary/10 text-primary">
                   <Shield className="h-8 w-8" />
@@ -80,7 +83,7 @@ export function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-md bg-card/50 hover:bg-card transition-colors">
+            <Card className="border-none shadow-md bg-card/50 transition-colors">
               <CardContent className="flex flex-col items-center text-center p-8 space-y-4">
                 <div className="p-4 rounded-full bg-primary/10 text-primary">
                   <Clock className="h-8 w-8" />

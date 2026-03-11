@@ -1,11 +1,11 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { getUser } from '@/features/user/api/user';
 import { userKeys } from '@/lib/queries/keys';
+import { getUserAction } from '@/lib/server/actions/users';
 
 export function useUser(userId: string) {
   return useQuery({
     queryKey: userKeys.single(userId),
-    queryFn: ({ signal }) => getUser(userId, signal),
+    queryFn: () => getUserAction(userId),
     enabled: !!userId,
   });
 }
@@ -13,6 +13,6 @@ export function useUser(userId: string) {
 export function useSuspenseUser(userId: string) {
   return useSuspenseQuery({
     queryKey: userKeys.single(userId),
-    queryFn: ({ signal }) => getUser(userId, signal),
+    queryFn: () => getUserAction(userId),
   });
 }
