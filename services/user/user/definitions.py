@@ -1,11 +1,11 @@
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 from ninja import Schema
 
 T = TypeVar('T')
 
 
-class SuccessResponse(Schema, Generic[T]):
+class SuccessResponse[T](Schema):
     success: bool
     message: str
     data: T
@@ -16,4 +16,7 @@ class ErrorResponse(Schema):
     error: str
 
 
-ServiceResponse = SuccessResponse[T] | ErrorResponse
+class ServiceResponse[T]:
+    def __init__(self, data: T = None, error: str = ''):
+        self.data = data
+        self.error = error
