@@ -34,7 +34,7 @@ export function useCheckoutFlow() {
 
   const subtotal = getTotalPrice();
   const tax = subtotal * 0.1;
-  const shipping = 15.0;
+  const shipping = 0.0;
   const total = subtotal + tax + shipping;
 
   return {

@@ -7,6 +7,7 @@ export interface OrderCreate {
   items: OrderItemCreate[];
   purchase_date: string;
   total_price: number;
+  stripe_session_id: string;
 }
 
 export interface OrderItemCreate {

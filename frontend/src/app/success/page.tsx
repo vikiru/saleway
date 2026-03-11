@@ -4,6 +4,7 @@ import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent } from '@/lib/components/ui/card';
+import { SEARCH_ROUTE } from '@/lib/constants/routes';
 
 export default function SuccessPage() {
   return (
@@ -17,7 +18,7 @@ export default function SuccessPage() {
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground mb-3">Checkout Completed!</h1>
           <p className="text-muted-foreground mb-8 text-base">Your order has been processed successfully.</p>
-          <Link className="w-full block" href="/search">
+          <Link className="w-full block" href={SEARCH_ROUTE}>
             <Button className="w-full" size="lg">
               Continue Shopping
             </Button>
