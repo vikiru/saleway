@@ -23,7 +23,7 @@ export function SearchResultsGrid({ products, totalProducts, startIndex, endInde
 
       <ScrollArea className="h-[calc(100vh-300px)] pr-4">
         <section aria-label="Search results">
-          <ProductGrid products={products} />
+          <ProductGrid priorityCount={4} products={products} />
         </section>
 
         {totalProducts === 0 && (

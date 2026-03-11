@@ -9,7 +9,7 @@ export function useSearchRoute() {
   const searchParams = useSearchParams();
 
   const handleSearch = useCallback(
-    (term: string) => {
+    (term: string, options: { replace?: boolean; scroll?: boolean } = {}) => {
       const params = new URLSearchParams(searchParams?.toString() ?? '');
       if (term) {
         params.set('q', term);
@@ -17,7 +17,13 @@ export function useSearchRoute() {
         params.delete('q');
       }
       params.set('page', '1');
-      router.push(`${pathname}?${params.toString()}`);
+      const url = `${pathname}?${params.toString()}`;
+
+      if (options.replace) {
+        router.replace(url, { scroll: options.scroll ?? false });
+      } else {
+        router.push(url, { scroll: options.scroll ?? true });
+      }
     },
     [searchParams, pathname, router],
   );
