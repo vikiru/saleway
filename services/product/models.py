@@ -27,8 +27,8 @@ class Product(SQLModel, table=True):
 
     id: int = Field(default=None, primary_key=True)
     name: str
-    brand: str
-    category: str
+    brand: str = Field(index=True)
+    category: str = Field(index=True)
     summary: str
     description: str
     price: Decimal

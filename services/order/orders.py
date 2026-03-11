@@ -34,6 +34,7 @@ def create_order_route():
                 items_data=validated_data.items,
                 purchase_date=validated_data.purchase_date,
                 total_price=validated_data.total_price,
+                stripe_session_id=validated_data.stripe_session_id,
             )
 
         return jsonify(
@@ -209,6 +210,28 @@ def update_order_route(order_id: int):
                 error='An unexpected error occurred. Please try again.',
             ).model_dump()
         ), 500
+
+
+@orders_bp.route('/stripe-session/<string:session_id>', methods=['GET'])
+def get_order_by_stripe_session_route(session_id: str):
+    try:
+        with get_session() as session:
+            from sqlmodel import select
+            from sqlalchemy.orm import selectinload
+
+            statement = select(Order).options(selectinload(Order.items)).where(Order.stripe_session_id == session_id)
+            order = session.exec(statement).first()
+
+        if not order:
+            return jsonify(ErrorResponse(success=False, error='Order not found for session').model_dump()), 404
+
+        from serializers import serialize_order
+
+        return jsonify(
+            SuccessResponse(success=True, message='Order retrieved', data=serialize_order(order)).model_dump()
+        ), 200
+    except Exception as e:
+        return jsonify(ErrorResponse(success=False, error=f'An error occurred: {str(e)}').model_dump()), 500
 
 
 @orders_bp.route('/<int:order_id>', methods=['DELETE'])

@@ -7,7 +7,7 @@ from ninja import Schema
 
 class UserReview(models.Model):
     user_id = models.CharField(max_length=255)
-    product_id = models.IntegerField()
+    product_id = models.IntegerField(db_index=True)
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     review = models.TextField()

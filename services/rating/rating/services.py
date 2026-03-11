@@ -46,7 +46,6 @@ def create_review(payload: UserReviewInput) -> ServiceResponse:
             author=payload.author,
             review=payload.review,
             rating=payload.rating,
-            date_reviewed=payload.date_reviewed,
             date_purchased=payload.date_purchased,
         )
         data = extract_review(review)

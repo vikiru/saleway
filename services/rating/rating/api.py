@@ -16,7 +16,7 @@ api = NinjaAPI()
 
 
 @api.get('/products/{product_id}/reviews/{review_id}')
-def retrieve_review_by_id(request, product_id: int, review_id: int) -> SuccessResponse[dict]:
+def retrieve_review_by_id(request, product_id: int, review_id: int) -> SuccessResponse[dict] | ErrorResponse:
     try:
         response = get_review_by_id(product_id, review_id)
         if not response.data:
@@ -28,12 +28,11 @@ def retrieve_review_by_id(request, product_id: int, review_id: int) -> SuccessRe
 
 
 @api.get('/products/{product_id}/reviews')
-def retrieve_review_by_product_id(request, product_id: int) -> SuccessResponse[dict]:
+def retrieve_review_by_product_id(request, product_id: int) -> SuccessResponse[list] | ErrorResponse:
     try:
         response = get_reviews_by_product(product_id)
         if not response.data:
             return ErrorResponse(success=False, error='No matching reviews found')
-        print(response.data)
 
         return SuccessResponse(success=True, message='Reviews retrieved successfully.', data=response.data)
     except Exception as e:
@@ -41,7 +40,7 @@ def retrieve_review_by_product_id(request, product_id: int) -> SuccessResponse[d
 
 
 @api.get('/reviews/users/{user_id}')
-def retrieve_reviews_by_user_id(request, user_id: str) -> SuccessResponse[dict]:
+def retrieve_reviews_by_user_id(request, user_id: str) -> SuccessResponse[list] | ErrorResponse:
     try:
         response = get_reviews_by_user(user_id)
         if not response.data:
@@ -54,7 +53,7 @@ def retrieve_reviews_by_user_id(request, user_id: str) -> SuccessResponse[dict]:
 
 @api.post('/products/{product_id}/reviews')
 @csrf_exempt
-def post_review(request, product_id: int, payload: UserReviewInput) -> SuccessResponse[dict]:
+def post_review(request, product_id: int, payload: UserReviewInput) -> SuccessResponse[dict] | ErrorResponse:
     try:
         response = create_review(payload)
         if response.error:
@@ -66,9 +65,11 @@ def post_review(request, product_id: int, payload: UserReviewInput) -> SuccessRe
 
 @api.put('/products/{product_id}/reviews/{review_id}')
 @csrf_exempt
-def update_review(request, product_id: int, review_id: int, payload: UserReviewInput) -> SuccessResponse[dict]:
+def update_review(
+    request, product_id: int, review_id: int, payload: UserReviewInput
+) -> SuccessResponse[dict] | ErrorResponse:
     try:
-        response = modify_review(product_id, review_id, payload)
+        response = modify_review(review_id, payload)
         if response.error:
             return ErrorResponse(success=False, error='Review update failed.')
         return SuccessResponse(success=True, message='Review updated successfully.', data=response.data)
@@ -78,7 +79,7 @@ def update_review(request, product_id: int, review_id: int, payload: UserReviewI
 
 @api.delete('/products/{product_id}/reviews/{review_id}')
 @csrf_exempt
-def delete_review(request, product_id: int, review_id: int) -> SuccessResponse[dict]:
+def delete_review(request, product_id: int, review_id: int) -> SuccessResponse[dict] | ErrorResponse:
     try:
         response = remove_review(review_id)
         if response.error:
