@@ -1,11 +1,11 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { getProductReviews, getUserReviews } from '@/features/rating/api/rating';
 import { ratingKeys } from '@/lib/queries/keys';
+import { getProductReviewsAction, getUserReviewsAction } from '@/lib/server/actions/reviews';
 
 export function useProductReviews(productId: string) {
   return useQuery({
     queryKey: ratingKeys.byProduct(productId),
-    queryFn: ({ signal }) => getProductReviews(productId, signal),
+    queryFn: () => getProductReviewsAction(productId),
     enabled: !!productId,
   });
 }
@@ -13,7 +13,7 @@ export function useProductReviews(productId: string) {
 export function useUserReviews(userId: string) {
   return useQuery({
     queryKey: ratingKeys.byUser(userId),
-    queryFn: ({ signal }) => getUserReviews(userId, signal),
+    queryFn: () => getUserReviewsAction(userId),
     enabled: !!userId,
   });
 }
@@ -21,13 +21,13 @@ export function useUserReviews(userId: string) {
 export function useSuspenseProductReviews(productId: string) {
   return useSuspenseQuery({
     queryKey: ratingKeys.byProduct(productId),
-    queryFn: ({ signal }) => getProductReviews(productId, signal),
+    queryFn: () => getProductReviewsAction(productId),
   });
 }
 
 export function useSuspenseUserReviews(userId: string) {
   return useSuspenseQuery({
     queryKey: ratingKeys.byUser(userId),
-    queryFn: ({ signal }) => getUserReviews(userId, signal),
+    queryFn: () => getUserReviewsAction(userId),
   });
 }

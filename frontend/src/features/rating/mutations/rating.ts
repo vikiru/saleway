@@ -1,12 +1,19 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { UserReviewCreate, UserReviewUpdate } from '@/features/rating/types/rating';
+import type { ReviewUpdate } from '@/features/product/api/rating';
+import type { ReviewCreate } from '@/features/product/types/product';
 import { ratingKeys } from '@/lib/queries/keys';
-import { createReview, deleteReview, updateReview } from '@/lib/server/actions/reviews';
+import { createReviewAction, deleteReviewAction, updateReviewAction } from '@/lib/server/actions/reviews';
 
 export function useCreateReview() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (review: UserReviewCreate) => createReview(review),
+    mutationFn: async (review: ReviewCreate) => {
+      const result = await createReviewAction(review);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ratingKeys.all });
     },
@@ -16,8 +23,13 @@ export function useCreateReview() {
 export function useUpdateReview() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ reviewId, review }: { reviewId: number; review: UserReviewUpdate }) =>
-      updateReview(reviewId, review),
+    mutationFn: async ({ productId, reviewId, data }: { productId: number; reviewId: number; data: ReviewUpdate }) => {
+      const result = await updateReviewAction(productId, reviewId, data);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ratingKeys.all });
     },
@@ -27,7 +39,12 @@ export function useUpdateReview() {
 export function useDeleteReview() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ reviewId }: { reviewId: number }) => deleteReview(reviewId),
+    mutationFn: async ({ productId, reviewId }: { productId: number; reviewId: number }) => {
+      const result = await deleteReviewAction(productId, reviewId);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ratingKeys.all });
     },
