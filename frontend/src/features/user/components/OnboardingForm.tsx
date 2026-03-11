@@ -25,20 +25,50 @@ export function OnboardingForm() {
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-2">
             <Label htmlFor="firstName">First Name</Label>
-            <Input id="firstName" {...register('firstName')} placeholder="John" />
-            {errors.firstName && <p className="text-sm text-destructive">{errors.firstName.message}</p>}
+            <Input
+              aria-describedby={errors.firstName ? 'firstName-error' : undefined}
+              aria-invalid={!!errors.firstName}
+              id="firstName"
+              {...register('firstName')}
+              placeholder="John"
+            />
+            {errors.firstName && (
+              <p className="text-sm text-destructive" id="firstName-error" role="alert">
+                {errors.firstName.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="lastName">Last Name</Label>
-            <Input id="lastName" {...register('lastName')} placeholder="Doe" />
-            {errors.lastName && <p className="text-sm text-destructive">{errors.lastName.message}</p>}
+            <Input
+              aria-describedby={errors.lastName ? 'lastName-error' : undefined}
+              aria-invalid={!!errors.lastName}
+              id="lastName"
+              {...register('lastName')}
+              placeholder="Doe"
+            />
+            {errors.lastName && (
+              <p className="text-sm text-destructive" id="lastName-error" role="alert">
+                {errors.lastName.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
-            <Input id="username" {...register('username')} placeholder="johndoe" />
-            {errors.username && <p className="text-sm text-destructive">{errors.username.message}</p>}
+            <Input
+              aria-describedby={errors.username ? 'username-error' : undefined}
+              aria-invalid={!!errors.username}
+              id="username"
+              {...register('username')}
+              placeholder="johndoe"
+            />
+            {errors.username && (
+              <p className="text-sm text-destructive" id="username-error" role="alert">
+                {errors.username.message}
+              </p>
+            )}
           </div>
 
           <Button className="w-full" disabled={isSubmitting} type="submit">

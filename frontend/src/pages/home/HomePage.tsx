@@ -48,8 +48,8 @@ export function HomePage({ products }: HomePageProps) {
               </Link>
             </div>
             <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+              {featuredProducts.map((product, index) => (
+                <ProductCard key={product.id} priority={index < 4} product={product} />
               ))}
             </div>
           </div>
@@ -59,7 +59,7 @@ export function HomePage({ products }: HomePageProps) {
       <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="border-none shadow-md bg-card/50 transition-colors">
+            <Card className="border-none shadow-md bg-card transition-colors">
               <CardContent className="flex flex-col items-center text-center p-8 space-y-4">
                 <div className="p-4 rounded-full bg-primary/10 text-primary">
                   <Truck className="h-8 w-8" />
@@ -83,7 +83,7 @@ export function HomePage({ products }: HomePageProps) {
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-md bg-card/50 transition-colors">
+            <Card className="border-none shadow-md bg-card transition-colors">
               <CardContent className="flex flex-col items-center text-center p-8 space-y-4">
                 <div className="p-4 rounded-full bg-primary/10 text-primary">
                   <Clock className="h-8 w-8" />

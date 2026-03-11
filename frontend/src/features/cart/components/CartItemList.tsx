@@ -21,7 +21,7 @@ export function CartItemList({ products }: CartItemListProps) {
     return (
       <Empty>
         <EmptyHeader>
-          <div className="bg-muted flex size-12 items-center justify-center rounded-full mb-4">
+          <div aria-hidden="true" className="bg-muted flex size-12 items-center justify-center rounded-full mb-4">
             <ShoppingBag className="h-6 w-6 text-muted-foreground" />
           </div>
           <EmptyTitle>Your cart is empty</EmptyTitle>
