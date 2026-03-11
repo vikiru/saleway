@@ -1,24 +1,52 @@
-'use server';
+import {
+  createOrder as createOrderApi,
+  deleteOrder as deleteOrderApi,
+  getOrder as getOrderApi,
+  getOrderByStripeSession as getOrderByStripeSessionApi,
+  getOrders as getOrdersApi,
+  updateOrderStatus as updateOrderStatusApi,
+} from '@/features/order/api/order';
+import type { Order, OrderCreate, OrderResponse } from '@/features/order/types/order';
+import type { ServiceResponse } from '@/shared/api/types';
 
-import type { OrderCreate, OrderResponse } from '@/features/order/types/order';
-import { requireUser } from '@/features/user/actions/auth';
-import { ORDER_SERVICE_URL } from '@/lib/constants/routes';
-import { handleResponse } from '@/shared/api/fetch';
-
-export async function createOrder(order: OrderCreate): Promise<OrderResponse> {
-  const userId = await requireUser();
-
-  const response = await fetch(`${ORDER_SERVICE_URL}/orders`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...order, user_id: userId }),
-  });
-  return handleResponse(response);
+export async function getOrderAction(orderId: number | string): Promise<Order> {
+  return getOrderApi(orderId);
 }
 
-export async function cancelOrder(orderId: number): Promise<OrderResponse> {
-  const response = await fetch(`${ORDER_SERVICE_URL}/orders/${orderId}/cancel`, {
-    method: 'POST',
-  });
-  return handleResponse(response);
+export async function getOrdersAction(userId: string): Promise<Order[]> {
+  return getOrdersApi(userId);
+}
+
+export async function getOrderByStripeSessionAction(sessionId: string): Promise<Order> {
+  return getOrderByStripeSessionApi(sessionId);
+}
+
+export async function createOrder(data: OrderCreate): Promise<OrderResponse> {
+  try {
+    const result = await createOrderApi(data);
+    return { success: true, message: 'Order created successfully', data: result };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to create order';
+    return { success: false, error: message };
+  }
+}
+
+export async function updateOrderStatusAction(orderId: number, status: string): Promise<OrderResponse> {
+  try {
+    const result = await updateOrderStatusApi(orderId, status);
+    return { success: true, message: 'Order status updated', data: result };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to update order status';
+    return { success: false, error: message };
+  }
+}
+
+export async function deleteOrderAction(orderId: number): Promise<ServiceResponse<void>> {
+  try {
+    await deleteOrderApi(orderId);
+    return { success: true, message: 'Order deleted successfully', data: undefined };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to delete order';
+    return { success: false, error: message };
+  }
 }

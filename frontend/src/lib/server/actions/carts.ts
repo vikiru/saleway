@@ -1,52 +1,84 @@
-'use server';
-
-import type { CartItemCreateInput, CartResponse } from '@/features/cart/types/cart';
+import {
+  clearCart as clearCartApi,
+  createCart as createCartApi,
+  createCartItem as createCartItemApi,
+  getCart as getCartApi,
+  removeCartItem as removeCartItemApi,
+  syncCart as syncCartApi,
+  updateCartItem as updateCartItemApi,
+} from '@/features/cart/api/cart';
+import type { Cart, CartItemCreateInput, CartItemResponse, CartResponse } from '@/features/cart/types/cart';
 import { requireUser } from '@/features/user/actions/auth';
-import { CART_SERVICE_URL } from '@/lib/constants/routes';
-import { handleResponse } from '@/shared/api/fetch';
+import type { ServiceResponse } from '@/shared/api/types';
 
-export async function createCartItem(item: CartItemCreateInput): Promise<CartResponse> {
-  const userId = await requireUser();
-  const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/item`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify([item]),
-  });
-  return handleResponse(response);
+export async function getCartAction(userId: string): Promise<Cart> {
+  return getCartApi(userId);
 }
 
-export async function updateCartItem(cartItemId: string, quantity: number, unitPrice: number): Promise<CartResponse> {
-  const userId = await requireUser();
-  const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/item/${cartItemId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ cartItemId, quantity, unitPrice, totalPrice: quantity * unitPrice }),
-  });
-  return handleResponse(response);
+export async function createCartAction(): Promise<CartResponse> {
+  try {
+    const userId = await requireUser();
+    const result = await createCartApi(userId);
+    return { success: true, message: 'Cart created', data: result };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to create cart';
+    return { success: false, error: message };
+  }
 }
 
-export async function removeCartItem(cartItemId: string): Promise<CartResponse> {
-  const userId = await requireUser();
-  const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/item/${cartItemId}`, {
-    method: 'DELETE',
-  });
-  return handleResponse(response);
+export async function createCartItemAction(userId: string, item: CartItemCreateInput): Promise<CartItemResponse> {
+  try {
+    const result = await createCartItemApi(userId, item);
+    return { success: true, message: 'Item added to cart', data: result };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to add item to cart';
+    return { success: false, error: message };
+  }
 }
 
-export async function clearCart(): Promise<CartResponse> {
-  const userId = await requireUser();
-  const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}`, {
-    method: 'DELETE',
-  });
-  return handleResponse(response);
+export async function updateCartItemAction(
+  userId: string,
+  cartItemId: string,
+  quantity: number,
+  unitPrice: number,
+): Promise<CartItemResponse> {
+  try {
+    const result = await updateCartItemApi(userId, cartItemId, quantity, unitPrice);
+    return { success: true, message: 'Cart updated', data: result };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to update cart';
+    return { success: false, error: message };
+  }
 }
 
-export async function syncCart(items: CartItemCreateInput[]): Promise<{ success: boolean }> {
-  const userId = await requireUser();
-  const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}/sync`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ items }),
-  });
-  return handleResponse(response);
+export async function removeCartItemAction(userId: string, cartItemId: string): Promise<ServiceResponse<void>> {
+  try {
+    await removeCartItemApi(userId, cartItemId);
+    return { success: true, message: 'Item removed from cart', data: undefined };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to remove item';
+    return { success: false, error: message };
+  }
+}
+
+export async function clearCart(): Promise<ServiceResponse<void>> {
+  try {
+    const userId = await requireUser();
+    await clearCartApi(userId);
+    return { success: true, message: 'Cart cleared', data: undefined };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to clear cart';
+    return { success: false, error: message };
+  }
+}
+
+export async function syncCart(items: CartItemCreateInput[]): Promise<CartResponse> {
+  try {
+    const userId = await requireUser();
+    const result = await syncCartApi(userId, items);
+    return { success: true, message: 'Cart synced', data: result };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to sync cart';
+    return { success: false, error: message };
+  }
 }
