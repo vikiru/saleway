@@ -5,6 +5,7 @@ import { MessageSquareOff } from 'lucide-react';
 import { ReviewCard } from '@/features/product/components/ReviewCard';
 import { ReviewFormDialog } from '@/features/product/components/ReviewFormDialog';
 import type { Review } from '@/features/product/types/product';
+import { useReviews } from '@/features/product/queries/rating';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
 import { ScrollArea } from '@/lib/components/ui/scroll-area';
 
@@ -13,7 +14,8 @@ interface ReviewsListProps {
   productId: string;
 }
 
-export function ReviewsList({ reviews, productId }: ReviewsListProps) {
+export function ReviewsList({ reviews: serverReviews, productId }: ReviewsListProps) {
+  const { data: reviews = [] } = useReviews(productId, serverReviews);
   const { user } = useUser();
   const hasReviewed = user ? reviews.some((r) => r.user_id === user.id) : false;
 

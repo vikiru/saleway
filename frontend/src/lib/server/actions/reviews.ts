@@ -7,15 +7,21 @@ import {
   getReviews as getReviewsApi,
   updateReview as updateReviewApi,
 } from '@/features/product/api/rating';
-import type { Review, ReviewCreate, ReviewResponse } from '@/features/product/types/product';
+import type { Review, ReviewCreate, ReviewResponse, ReviewsResponse } from '@/features/product/types/product';
 import type { ProductReviewsData, UserReviewsData } from '@/features/rating/api/rating';
 import {
   getProductReviews as getProductReviewsApi,
   getUserReviews as getUserReviewsApi,
 } from '@/features/rating/api/rating';
 
-export async function getReviewsAction(productId: string): Promise<Review[]> {
-  return getReviewsApi(productId);
+export async function getReviewsAction(productId: string): Promise<ReviewsResponse> {
+  try {
+    const result = await getReviewsApi(productId);
+    return { success: true, message: 'Reviews fetched successfully', data: result };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to fetch reviews';
+    return { success: false, error: message };
+  }
 }
 
 export async function createReviewAction(data: ReviewCreate): Promise<ReviewResponse> {

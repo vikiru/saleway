@@ -9,11 +9,16 @@ import {
   updateReviewAction,
 } from '@/lib/server/actions/reviews';
 
-export function useReviews(productId: string) {
+export function useReviews(productId: string, initialData?: Review[]) {
   return useQuery({
     queryKey: ratingKeys.byProduct(productId),
-    queryFn: () => getReviewsAction(productId),
+    queryFn: async () => {
+      const result = await getReviewsAction(productId);
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    },
     enabled: !!productId,
+    initialData,
   });
 }
 

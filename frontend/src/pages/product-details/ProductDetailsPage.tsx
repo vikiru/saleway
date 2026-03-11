@@ -1,20 +1,17 @@
-'use client';
-
 import { ProductBreadcrumb } from '@/features/product/components/ProductBreadcrumb';
 import { ProductDescription } from '@/features/product/components/ProductDescription';
 import { ProductGallery } from '@/features/product/components/ProductGallery';
 import { ProductInfo } from '@/features/product/components/ProductInfo';
 import { ProductRating } from '@/features/product/components/ProductRating';
 import { ReviewsList } from '@/features/product/components/ReviewsList';
-import { useReviews } from '@/features/product/queries/rating';
-import type { Product } from '@/features/product/types/product';
+import type { Product, Review } from '@/features/product/types/product';
 
 interface ProductDetailsPageProps {
   product: Product;
+  reviews: Review[];
 }
 
-export function ProductDetailsPage({ product }: ProductDetailsPageProps) {
-  const { data: reviews = [] } = useReviews(String(product.id));
+export function ProductDetailsPage({ product, reviews }: ProductDetailsPageProps) {
 
   const safeReviews = Array.isArray(reviews) ? reviews : [];
   const ratingStats = {
