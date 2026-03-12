@@ -101,6 +101,7 @@ export function ReviewFormDialog({
           title: values.title,
           author: user.fullName || user.username || 'Anonymous',
           review: values.review,
+          date_reviewed: new Date().toISOString(),
           date_purchased: new Date().toISOString(),
         });
         toast.success('Review submitted successfully!');
