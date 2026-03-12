@@ -1,26 +1,32 @@
-# Production build for Rating Service (Django)
-FROM python:3.13-slim-bookworm
+# Stage 1: Build
+FROM python:3.13-slim-bookworm AS builder
 
-# Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+# Pin uv version
+COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /bin/uv
 
-# Create non-root user
-RUN groupadd -r appgroup -g 1001 && useradd -r -u 1001 -g appgroup appuser
-
-# Create uv cache directory with proper permissions
-RUN mkdir -p /home/appuser/.cache/uv && chown -R appuser:appgroup /home/appuser
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
 WORKDIR /app
 
-# Install dependencies as root
+# Install dependencies
 COPY pyproject.toml uv.lock ./
 RUN uv sync --no-dev --frozen
 
-# Copy application code
-COPY . .
+# Stage 2: Runtime
+FROM python:3.13-slim-bookworm
 
-# Fix permissions for only what appuser needs to write
-RUN chown appuser:appgroup ./entrypoint.sh && chmod +x ./entrypoint.sh
+# Create non-root user
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+RUN groupadd -r appgroup -g 1001 && useradd -r -u 1001 -g appgroup appuser
+
+WORKDIR /app
+
+# Copy virtual environment and application code
+COPY --from=builder --chown=appuser:appgroup /app/.venv /app/.venv
+COPY --chown=appuser:appgroup . .
+
+# Fix permissions
+RUN chmod +x ./entrypoint.sh
 
 # Switch to non-root user
 USER appuser

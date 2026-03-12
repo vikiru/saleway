@@ -66,3 +66,4 @@ Thumbs.db
 # Flask specific
 instance
 .webassets-cache
+.ruff_cache
