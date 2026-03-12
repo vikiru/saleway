@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from pydantic import ValidationError
+from sqlalchemy.orm import selectinload
+from sqlmodel import select
 
 from database import get_session
 from models import Order, OrderCreate, OrderItemCreate, OrderStatus
@@ -60,19 +62,6 @@ def create_order_route():
                 error='An unexpected error occurred. Please try again.',
             ).model_dump()
         ), 500
-
-
-@orders_bp.route('/debug', methods=['GET'])
-def debug_orders():
-    try:
-        with get_session() as session:
-            from sqlmodel import select
-
-            orders = session.exec(select(Order)).all()
-            order_ids = [order.id for order in orders]
-            return jsonify({'success': True, 'order_ids': order_ids, 'count': len(order_ids)})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @orders_bp.route('/<int:order_id>/items', methods=['GET'])
@@ -216,9 +205,6 @@ def update_order_route(order_id: int):
 def get_order_by_stripe_session_route(session_id: str):
     try:
         with get_session() as session:
-            from sqlmodel import select
-            from sqlalchemy.orm import selectinload
-
             statement = select(Order).options(selectinload(Order.items)).where(Order.stripe_session_id == session_id)
             order = session.exec(statement).first()
 

@@ -1,5 +1,3 @@
-import json
-
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -28,7 +26,7 @@ class EcommerceUser(AbstractUser):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return json.dumps(self)
+        return self.email
 
 
 class EcommerceUserCreate(Schema):
