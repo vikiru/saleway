@@ -66,3 +66,4 @@ Thumbs.db
 *.nar
 hs_err_pid*
 replay_pid*
+.ruff_cache

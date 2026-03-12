@@ -69,3 +69,4 @@ Thumbs.db
 media
 staticfiles
 local_settings.py
+.ruff_cache

@@ -2,7 +2,7 @@
 FROM node:22-slim AS base
 
 # Install pnpm via corepack
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9.x --activate
 
 # Install OpenSSL for Prisma
 RUN apt-get update && apt-get install -y openssl wget && rm -rf /var/lib/apt/lists/*
