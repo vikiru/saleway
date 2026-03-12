@@ -84,6 +84,7 @@ export interface ReviewCreate {
   title: string;
   author: string;
   review: string;
+  date_reviewed: string;
   date_purchased: string;
 }
 
