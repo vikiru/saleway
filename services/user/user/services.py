@@ -42,10 +42,9 @@ def modify_user(clerk_user_id: str, updated_user: EcommerceUserInput) -> Service
         if not user:
             return ServiceResponse(data={}, error='User not found')
 
-        updated_data = updated_user.dict()
+        updated_data = updated_user.dict(exclude_unset=True)
         for attr, value in updated_data.items():
-            if value:
-                setattr(user, attr, value)
+            setattr(user, attr, value)
         user.save()
 
         data = extract_user(user)

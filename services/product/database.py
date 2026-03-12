@@ -4,7 +4,7 @@ from sqlmodel import Session, create_engine
 
 from config import Config
 
-engine = create_engine(Config.DATABASE_URL, echo=True)
+engine = create_engine(Config.DATABASE_URL, echo=False)
 
 
 @contextmanager

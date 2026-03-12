@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 from django.db import models
@@ -12,7 +11,7 @@ class UserReview(models.Model):
     author = models.CharField(max_length=255)
     review = models.TextField()
     rating = models.IntegerField()
-    date_reviewed = models.DateTimeField(auto_now_add=True)
+    date_reviewed = models.DateTimeField(default=datetime.now)
     date_purchased = models.DateTimeField()
 
     class Meta:
@@ -22,7 +21,7 @@ class UserReview(models.Model):
         ]
 
     def __str__(self):
-        return json.dumps(self)
+        return f"{self.user_id} - {self.product_id}"
 
 
 class UserReviewInput(Schema):
@@ -32,6 +31,7 @@ class UserReviewInput(Schema):
     rating: int
     title: str
     author: str
+    date_reviewed: datetime
     date_purchased: datetime
 
     def to_dict(self):
@@ -42,6 +42,7 @@ class UserReviewInput(Schema):
             'rating': self.rating,
             'title': self.title,
             'author': self.author,
+            'date_reviewed': self.date_reviewed,
             'date_purchased': self.date_purchased,
         }
 

@@ -10,6 +10,7 @@ dependencies = [
     "flask-compress>=1.23",
     "flask-cors>=5.0.0",
     "loguru>=0.7.2",
+    "gunicorn>=21.2.0",
     "psycopg2-binary>=2.9.10",
     "python-dotenv>=1.0.0",
     "sqlmodel>=0.0.22",
