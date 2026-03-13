@@ -47,7 +47,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/postcss": "^4.2.1",
     "@tanstack/react-query": "^5.90.21",
-    "@tanstack/react-virtual": "^3.13.21",
+    "@tanstack/react-virtual": "^3.13.22",
     "@types/react": "^19.2.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -72,7 +72,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
+    "@biomejs/biome": "^2.4.7",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^22.19.15",
     "@types/postcss-import": "~14.0.3",
