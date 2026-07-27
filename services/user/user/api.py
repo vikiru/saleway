@@ -26,7 +26,8 @@ def post_user(request, payload: EcommerceUserCreate) -> SuccessResponse[dict] | 
         else:
             return SuccessResponse(success=True, message='User successfully created.', data=response.data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'User creation failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.get('/users/{user_id}')
@@ -47,7 +48,8 @@ def get_user(request, user_id: str) -> SuccessResponse[dict] | ErrorResponse:
 
         return SuccessResponse(success=True, message='User retrieved successfully.', data=user_data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'User retrieval failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.put('/users/{user_id}')
@@ -60,7 +62,8 @@ def update_user(request, user_id: str, payload: EcommerceUserInput) -> SuccessRe
         else:
             return SuccessResponse(success=True, message='User updated successfully.', data=response.data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'User update failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.delete('/users/{user_id}')
@@ -73,4 +76,5 @@ def delete_user(request, user_id: str) -> SuccessResponse[dict] | ErrorResponse:
         else:
             return SuccessResponse(success=True, message='User successfully deleted.', data={})
     except Exception as e:
-        return ErrorResponse(success=False, error=f'User deletion failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')

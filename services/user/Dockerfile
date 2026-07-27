@@ -36,5 +36,6 @@ ENV PORT=8002
 
 EXPOSE 8002
 
+ENV GUNICORN_WORKERS=2
 ENTRYPOINT ["./entrypoint.sh"]
-CMD [".venv/bin/gunicorn", "--bind", "0.0.0.0:8002", "--workers", "2", "user.wsgi:application"]
+CMD ["sh", "-c", ".venv/bin/gunicorn --bind 0.0.0.0:8002 --workers ${GUNICORN_WORKERS} user.wsgi:application"]
