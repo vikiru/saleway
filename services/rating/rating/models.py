@@ -10,25 +10,25 @@ class UserReview(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     review = models.TextField()
-    rating = models.IntegerField()
+    rating = models.FloatField()
     date_reviewed = models.DateTimeField(default=datetime.now)
     date_purchased = models.DateTimeField()
 
     class Meta:
         unique_together = ['user_id', 'product_id']
         constraints = [
-            models.CheckConstraint(condition=models.Q(rating__gte=1) & models.Q(rating__lte=5), name='rating_range')
+            models.CheckConstraint(condition=models.Q(rating__gte=0) & models.Q(rating__lte=5), name='rating_range')
         ]
 
     def __str__(self):
-        return f"{self.user_id} - {self.product_id}"
+        return f'{self.user_id} - {self.product_id}'
 
 
 class UserReviewInput(Schema):
     user_id: str
     product_id: int
     review: str
-    rating: int
+    rating: float
     title: str
     author: str
     date_reviewed: datetime
@@ -47,6 +47,17 @@ class UserReviewInput(Schema):
         }
 
 
+class UserReviewUpdateInput(Schema):
+    user_id: str | None = None
+    product_id: int | None = None
+    review: str | None = None
+    rating: float | None = None
+    title: str | None = None
+    author: str | None = None
+    date_reviewed: datetime | None = None
+    date_purchased: datetime | None = None
+
+
 class UserReviewOutput(Schema):
     id: int
     user_id: str
@@ -54,7 +65,7 @@ class UserReviewOutput(Schema):
     title: str
     author: str
     review: str
-    rating: int
+    rating: float
     date_reviewed: datetime
     date_purchased: datetime
 

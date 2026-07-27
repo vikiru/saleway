@@ -2,9 +2,10 @@ from django.views.decorators.csrf import csrf_exempt
 from ninja import NinjaAPI
 
 from .definitions import ErrorResponse, SuccessResponse
-from .models import UserReviewInput
+from .models import UserReviewInput, UserReviewUpdateInput
 from .services import (
     create_review,
+    get_product_average_rating,
     get_review_by_id,
     get_reviews_by_product,
     get_reviews_by_user,
@@ -27,19 +28,25 @@ def retrieve_review_by_id(request, product_id: int, review_id: int) -> SuccessRe
         return ErrorResponse(success=False, error=f'Review retrieval failed: {str(e)}')
 
 
+@api.get('/products/{product_id}/rating')
+def retrieve_product_average_rating(request, product_id: int) -> SuccessResponse[dict] | ErrorResponse:
+    try:
+        response = get_product_average_rating(product_id)
+        return SuccessResponse(success=True, message='Average rating retrieved successfully.', data=response.data)
+    except Exception as e:
+        return ErrorResponse(success=False, error=f'Average rating retrieval failed: {str(e)}')
+
+
 @api.get('/products/{product_id}/reviews')
-def retrieve_review_by_product_id(request, product_id: int) -> SuccessResponse[list] | ErrorResponse:
+def retrieve_review_by_product_id(request, product_id: int) -> SuccessResponse[dict] | ErrorResponse:
     try:
         response = get_reviews_by_product(product_id)
-        if not response.data:
-            return ErrorResponse(success=False, error='No matching reviews found')
-
         return SuccessResponse(success=True, message='Reviews retrieved successfully.', data=response.data)
     except Exception as e:
         return ErrorResponse(success=False, error=f'Review retrieval failed: {str(e)}')
 
 
-@api.get('/reviews/users/{user_id}')
+@api.get('/reviews/user/{user_id}')
 def retrieve_reviews_by_user_id(request, user_id: str) -> SuccessResponse[list] | ErrorResponse:
     try:
         response = get_reviews_by_user(user_id)
@@ -66,7 +73,7 @@ def post_review(request, product_id: int, payload: UserReviewInput) -> SuccessRe
 @api.put('/products/{product_id}/reviews/{review_id}')
 @csrf_exempt
 def update_review(
-    request, product_id: int, review_id: int, payload: UserReviewInput
+    request, product_id: int, review_id: int, payload: UserReviewUpdateInput
 ) -> SuccessResponse[dict] | ErrorResponse:
     try:
         response = modify_review(review_id, payload)
