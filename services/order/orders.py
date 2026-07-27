@@ -17,10 +17,13 @@ from services import (
     update_order_status,
 )
 
+from auth import jwt_required
+
 orders_bp = Blueprint('orders', __name__, url_prefix='/api/v1/orders')
 
 
 @orders_bp.route('', methods=['POST'])
+@jwt_required
 def create_order_route():
     try:
         payload = request.get_json()
@@ -160,6 +163,7 @@ def get_order_route(order_id: int):
 
 
 @orders_bp.route('/user/<string:user_id>', methods=['GET'])
+@jwt_required
 def get_orders_by_user_route(user_id: str):
     try:
         with get_session() as session:
@@ -178,6 +182,7 @@ def get_orders_by_user_route(user_id: str):
 
 
 @orders_bp.route('/<int:order_id>', methods=['PUT'])
+@jwt_required
 def update_order_route(order_id: int):
     session = None
     try:

@@ -21,9 +21,9 @@ public class RefundController {
       RefundResponse response = refundService.processRefund(request);
       return ResponseEntity.ok(ApiResponse.success(response));
     } catch (IllegalArgumentException e) {
-      return ResponseEntity.badRequest().body(ApiResponse.error("invalid_request", e.getMessage()));
+      return ResponseEntity.badRequest().body(ApiResponse.error("invalid_request", "Invalid refund request parameters."));
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body(ApiResponse.error("refund_failed", e.getMessage()));
+      return ResponseEntity.badRequest().body(ApiResponse.error("refund_failed", "An unexpected error occurred during refund."));
     }
   }
 }
