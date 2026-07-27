@@ -1,6 +1,6 @@
+import type { ServiceResponse } from '@/types/ServiceResponse';
 import { verifyToken } from '@clerk/backend';
 import { Request, Response, NextFunction } from 'express';
-import { ServiceResponse } from '../types';
 
 export const clerkAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
@@ -13,7 +13,7 @@ export const clerkAuth = async (req: Request, res: Response, next: NextFunction)
     const claims = await verifyToken(token, {
       secretKey: process.env.CLERK_SECRET_KEY,
     });
-    
+
     // Attach userId to request
     (req as any).auth = { userId: claims.sub };
     next();

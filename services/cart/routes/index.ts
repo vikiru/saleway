@@ -2,11 +2,15 @@ import { Router } from 'express';
 
 import * as CartController from '@/controllers/index';
 
+import { clerkAuth } from '../middleware/auth';
+
 const router = Router();
 
 router.get('/health', (_req, res) => {
   res.json({ message: 'Cart service is running.' });
 });
+
+router.use('/cart', clerkAuth);
 
 router.get('/cart/user/:userId', CartController.retrieveCartByUserId);
 router.post('/cart/user/:userId', CartController.createCart);
