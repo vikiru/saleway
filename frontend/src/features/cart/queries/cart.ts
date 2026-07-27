@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { getCartAction } from '@/features/cart/actions/cart';
 import { cartKeys } from '@/lib/queries/keys';
-import { getCartAction } from '@/lib/server/actions/carts';
 
 export function useCart(userId: string) {
   return useQuery({

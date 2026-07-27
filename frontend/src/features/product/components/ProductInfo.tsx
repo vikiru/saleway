@@ -15,7 +15,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
     <div className="mt-4 lg:mt-0">
       <h1 className="text-3xl font-bold tracking-tight text-foreground lg:text-4xl">{product.name}</h1>
 
-      <p className="mt-4 text-3xl tracking-tight text-foreground">${product.price.toFixed(2)}</p>
+      <p className="mt-4 text-3xl tracking-tight text-foreground">${Number(product.price).toFixed(2)}</p>
 
       <div className="mt-6">
         {product.inStock ? (

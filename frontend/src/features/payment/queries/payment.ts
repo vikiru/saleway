@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { verifySessionAction } from '@/features/payment/actions/payment';
 import { paymentKeys } from '@/lib/queries/keys';
-import { verifySessionAction } from '@/lib/server/actions/payments';
 
 export function usePaymentVerify(sessionId: string) {
   return useQuery({

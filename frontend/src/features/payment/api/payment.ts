@@ -1,3 +1,9 @@
+import {
+  checkoutSessionRequestSchema,
+  checkoutSessionResponseSchema,
+  refundResponseSchema,
+  verifySessionResponseSchema,
+} from '@/features/payment/schemas/payment';
 import type {
   CheckoutSessionRequest,
   CheckoutSessionResponse,
@@ -9,12 +15,21 @@ import { PAYMENT_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 
 export async function createCheckout(request: CheckoutSessionRequest): Promise<CheckoutSessionResponse> {
+  const inputParsed = checkoutSessionRequestSchema.safeParse(request);
+  if (!inputParsed.success) {
+    throw new Error('Invalid checkout session request payload');
+  }
   const response = await fetch(`${PAYMENT_SERVICE_URL}/checkout/create-session`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request),
+    body: JSON.stringify(inputParsed.data),
   });
-  return handleResponse<CheckoutSessionResponse>(response);
+  const data = await handleResponse<CheckoutSessionResponse>(response);
+  const parsed = checkoutSessionResponseSchema.safeParse(data);
+  if (!parsed.success) {
+    throw new Error('Invalid checkout session response format');
+  }
+  return parsed.data as CheckoutSessionResponse;
 }
 
 export async function verifySession(sessionId: string, signal?: AbortSignal): Promise<VerifySessionResponse> {
@@ -24,7 +39,12 @@ export async function verifySession(sessionId: string, signal?: AbortSignal): Pr
     body: JSON.stringify({ sessionId }),
     signal,
   });
-  return handleResponse<VerifySessionResponse>(response);
+  const data = await handleResponse<VerifySessionResponse>(response);
+  const parsed = verifySessionResponseSchema.safeParse(data);
+  if (!parsed.success) {
+    throw new Error('Invalid verify session response format');
+  }
+  return parsed.data as VerifySessionResponse;
 }
 
 export async function processRefund(request: RefundRequest): Promise<RefundResponse> {
@@ -33,5 +53,10 @@ export async function processRefund(request: RefundRequest): Promise<RefundRespo
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request),
   });
-  return handleResponse<RefundResponse>(response);
+  const data = await handleResponse<RefundResponse>(response);
+  const parsed = refundResponseSchema.safeParse(data);
+  if (!parsed.success) {
+    throw new Error('Invalid refund response format');
+  }
+  return parsed.data as RefundResponse;
 }

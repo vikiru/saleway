@@ -1,18 +1,16 @@
 'use client';
 
 import { ArrowDown01, ArrowUp01 } from 'lucide-react';
-import { useSortRoute } from '@/features/product/hooks/useSortRoute';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/lib/components/ui/select';
 
 interface SortSelectProps {
-  defaultValue?: string;
+  value?: string;
+  onValueChange: (value: string) => void;
 }
 
-export function SortSelect({ defaultValue }: SortSelectProps) {
-  const { handleSortChange } = useSortRoute();
-
+export function SortSelect({ value, onValueChange }: SortSelectProps) {
   return (
-    <Select defaultValue={defaultValue || 'price-asc'} onValueChange={handleSortChange}>
+    <Select onValueChange={onValueChange} value={value || 'price-asc'}>
       <SelectTrigger aria-label="Sort products" className="w-[200px] hover:cursor-pointer">
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
