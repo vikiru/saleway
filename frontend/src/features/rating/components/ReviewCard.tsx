@@ -4,10 +4,11 @@ import { useUser } from '@clerk/nextjs';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { RatingStars } from '@/features/product/components/RatingStars';
-import { ReviewFormDialog } from '@/features/product/components/ReviewFormDialog';
-import { useDeleteReview } from '@/features/product/queries/rating';
-import type { Review } from '@/features/product/types/product';
+import { RatingStars } from '@/features/rating/components/RatingStars';
+import { ReviewFormDialog } from '@/features/rating/components/ReviewFormDialog';
+import { useDeleteReview } from '@/features/rating/mutations/rating';
+import type { Review } from '@/features/rating/types/rating';
+import { ConfirmDialog } from '@/lib/components/confirm-dialog';
 import { Button } from '@/lib/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -19,15 +20,18 @@ interface ReviewCardProps {
 export function ReviewCard({ review, productId }: ReviewCardProps) {
   const { user } = useUser();
   const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const deleteReview = useDeleteReview(String(productId));
 
   const isOwner = user?.id === review.user_id;
 
-  const date = new Date(review.date_reviewed).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+  const date = review.date_reviewed
+    ? new Date(review.date_reviewed).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+    : '';
 
   const handleDelete = async () => {
     try {
@@ -76,12 +80,21 @@ export function ReviewCard({ review, productId }: ReviewCardProps) {
                 aria-label="Delete review"
                 className="h-7 w-7 text-muted-foreground hover:text-destructive"
                 disabled={deleteReview.isPending}
-                onClick={handleDelete}
+                onClick={() => setDeleteOpen(true)}
                 size="icon"
                 variant="ghost"
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
+              <ConfirmDialog
+                cancelText="Cancel"
+                confirmText="Delete"
+                description="This action cannot be undone. Your review will be permanently removed."
+                heading="Delete Review?"
+                onConfirm={handleDelete}
+                onOpenChange={setDeleteOpen}
+                open={deleteOpen}
+              />
             </div>
           )}
         </div>

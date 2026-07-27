@@ -1,50 +1,43 @@
-export interface UserReview {
+import type { ServiceResponse } from '@/shared/api/types';
+
+export interface Review {
   id: number;
-  userId: string;
-  productId: number;
+  user_id: string;
+  author: string;
+  rating: number;
+  title: string;
+  review: string;
+  date_reviewed: string;
+  date_purchased: string;
+}
+
+export interface ReviewCreate {
+  user_id?: string;
+  product_id: number;
   title: string;
   author: string;
   review: string;
   rating: number;
-  dateReviewed: string;
-  datePurchased: string;
+  date_reviewed?: string;
+  date_purchased: string;
 }
 
-export interface UserReviewCreate {
-  userId?: string;
-  productId: number;
-  title: string;
-  author: string;
-  review: string;
-  rating: number;
-  datePurchased: string;
-}
-
-export interface UserReviewUpdate {
+export interface ReviewUpdate {
   title?: string;
   author?: string;
   review?: string;
   rating?: number;
 }
 
-export interface ReviewResponse {
-  success: boolean;
-  data?: UserReview;
-  error?: string;
-}
-
-export interface ReviewsResponse {
-  success: boolean;
-  data?: UserReview[];
-  error?: string;
-}
+export type ReviewResponse = ServiceResponse<Review>;
+export type ReviewsResponse = ServiceResponse<Review[]>;
 
 export interface ProductReviewsResponse {
   success: boolean;
   data?: {
-    reviews: UserReview[];
-    averageRating: number;
-    totalReviews: number;
+    reviews: Review[];
+    average_rating: number;
+    total_reviews: number;
   };
   error?: string;
 }
@@ -52,8 +45,8 @@ export interface ProductReviewsResponse {
 export interface UserReviewsResponse {
   success: boolean;
   data?: {
-    reviews: UserReview[];
-    totalReviews: number;
+    reviews: Review[];
+    total_reviews: number;
   };
   error?: string;
 }
