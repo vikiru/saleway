@@ -18,6 +18,7 @@
     "unused": "knip"
   },
   "dependencies": {
+    "@clerk/backend": "^3.13.1",
     "@prisma/client": "^5.22.0",
     "body-parser": "^2.2.2",
     "compression": "^1.8.1",
