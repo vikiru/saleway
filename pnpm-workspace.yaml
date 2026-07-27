@@ -14,22 +14,22 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - fast-xml-parser@4.5.4 || 4.5.5 || 5.7.0
-  - next@15.5.13 || 15.5.14 || 15.5.15 || 15.5.16 || 15.5.18
+  - next@15.5.13 || 15.5.14 || 15.5.15 || 15.5.16 || 15.5.18 || 15.5.21
   - smol-toml@1.6.1
   - path-to-regexp@0.1.13
-  - brace-expansion@5.0.5 || 5.0.6
+  - brace-expansion@5.0.5 || 5.0.6 || 5.0.7 || 5.0.8
   - picomatch@4.0.4
   - yaml@2.8.3
   - lodash@4.17.24
   - '@usebruno/cli@3.2.0'
   - follow-redirects@1.15.12
   - dompurify@3.3.4 || 3.4.0 || 3.4.9 || 3.4.11
-  - axios@1.15.0 || 1.15.1 || 1.15.2 || 1.16.0
-  - postcss@8.5.10
+  - axios@1.15.0 || 1.15.1 || 1.15.2 || 1.16.0 || 1.18.0
+  - postcss@8.5.10 || 8.5.18
   - '@clerk/shared@3.47.4 || 3.47.5'
   - '@clerk/nextjs@6.39.2 || 6.39.3'
-  - protobufjs@7.5.5 || 7.5.6 || 7.5.8 || 7.6.3
-  - fast-uri@3.1.1 || 3.1.2
+  - protobufjs@7.5.5 || 7.5.6 || 7.5.8 || 7.6.3 || 8.6.5 || 8.6.6
+  - fast-uri@3.1.1 || 3.1.2 || 3.1.3 || 3.1.4
   - '@clerk/clerk-react@5.61.6'
   - '@clerk/backend@2.33.3'
   - ip-address@10.1.1
@@ -45,6 +45,9 @@ minimumReleaseAgeExclude:
   - '@babel/core@7.29.1'
   - undici@7.28.0
   - morgan@1.10.2
+  - js-yaml@4.3.0
+  - body-parser@1.20.6 || 2.3.0
+  - sharp@0.35.0
 
 onlyBuiltDependencies:
   - lefthook
@@ -56,12 +59,33 @@ overrides:
   axios@>=1.0.0 <1.15.1: ^1.15.1
   axios@>=1.0.0 <1.15.2: ^1.15.2
   axios@>=1.0.0 <1.16.0: ^1.16.0
+  axios@>=1.0.0 <1.18.0: ^1.18.0
+  axios@>=1.13.0 <1.18.0: ^1.18.0
+  axios@>=1.15.0 <1.18.0: ^1.18.0
+  axios@>=1.15.1 <1.18.0: ^1.18.0
+  axios@>=1.15.2 <1.18.0: ^1.18.0
   axios@>=1.7.0 <1.16.0: ^1.16.0
+  axios@>=1.7.0 <1.18.0: ^1.18.0
+  body-parser@<1.20.6: ^1.20.6
+  body-parser@>=2.0.0 <2.3.0: ^2.3.0
+  brace-expansion@<=5.0.7: ^5.0.8
+  brace-expansion@>=3.0.0 <5.0.7: ^5.0.7
+  fast-uri@>=3.0.0 <3.1.3: ^3.1.3
+  fast-uri@>=3.0.0 <=3.1.3: ^3.1.4
   fast-xml-parser@<5.7.0: ^5.7.0
   fast-xml-parser@>=4.0.0-beta.0 <4.5.4: ^4.5.4
   fast-xml-parser@>=4.0.0-beta.3 <4.5.5: ^4.5.5
   fast-xml-parser@>=4.1.3 <4.5.4: ^4.5.4
   form-data@>=4.0.0 <4.0.6: ^4.0.6
+  js-yaml@>=4.0.0 <4.3.0: ^4.3.0
+  next@>=12.0.0 <15.5.21: ^15.5.21
+  next@>=13.0.0 <15.5.21: ^15.5.21
+  next@>=14.1.1 <15.5.21: ^15.5.21
+  next@>=15.5.0 <15.5.21: ^15.5.21
   postcss@<8.5.10: ^8.5.10
+  postcss@<=8.5.17: ^8.5.18
+  protobufjs@>=8.0.0 <=8.6.5: ^8.6.6
+  protobufjs@>=8.2.0 <=8.6.4: ^8.6.5
   qs@>=6.11.1 <=6.15.1: ^6.15.2
+  sharp@<0.35.0: ^0.35.0
   uuid@<11.1.1: ^11.1.1
