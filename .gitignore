@@ -347,6 +347,9 @@ replay_pid*
 *.vsix
 
 openspec
+.agents
+.agent
+skills-lock.json
 .github/prompts
 .github/skills
 .cospec
