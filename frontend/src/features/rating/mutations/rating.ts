@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { ReviewUpdate } from '@/features/product/api/rating';
-import type { ReviewCreate } from '@/features/product/types/product';
+import { createReviewAction, deleteReviewAction, updateReviewAction } from '@/features/rating/actions/rating';
+import type { ReviewCreate, ReviewUpdate } from '@/features/rating/types/rating';
 import { ratingKeys } from '@/lib/queries/keys';
-import { createReviewAction, deleteReviewAction, updateReviewAction } from '@/lib/server/actions/reviews';
 
 export function useCreateReview() {
   const queryClient = useQueryClient();
@@ -14,39 +13,51 @@ export function useCreateReview() {
       }
       return result.data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ratingKeys.all });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ratingKeys.byProduct(String(variables.product_id)),
+      });
     },
   });
 }
 
-export function useUpdateReview() {
+export function useUpdateReview(productId?: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ productId, reviewId, data }: { productId: number; reviewId: number; data: ReviewUpdate }) => {
-      const result = await updateReviewAction(productId, reviewId, data);
+    mutationFn: async ({ reviewId, data }: { reviewId: number; data: ReviewUpdate }) => {
+      // If productId is not provided to the hook, we might need it in the mutation input,
+      // but the current action expects it as a number.
+      const result = await updateReviewAction(Number(productId), reviewId, data);
       if (!result.success) {
         throw new Error(result.error);
       }
       return result.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ratingKeys.all });
+      if (productId) {
+        queryClient.invalidateQueries({ queryKey: ratingKeys.byProduct(productId) });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ratingKeys.all });
+      }
     },
   });
 }
 
-export function useDeleteReview() {
+export function useDeleteReview(productId?: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ productId, reviewId }: { productId: number; reviewId: number }) => {
-      const result = await deleteReviewAction(productId, reviewId);
+    mutationFn: async (reviewId: number) => {
+      const result = await deleteReviewAction(Number(productId), reviewId);
       if (!result.success) {
         throw new Error(result.error);
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ratingKeys.all });
+      if (productId) {
+        queryClient.invalidateQueries({ queryKey: ratingKeys.byProduct(productId) });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ratingKeys.all });
+      }
     },
   });
 }

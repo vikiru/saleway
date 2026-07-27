@@ -1,11 +1,11 @@
-import { RatingStars } from '@/features/product/components/RatingStars';
+import { RatingStars } from '@/features/rating/components/RatingStars';
 
 interface ProductRatingProps {
   rating: number;
-  reviewCount: number;
+  review_count: number;
 }
 
-export function ProductRating({ rating, reviewCount }: ProductRatingProps) {
+export function ProductRating({ rating, review_count }: ProductRatingProps) {
   return (
     <div className="mt-6">
       <h3 className="sr-only">Reviews</h3>
@@ -15,7 +15,7 @@ export function ProductRating({ rating, reviewCount }: ProductRatingProps) {
           <span className="ml-3 text-sm font-medium text-muted-foreground">{rating.toFixed(1)} out of 5 stars</span>
         </div>
         <p className="sr-only">{rating} out of 5 stars</p>
-        <span className="ml-4 text-sm text-muted-foreground">({reviewCount} reviews)</span>
+        <span className="ml-4 text-sm text-muted-foreground">({review_count} reviews)</span>
       </div>
     </div>
   );

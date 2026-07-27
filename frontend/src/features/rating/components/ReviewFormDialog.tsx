@@ -2,11 +2,11 @@
 
 import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Star } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useCreateReview, useUpdateReview } from '@/features/product/queries/rating';
+import { useCreateReview, useUpdateReview } from '@/features/rating/mutations/rating';
 import { Button } from '@/lib/components/ui/button';
 import {
   Dialog,
@@ -21,7 +21,6 @@ import { Input } from '@/lib/components/ui/input';
 import { Label } from '@/lib/components/ui/label';
 import { Textarea } from '@/lib/components/ui/textarea';
 import { type ReviewFormValues, reviewSchema } from '@/lib/schema/review';
-import { cn } from '@/lib/utils';
 
 interface ReviewFormDialogProps {
   productId: number;
@@ -44,7 +43,6 @@ export function ReviewFormDialog({
 }: ReviewFormDialogProps) {
   const { user } = useUser();
   const [internalOpen, setInternalOpen] = useState(false);
-  const [hoverRating, setHoverRating] = useState(0);
 
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
@@ -132,25 +130,39 @@ export function ReviewFormDialog({
           <div className="grid gap-4 py-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="rating">Rating</Label>
-              <div className="flex gap-1" id="rating">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    aria-label={`Rate ${star} stars`}
-                    className="focus:outline-none transition-transform hover:scale-110"
-                    key={star}
-                    onClick={() => setValue('rating', star, { shouldValidate: true })}
-                    onMouseEnter={() => setHoverRating(star)}
-                    onMouseLeave={() => setHoverRating(0)}
-                    type="button"
-                  >
-                    <Star
-                      className={cn(
-                        'size-6 transition-colors',
-                        (hoverRating || rating) >= star ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground',
-                      )}
-                    />
-                  </button>
-                ))}
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={() => {
+                    const newVal = Math.max(0, (rating || 0) - 0.5);
+                    setValue('rating', newVal, { shouldValidate: true });
+                  }}
+                  size="icon"
+                  type="button"
+                  variant="outline"
+                >
+                  -
+                </Button>
+                <Input
+                  className="w-16 text-center"
+                  id="rating"
+                  max={5}
+                  min={0}
+                  step={0.5}
+                  type="number"
+                  {...register('rating', { valueAsNumber: true })}
+                />
+                <Button
+                  onClick={() => {
+                    const newVal = Math.min(5, (rating || 0) + 0.5);
+                    setValue('rating', newVal, { shouldValidate: true });
+                  }}
+                  size="icon"
+                  type="button"
+                  variant="outline"
+                >
+                  +
+                </Button>
+                <span className="text-sm text-muted-foreground">/ 5</span>
               </div>
               {errors.rating && <p className="text-sm text-destructive">{errors.rating.message}</p>}
             </div>

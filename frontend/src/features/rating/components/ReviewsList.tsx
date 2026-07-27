@@ -1,11 +1,12 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import { MessageSquareOff } from 'lucide-react';
-import { ReviewCard } from '@/features/product/components/ReviewCard';
-import { ReviewFormDialog } from '@/features/product/components/ReviewFormDialog';
-import type { Review } from '@/features/product/types/product';
-import { useReviews } from '@/features/product/queries/rating';
+import { MessageSquareOff, Plus } from 'lucide-react';
+import { ReviewCard } from '@/features/rating/components/ReviewCard';
+import { ReviewFormDialog } from '@/features/rating/components/ReviewFormDialog';
+import { useReviews } from '@/features/rating/queries/rating';
+import type { Review } from '@/features/rating/types/rating';
+import { Button } from '@/lib/components/ui/button';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
 import { ScrollArea } from '@/lib/components/ui/scroll-area';
 
@@ -23,7 +24,7 @@ export function ReviewsList({ reviews: serverReviews, productId }: ReviewsListPr
     <section className="pb-16">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-2xl font-bold tracking-tight text-foreground">Customer Reviews</h3>
+          <h2 className="font-bold tracking-tight text-foreground">Customer Reviews</h2>
           <p className="text-sm text-muted-foreground mt-0.5">
             {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
           </p>
@@ -32,9 +33,10 @@ export function ReviewsList({ reviews: serverReviews, productId }: ReviewsListPr
           <ReviewFormDialog
             productId={Number(productId)}
             trigger={
-              <button className="text-sm underline underline-offset-4 text-primary hover:text-primary/80 transition-colors">
+              <Button className="gap-2" size="sm" variant="outline">
+                <Plus className="size-4" />
                 Write a Review
-              </button>
+              </Button>
             }
           />
         )}
