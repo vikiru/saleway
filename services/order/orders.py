@@ -136,7 +136,7 @@ def remove_order_item_route(order_id: int, item_id: int):
     except Exception as e:
         return jsonify(
             ErrorResponse(
-                success=False, error=f'An error occurred while removing item from order: {str(e)}'
+                success=False, error='An unexpected error occurred.'
             ).model_dump()
         ), 500
 
@@ -217,7 +217,7 @@ def get_order_by_stripe_session_route(session_id: str):
             SuccessResponse(success=True, message='Order retrieved', data=serialize_order(order)).model_dump()
         ), 200
     except Exception as e:
-        return jsonify(ErrorResponse(success=False, error=f'An error occurred: {str(e)}').model_dump()), 500
+        return jsonify(ErrorResponse(success=False, error='An unexpected error occurred.').model_dump()), 500
 
 
 @orders_bp.route('/<int:order_id>', methods=['DELETE'])
