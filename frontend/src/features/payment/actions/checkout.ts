@@ -2,14 +2,14 @@
 
 import { clerkClient } from '@clerk/nextjs/server';
 import { z } from 'zod';
+import { clearCart } from '@/features/cart/actions/cart';
 import { getCart } from '@/features/cart/api/cart';
+import { createOrder } from '@/features/order/actions/order';
 import type { OrderResponse } from '@/features/order/types/order';
 import { createCheckout as createCheckoutApi, verifySession } from '@/features/payment/api/payment';
 import type { CartItemSnapshot } from '@/features/payment/types/payment';
 import { getProduct } from '@/features/product/api/product';
 import { requireUser } from '@/features/user/actions/auth';
-import { clearCart } from '@/lib/server/actions/carts';
-import { createOrder } from '@/lib/server/actions/orders';
 
 const CheckoutSessionSchema = z.object({
   sessionId: z.string().min(1, 'Session ID required'),
