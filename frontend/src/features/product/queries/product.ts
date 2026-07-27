@@ -7,6 +7,7 @@ export function useProduct(productId: string) {
     queryKey: productKeys.detail(productId),
     queryFn: () => getProduct(productId),
     enabled: !!productId,
+    staleTime: Infinity,
   });
 }
 
@@ -14,6 +15,7 @@ export function useProducts() {
   return useQuery({
     queryKey: productKeys.lists(),
     queryFn: () => getProducts(),
+    staleTime: Infinity,
   });
 }
 
@@ -21,6 +23,7 @@ export function useSuspenseProduct(productId: string) {
   return useSuspenseQuery({
     queryKey: productKeys.detail(productId),
     queryFn: () => getProduct(productId),
+    staleTime: Infinity,
   });
 }
 
@@ -28,5 +31,6 @@ export function useSuspenseProducts() {
   return useSuspenseQuery({
     queryKey: productKeys.lists(),
     queryFn: () => getProducts(),
+    staleTime: Infinity,
   });
 }

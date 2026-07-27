@@ -1,13 +1,15 @@
-from contextlib import contextmanager
+from contextlib import asynccontextmanager
 
-from sqlmodel import Session, create_engine
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 from config import Config
 
-engine = create_engine(Config.DATABASE_URL, echo=False)
+db_url = Config.DATABASE_URL.replace('postgresql://', 'postgresql+asyncpg://')
+engine = create_async_engine(db_url, echo=False)
 
 
-@contextmanager
-def get_session():
-    with Session(engine) as session:
+@asynccontextmanager
+async def get_session():
+    async with AsyncSession(engine) as session:
         yield session

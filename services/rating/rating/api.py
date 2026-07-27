@@ -25,7 +25,8 @@ def retrieve_review_by_id(request, product_id: int, review_id: int) -> SuccessRe
 
         return SuccessResponse(success=True, message='Review retrieved successfully.', data=response.data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'Review retrieval failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.get('/products/{product_id}/rating')
@@ -34,7 +35,8 @@ def retrieve_product_average_rating(request, product_id: int) -> SuccessResponse
         response = get_product_average_rating(product_id)
         return SuccessResponse(success=True, message='Average rating retrieved successfully.', data=response.data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'Average rating retrieval failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.get('/products/{product_id}/reviews')
@@ -43,7 +45,8 @@ def retrieve_review_by_product_id(request, product_id: int) -> SuccessResponse[d
         response = get_reviews_by_product(product_id)
         return SuccessResponse(success=True, message='Reviews retrieved successfully.', data=response.data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'Review retrieval failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.get('/reviews/user/{user_id}')
@@ -55,7 +58,8 @@ def retrieve_reviews_by_user_id(request, user_id: str) -> SuccessResponse[list] 
 
         return SuccessResponse(success=True, message='Reviews retrieved successfully.', data=response.data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'Review retrieval failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.post('/products/{product_id}/reviews')
@@ -67,7 +71,8 @@ def post_review(request, product_id: int, payload: UserReviewInput) -> SuccessRe
             return ErrorResponse(success=False, error='Review creation failed.')
         return SuccessResponse(success=True, message='Review created successfully.', data=response.data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'Review creation failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.put('/products/{product_id}/reviews/{review_id}')
@@ -81,7 +86,8 @@ def update_review(
             return ErrorResponse(success=False, error='Review update failed.')
         return SuccessResponse(success=True, message='Review updated successfully.', data=response.data)
     except Exception as e:
-        return ErrorResponse(success=False, error=f'Review update failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')
 
 
 @api.delete('/products/{product_id}/reviews/{review_id}')
@@ -93,4 +99,5 @@ def delete_review(request, product_id: int, review_id: int) -> SuccessResponse[d
             return ErrorResponse(success=False, error='Review deletion failed.')
         return SuccessResponse(success=True, message='Review deleted successfully.', data={})
     except Exception as e:
-        return ErrorResponse(success=False, error=f'Review deletion failed: {str(e)}')
+        print(f'Error: {str(e)}')
+        return ErrorResponse(success=False, error='An unexpected error occurred.')

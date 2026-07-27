@@ -9,10 +9,10 @@ from services import (
 )
 
 
-def fetch_all_products():
-    with get_session() as session:
+async def fetch_all_products():
+    async with get_session() as session:
         try:
-            products = get_all_products_with_images(session)
+            products = await get_all_products_with_images(session)
             return SuccessResponse(
                 success=True,
                 message='Products fetched successfully',
@@ -26,10 +26,10 @@ def fetch_all_products():
             )
 
 
-def fetch_product_by_id(product_id: int):
-    with get_session() as session:
+async def fetch_product_by_id(product_id: int):
+    async with get_session() as session:
         try:
-            product = get_product_by_id(session, product_id)
+            product = await get_product_by_id(session, product_id)
             return SuccessResponse(
                 success=True,
                 message='Product fetched successfully',
@@ -42,10 +42,10 @@ def fetch_product_by_id(product_id: int):
             )
 
 
-def fetch_products_by_category(category: str):
-    with get_session() as session:
+async def fetch_products_by_category(category: str):
+    async with get_session() as session:
         try:
-            products = get_products_by_category(session, category)
+            products = await get_products_by_category(session, category)
             return SuccessResponse(
                 success=True,
                 message=f'Products in category {category} fetched successfully',
@@ -58,10 +58,10 @@ def fetch_products_by_category(category: str):
             )
 
 
-def fetch_products_by_brand(brand: str):
-    with get_session() as session:
+async def fetch_products_by_brand(brand: str):
+    async with get_session() as session:
         try:
-            products = get_products_by_brand(session, brand)
+            products = await get_products_by_brand(session, brand)
             return SuccessResponse(
                 success=True,
                 message=f'Products by brand {brand} fetched successfully',
@@ -74,10 +74,10 @@ def fetch_products_by_brand(brand: str):
             )
 
 
-def fetch_products_by_name(name: str):
-    with get_session() as session:
+async def fetch_products_by_name(name: str):
+    async with get_session() as session:
         try:
-            products = get_product_by_name(session, name)
+            products = await get_product_by_name(session, name)
             return SuccessResponse(
                 success=True,
                 message=f'Products matching name {name} fetched successfully',

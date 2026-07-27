@@ -1,12 +1,13 @@
 from sqlalchemy.orm import selectinload
-from sqlmodel import Session, select
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 from models import Product, ProductImage
 
 
-def get_all_products_with_images(session: Session):
+async def get_all_products_with_images(session: AsyncSession):
     statement = select(Product).options(selectinload(Product.image)).order_by(Product.id)
-    result = session.exec(statement).all()
+    result = (await session.exec(statement)).all()
     products_data = []
     for product in result:
         product_dict = product.model_dump(exclude_none=True)
@@ -16,11 +17,11 @@ def get_all_products_with_images(session: Session):
     return products_data
 
 
-def get_products_by_category(session: Session, category: str):
+async def get_products_by_category(session: AsyncSession, category: str):
     statement = (
         select(Product).options(selectinload(Product.image)).where(Product.category == category).order_by(Product.id)
     )
-    result = session.exec(statement).all()
+    result = (await session.exec(statement)).all()
     products_data = []
     for product in result:
         product_dict = product.model_dump(exclude_none=True)
@@ -30,9 +31,9 @@ def get_products_by_category(session: Session, category: str):
     return products_data
 
 
-def get_product_by_id(session: Session, product_id: int):
+async def get_product_by_id(session: AsyncSession, product_id: int):
     statement = select(Product).options(selectinload(Product.image)).where(Product.id == product_id)
-    product = session.exec(statement).first()
+    product = (await session.exec(statement)).first()
     if not product:
         return None
     product_dict = product.model_dump(exclude_none=True)
@@ -41,9 +42,9 @@ def get_product_by_id(session: Session, product_id: int):
     return product_dict
 
 
-def get_products_by_brand(session: Session, brand: str):
+async def get_products_by_brand(session: AsyncSession, brand: str):
     statement = select(Product).options(selectinload(Product.image)).where(Product.brand == brand).order_by(Product.id)
-    result = session.exec(statement).all()
+    result = (await session.exec(statement)).all()
     products_data = []
     for product in result:
         product_dict = product.model_dump(exclude_none=True)
@@ -53,9 +54,9 @@ def get_products_by_brand(session: Session, brand: str):
     return products_data
 
 
-def get_product_by_name(session: Session, name: str):
+async def get_product_by_name(session: AsyncSession, name: str):
     statement = select(Product).options(selectinload(Product.image)).where(Product.name == name)
-    result = session.exec(statement).all()
+    result = (await session.exec(statement)).all()
     products_data = []
     for product in result:
         product_dict = product.model_dump(exclude_none=True)
@@ -65,13 +66,13 @@ def get_product_by_name(session: Session, name: str):
     return products_data
 
 
-def get_product_images(session: Session):
+async def get_product_images(session: AsyncSession):
     statement = select(ProductImage)
-    result = session.exec(statement).all()
+    result = (await session.exec(statement)).all()
     return result
 
 
-def get_product_images_by_product_id(session: Session, product_id: int):
+async def get_product_images_by_product_id(session: AsyncSession, product_id: int):
     statement = select(ProductImage).where(ProductImage.product_id == product_id)
-    result = session.exec(statement).all()
+    result = (await session.exec(statement)).all()
     return result
