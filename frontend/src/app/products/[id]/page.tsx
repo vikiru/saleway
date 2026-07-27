@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getProduct, getProducts } from '@/features/product/api/product';
-import { getReviewsAction } from '@/lib/server/actions/reviews';
+import { getReviewsAction } from '@/features/rating/actions/rating';
 import { ProductDetailsPage } from '@/pages/product-details/ProductDetailsPage';
 
 export const dynamicParams = false;

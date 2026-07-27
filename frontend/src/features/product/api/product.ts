@@ -1,28 +1,33 @@
+import { getProduct as getStaticProduct, getProducts as getStaticProducts } from '@/shared/api/static';
 import type { Product } from '@/features/product/types/product';
-import { PRODUCT_SERVICE_URL } from '@/lib/constants/routes';
-import { handleResponse } from '@/shared/api/fetch';
 
-export async function getProducts(signal?: AbortSignal): Promise<Product[]> {
-  const response = await fetch(`${PRODUCT_SERVICE_URL}/products`, { signal });
-  return handleResponse<Product[]>(response);
+export async function getProducts(_signal?: AbortSignal): Promise<Product[]> {
+  return getStaticProducts();
 }
 
-export async function getProduct(productId: number | string, signal?: AbortSignal): Promise<Product> {
-  const response = await fetch(`${PRODUCT_SERVICE_URL}/products/${productId}`, { signal });
-  return handleResponse<Product>(response);
+export async function getProduct(productId: number | string, _signal?: AbortSignal): Promise<Product> {
+  const product = getStaticProduct(productId);
+  if (!product) {
+    throw new Error('Product not found');
+  }
+  return product;
 }
 
-export async function getProductsByCategory(category: string, signal?: AbortSignal): Promise<Product[]> {
-  const response = await fetch(`${PRODUCT_SERVICE_URL}/products/category/${encodeURIComponent(category)}`, { signal });
-  return handleResponse<Product[]>(response);
+export async function getProductsByCategory(category: string, _signal?: AbortSignal): Promise<Product[]> {
+  const products = getStaticProducts();
+  return products.filter((p) => p.category.toLowerCase() === category.toLowerCase());
 }
 
-export async function getProductsByBrand(brand: string, signal?: AbortSignal): Promise<Product[]> {
-  const response = await fetch(`${PRODUCT_SERVICE_URL}/products/brand/${encodeURIComponent(brand)}`, { signal });
-  return handleResponse<Product[]>(response);
+export async function getProductsByBrand(brand: string, _signal?: AbortSignal): Promise<Product[]> {
+  const products = getStaticProducts();
+  return products.filter((p) => p.brand.toLowerCase() === brand.toLowerCase());
 }
 
-export async function searchProductsByName(name: string, signal?: AbortSignal): Promise<Product[]> {
-  const response = await fetch(`${PRODUCT_SERVICE_URL}/products/search/${encodeURIComponent(name)}`, { signal });
-  return handleResponse<Product[]>(response);
+export async function searchProductsByName(name: string, _signal?: AbortSignal): Promise<Product[]> {
+  const products = getStaticProducts();
+  const query = name.toLowerCase();
+  return products.filter((p) => 
+    p.name.toLowerCase().includes(query) || 
+    p.brand.toLowerCase().includes(query)
+  );
 }

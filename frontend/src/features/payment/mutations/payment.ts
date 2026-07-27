@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createCheckoutAction, processRefundAction } from '@/features/payment/actions/payment';
 import type { CheckoutSessionRequest, RefundRequest } from '@/features/payment/types/payment';
 import { cartKeys, orderKeys } from '@/lib/queries/keys';
-import { createCheckoutAction, processRefundAction } from '@/lib/server/actions/payments';
 
 export function useCheckout() {
   const queryClient = useQueryClient();

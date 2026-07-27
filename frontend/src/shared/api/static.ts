@@ -27,13 +27,13 @@ interface RawProduct {
 
 const mapImage = (img: RawImage): ProductImage => ({
   id: img.id,
-  productId: img.product_id,
+  product_id: img.product_id,
   image_url: img.image_url,
-  imageAuthor: img.image_author,
-  altText: img.alt_text,
+  image_author: img.image_author,
+  alt_text: img.alt_text,
   attribution: img.attribution,
-  createdAt: img.created_at,
-  updatedAt: img.updated_at,
+  created_at: img.created_at,
+  updated_at: img.updated_at,
 });
 
 const mapProduct = (p: RawProduct): Product => ({
@@ -44,8 +44,8 @@ const mapProduct = (p: RawProduct): Product => ({
   summary: p.summary,
   description: p.description,
   price: Number(p.price),
-  createdAt: p.created_at,
-  updatedAt: p.updated_at,
+  created_at: p.created_at,
+  updated_at: p.updated_at,
   image: mapImage(p.image),
 });
 

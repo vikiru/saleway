@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { getUserAction } from '@/features/user/actions/users';
 import { userKeys } from '@/lib/queries/keys';
-import { getUserAction } from '@/lib/server/actions/users';
 
 export function useUser(userId: string) {
   return useQuery({

@@ -2,9 +2,10 @@ import { ProductBreadcrumb } from '@/features/product/components/ProductBreadcru
 import { ProductDescription } from '@/features/product/components/ProductDescription';
 import { ProductGallery } from '@/features/product/components/ProductGallery';
 import { ProductInfo } from '@/features/product/components/ProductInfo';
-import { ProductRating } from '@/features/product/components/ProductRating';
-import { ReviewsList } from '@/features/product/components/ReviewsList';
-import type { Product, Review } from '@/features/product/types/product';
+import type { Product } from '@/features/product/types/product';
+import { ProductRating } from '@/features/rating/components/ProductRating';
+import { ReviewsList } from '@/features/rating/components/ReviewsList';
+import type { Review } from '@/features/rating/types/rating';
 
 interface ProductDetailsPageProps {
   product: Product;
@@ -12,7 +13,6 @@ interface ProductDetailsPageProps {
 }
 
 export function ProductDetailsPage({ product, reviews }: ProductDetailsPageProps) {
-
   const safeReviews = Array.isArray(reviews) ? reviews : [];
   const ratingStats = {
     average:
@@ -36,7 +36,7 @@ export function ProductDetailsPage({ product, reviews }: ProductDetailsPageProps
           <ProductGallery image_url={product.image?.image_url} name={product.name} />
 
           <div>
-            <ProductRating rating={ratingStats.average} reviewCount={ratingStats.count} />
+            <ProductRating rating={ratingStats.average} review_count={ratingStats.count} />
             <ProductInfo product={productInfoProps} />
           </div>
         </div>

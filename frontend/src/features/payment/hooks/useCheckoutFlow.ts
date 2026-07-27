@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { syncCart } from '@/features/cart/actions/cart';
 import { useCartStore } from '@/features/cart/store/Cart';
 import { createCheckoutSession } from '@/features/payment/actions/checkout';
-import { syncCart } from '@/lib/server/actions/carts';
 
 export function useCheckoutFlow() {
   const { items, getTotalPrice } = useCartStore();

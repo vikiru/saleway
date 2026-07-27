@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { getOrderAction, getOrdersAction } from '@/features/order/actions/order';
 import { orderKeys } from '@/lib/queries/keys';
-import { getOrderAction, getOrdersAction } from '@/lib/server/actions/orders';
 
 export function useOrder(orderId: string) {
   return useQuery({

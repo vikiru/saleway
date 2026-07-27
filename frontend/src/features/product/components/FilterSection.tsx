@@ -1,7 +1,6 @@
 'use client';
 
 import { X } from 'lucide-react';
-import { useSearchFilters } from '@/features/product/hooks/useSearchFilters';
 import { Button } from '@/lib/components/ui/button';
 import { Input } from '@/lib/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/lib/components/ui/select';
@@ -19,6 +18,11 @@ interface FilterSectionProps {
   selectedBrands: string[];
   minPrice: string;
   maxPrice: string;
+  setMinPrice: (value: string) => void;
+  setMaxPrice: (value: string) => void;
+  onFilterChange: (key: string, value: string) => void;
+  onPriceApply: () => void;
+  onReset: () => void;
 }
 
 export function FilterSection({
@@ -26,17 +30,16 @@ export function FilterSection({
   brands,
   selectedCategories,
   selectedBrands,
-  minPrice: initialMinPrice,
-  maxPrice: initialMaxPrice,
+  minPrice,
+  maxPrice,
+  setMinPrice,
+  setMaxPrice,
+  onFilterChange,
+  onPriceApply,
+  onReset,
 }: FilterSectionProps) {
-  const { minPrice, maxPrice, setMinPrice, setMaxPrice, handleFilterChange, handlePriceApply, handleReset } =
-    useSearchFilters({
-      initialMinPrice,
-      initialMaxPrice,
-    });
-
   const categoryValue = selectedCategories[0] || 'all';
-  const brandValue = selectedBrands[0] || 'all';
+  const brandValue = selectedBrands[0]?.toLowerCase() || 'all';
 
   return (
     <aside aria-label="Filters" className="space-y-8">
@@ -44,13 +47,13 @@ export function FilterSection({
         <h3 className="text-lg font-semibold tracking-tight">Filters</h3>
         <Button
           aria-label="Reset all filters"
-          className="h-8 px-2 text-muted-foreground hover:text-foreground"
-          onClick={handleReset}
+          className="h-8 px-2 text-muted-foreground hover:text-foreground flex items-center gap-1.5"
+          onClick={onReset}
           size="sm"
           variant="ghost"
         >
-          <X aria-hidden="true" className="h-4 w-4 mr-1" />
-          Reset
+          <X aria-hidden="true" className="h-4 w-4" />
+          <span>Reset</span>
         </Button>
       </div>
 
@@ -61,7 +64,7 @@ export function FilterSection({
           <label className="text-sm font-medium leading-none" id="category-label">
             Category
           </label>
-          <Select onValueChange={(v) => handleFilterChange('category', v)} value={categoryValue}>
+          <Select onValueChange={(v) => onFilterChange('category', v)} value={categoryValue}>
             <SelectTrigger aria-labelledby="category-label" className="w-full">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
@@ -80,7 +83,7 @@ export function FilterSection({
           <label className="text-sm font-medium leading-none" id="brand-label">
             Brand
           </label>
-          <Select onValueChange={(v) => handleFilterChange('brand', v)} value={brandValue}>
+          <Select onValueChange={(v) => onFilterChange('brand', v)} value={brandValue}>
             <SelectTrigger aria-labelledby="brand-label" className="w-full">
               <SelectValue placeholder="All Brands" />
             </SelectTrigger>
@@ -139,7 +142,7 @@ export function FilterSection({
               </div>
             </div>
           </div>
-          <Button className="w-full" onClick={handlePriceApply} size="sm" variant="outline">
+          <Button className="w-full" onClick={onPriceApply} size="sm" variant="outline">
             Apply Price
           </Button>
         </div>
