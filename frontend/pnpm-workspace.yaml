@@ -1,5 +1,6 @@
 allowBuilds:
   '@clerk/shared': true
+  esbuild: set this to true or false
 
 minimumReleaseAgeExclude:
   - next@15.5.15
