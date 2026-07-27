@@ -1,5 +1,6 @@
 'use client';
 
+import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { ThemeToggle } from '@/features/user/components/ThemeToggle';
@@ -25,7 +26,16 @@ export function Navbar() {
             </Button>
           </Link>
           <ThemeToggle />
-          <UserButton />
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <Button size="sm" variant="outline">
+                Sign In
+              </Button>
+            </SignInButton>
+          </SignedOut>
         </div>
       </div>
     </nav>
