@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useMemo, useState } from 'react';
 import type { Product } from '@/features/product/types/product';
 
@@ -34,9 +36,7 @@ export function useProductSearch({ allProducts, initialParams, itemsPerPage }: U
       const q = query.toLowerCase();
       result = result.filter(
         (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.brand.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q),
+          p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.category.toLowerCase().includes(q),
       );
     }
 

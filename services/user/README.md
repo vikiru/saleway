@@ -18,12 +18,32 @@ Django-based user authentication and profile management service.
 ## Setup
 
 ### Django Service Startup Process:
-1. Activate virtual environment: `source .venv/bin/activate`
-2. Install Python packages: `uv sync`
-3. Create PostgreSQL database: `poe create-db`
-4. Create Django migrations: `poe create-migrations`
-5. Apply Django migrations: `poe migrate`
-6. Start development server: `poe dev` or start production server: `poe start`
+1. Activate virtual environment.
+```bash
+source .venv/bin/activate
+```
+2. Install Python packages.
+```bash
+uv sync
+```
+3. Create PostgreSQL database.
+```bash
+poe create-db
+```
+4. Create Django migrations.
+```bash
+poe create-migrations
+```
+5. Apply Django migrations.
+```bash
+poe migrate
+```
+6. Start development server.
+```bash
+poe dev
+# or start production server:
+poe start
+```
 
 ```bash
 # Alternative manual setup
@@ -49,26 +69,24 @@ uv run python manage.py runserver
 ```bash
 # Replace these with your database username, password, host, port, and database name.
 DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
+
+# Frontend CORS
+FRONTEND_URL='http://localhost:3000'
 ```
 
 ## API Endpoints
 
-- `GET /api/users` - List all users
-- `POST /api/users` - Create new user
-- `GET /api/users/{id}` - Get user by ID
-- `PUT /api/users/{id}` - Update user
-- `DELETE /api/users/{id}` - Delete user
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
+- `GET /api/v1/health` - Health check
+- `POST /api/v1/users` - Create new user
+- `GET /api/v1/users/{user_id}` - Get user by ID
+- `PUT /api/v1/users/{user_id}` - Update user
+- `DELETE /api/v1/users/{user_id}` - Delete user
 
-The service will start on port 8001 by default.
+The service will start on port 8002 by default.
 
 ## Development
 
 ```bash
-# Run tests
-uv run pytest
-
 # Format code
 uv run ruff format .
 

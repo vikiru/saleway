@@ -4,13 +4,19 @@ import { Search, X } from 'lucide-react';
 import { useDeferredValue, useEffect, useState } from 'react';
 
 interface SearchInputProps {
-  defaultValue?: string;
+  value?: string;
   onSearch: (value: string) => void;
 }
 
-export function SearchInput({ defaultValue, onSearch }: SearchInputProps) {
-  const [value, setValue] = useState(defaultValue || '');
+export function SearchInput({ value: parentValue = '', onSearch }: SearchInputProps) {
+  const [value, setValue] = useState(parentValue);
   const deferredValue = useDeferredValue(value);
+
+  useEffect(() => {
+    if (parentValue === '') {
+      setValue('');
+    }
+  }, [parentValue]);
 
   useEffect(() => {
     onSearch(deferredValue);

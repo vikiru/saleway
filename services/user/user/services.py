@@ -1,6 +1,8 @@
-from .definitions import ServiceResponse
-from .models import EcommerceUser as EcommerceUserModel, EcommerceUserInput, EcommerceUserCreate
 from utils.user import extract_user
+
+from .definitions import ServiceResponse
+from .models import EcommerceUser as EcommerceUserModel
+from .models import EcommerceUserCreate, EcommerceUserInput
 
 
 def create_user(payload: EcommerceUserCreate) -> ServiceResponse:

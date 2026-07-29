@@ -1,6 +1,7 @@
 {
+  "root": false,
   "root": true,
-  "$schema": "https://biomejs.dev/schemas/2.4.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",
   "assist": {
     "actions": {
       "source": {
@@ -114,7 +115,7 @@
     },
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "a11y": "info",
       "complexity": "off",
       "performance": "info",

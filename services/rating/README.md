@@ -17,12 +17,32 @@ Django-based product rating and review management service.
 ## Setup
 
 ### Django Service Startup Process:
-1. Activate virtual environment: `source .venv/bin/activate`
-2. Install Python packages: `uv sync`
-3. Create PostgreSQL database: `poe create-db`
-4. Create Django migrations: `poe create-migrations`
-5. Apply Django migrations: `poe migrate`
-6. Start development server: `poe dev` or start production server: `poe start`
+1. Activate virtual environment.
+```bash
+source .venv/bin/activate
+```
+2. Install Python packages.
+```bash
+uv sync
+```
+3. Create PostgreSQL database.
+```bash
+poe create-db
+```
+4. Create Django migrations.
+```bash
+poe create-migrations
+```
+5. Apply Django migrations.
+```bash
+poe migrate
+```
+6. Start development server.
+```bash
+poe dev
+# or start production server:
+poe start
+```
 
 ```bash
 # Alternative manual setup
@@ -48,25 +68,30 @@ uv run python manage.py runserver
 ```bash
 # Replace these with your database username, password, host, port, and database name.
 DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
+
+# Frontend CORS
+CORS_ALLOWED_ORIGINS='http://localhost:3000'
+
+# Clerk Authentication
+CLERK_ISSUER_URL='https://clerk.your-tenant.com'
 ```
 
 ## API Endpoints
 
-- `GET /api/ratings` - List all ratings
-- `POST /api/ratings` - Create new rating
-- `GET /api/ratings/{id}` - Get rating by ID
-- `PUT /api/ratings/{id}` - Update rating
-- `DELETE /api/ratings/{id}` - Delete rating
-- `GET /api/ratings/product/{product_id}` - Get product ratings
+- `GET /api/v1/health` - Health check
+- `GET /api/v1/products/{product_id}/rating` - Get product average rating
+- `GET /api/v1/products/{product_id}/reviews` - Get product reviews
+- `POST /api/v1/products/{product_id}/reviews` - Create new review
+- `GET /api/v1/products/{product_id}/reviews/{review_id}` - Get review by ID
+- `PUT /api/v1/products/{product_id}/reviews/{review_id}` - Update review
+- `DELETE /api/v1/products/{product_id}/reviews/{review_id}` - Delete review
+- `GET /api/v1/reviews/user/{user_id}` - Get user's reviews
 
-The service will start on port 8002 by default.
+The service will start on port 8001 by default.
 
 ## Development
 
 ```bash
-# Run tests
-uv run pytest
-
 # Format code
 uv run ruff format .
 

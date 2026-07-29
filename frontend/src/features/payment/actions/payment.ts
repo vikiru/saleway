@@ -17,8 +17,8 @@ export async function createCheckoutAction(
     const result = await createCheckout(request);
     return { success: true, message: 'Checkout session created', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to create checkout session';
-    return { success: false, error: message };
+    console.error('[createCheckoutAction]', error);
+    return { success: false, error: 'Failed to create checkout session. Please try again.' };
   }
 }
 
@@ -27,8 +27,8 @@ export async function processRefundAction(request: RefundRequest): Promise<Servi
     const result = await processRefund(request);
     return { success: true, message: 'Refund processed', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to process refund';
-    return { success: false, error: message };
+    console.error('[processRefundAction]', error);
+    return { success: false, error: 'Failed to process refund. Please contact support.' };
   }
 }
 
@@ -37,7 +37,7 @@ export async function verifySessionAction(sessionId: string): Promise<ServiceRes
     const result = await verifySessionApi(sessionId);
     return { success: true, message: 'Session verified', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to verify session';
-    return { success: false, error: message };
+    console.error('[verifySessionAction]', error);
+    return { success: false, error: 'Failed to verify session. Please try again.' };
   }
 }

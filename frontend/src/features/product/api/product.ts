@@ -1,5 +1,5 @@
-import { getProduct as getStaticProduct, getProducts as getStaticProducts } from '@/shared/api/static';
 import type { Product } from '@/features/product/types/product';
+import { getProduct as getStaticProduct, getProducts as getStaticProducts } from '@/shared/api/static';
 
 export async function getProducts(_signal?: AbortSignal): Promise<Product[]> {
   return getStaticProducts();
@@ -26,8 +26,5 @@ export async function getProductsByBrand(brand: string, _signal?: AbortSignal): 
 export async function searchProductsByName(name: string, _signal?: AbortSignal): Promise<Product[]> {
   const products = getStaticProducts();
   const query = name.toLowerCase();
-  return products.filter((p) => 
-    p.name.toLowerCase().includes(query) || 
-    p.brand.toLowerCase().includes(query)
-  );
+  return products.filter((p) => p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query));
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getUserAction } from '@/features/user/actions/users';
 import { userKeys } from '@/lib/queries/keys';

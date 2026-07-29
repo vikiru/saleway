@@ -23,7 +23,7 @@ export function RecentOrders({ userId, initialOrders }: RecentOrdersProps) {
 
   if (!allOrders && isLoading) {
     return (
-      <Card>
+      <Card className="border border-border/60 shadow-sm transition-all hover:shadow-md">
         <CardHeader>
           <CardTitle>Recent Orders</CardTitle>
         </CardHeader>
@@ -36,7 +36,7 @@ export function RecentOrders({ userId, initialOrders }: RecentOrdersProps) {
 
   if (!allOrders && (error || !fetchedOrders)) {
     return (
-      <Card>
+      <Card className="border border-border/60 shadow-sm transition-all hover:shadow-md">
         <CardHeader>
           <CardTitle>Recent Orders</CardTitle>
         </CardHeader>
@@ -53,7 +53,7 @@ export function RecentOrders({ userId, initialOrders }: RecentOrdersProps) {
 
   if (orders.length === 0) {
     return (
-      <Card>
+      <Card className="border border-border/60 shadow-sm transition-all hover:shadow-md">
         <CardHeader>
           <CardTitle>Recent Orders</CardTitle>
         </CardHeader>
@@ -65,7 +65,7 @@ export function RecentOrders({ userId, initialOrders }: RecentOrdersProps) {
   }
 
   return (
-    <Card>
+    <Card className="border border-border/60 shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Recent Orders</CardTitle>
         <Button asChild className="hidden sm:flex" size="sm" variant="outline">
@@ -79,7 +79,7 @@ export function RecentOrders({ userId, initialOrders }: RecentOrdersProps) {
         <div className="space-y-6">
           {orders.map((order) => (
             <Link
-              className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-2 rounded-lg hover:bg-accent/50 transition-colors"
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl bg-transparent hover:bg-muted/30 transition-colors duration-300 gap-4"
               href={getOrderRoute(order.id)}
               key={order.id}
             >
@@ -89,7 +89,7 @@ export function RecentOrders({ userId, initialOrders }: RecentOrdersProps) {
                     <Package className="h-4 w-4" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="grid gap-1">
+                <div className="flex flex-col gap-1.5">
                   <p className="text-sm font-medium leading-none">Order #{order.id}</p>
                   <p className="text-xs text-muted-foreground">
                     {new Date(order.purchase_date).toLocaleDateString()} · {order.items.length}{' '}

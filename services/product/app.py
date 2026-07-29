@@ -1,3 +1,5 @@
+import os
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,9 +16,11 @@ from products import (
 
 app = FastAPI()
 
+
+frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
 origins = [
     'http://localhost',
-    'http://localhost:3000',
+    frontend_url,
 ]
 
 app.add_middleware(

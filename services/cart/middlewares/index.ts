@@ -18,4 +18,4 @@ const morganMiddleware = morgan('dev', {
   skip,
 });
 
-export { body, cors, helmet, morganMiddleware as morgan, compression };
+export { body, compression, cors, helmet, morganMiddleware as morgan };

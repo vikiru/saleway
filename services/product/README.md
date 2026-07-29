@@ -19,12 +19,33 @@ FastAPI-based service for managing product information.
 ## Setup
 
 ### FastAPI Service Startup Process:
-1. Activate virtual environment: `source .venv/bin/activate`
-2. Install Python packages: `uv sync`
-3. Create PostgreSQL database (if it doesn't exist): `poe create-db`
-4. Initialize database with tables: `poe init-db`
-5. Seed database with sample data: `poe seed`
-6. Start development server: `poe dev` or start production server: `poe start`
+### FastAPI Service Startup Process:
+1. Activate virtual environment.
+```bash
+source .venv/bin/activate
+```
+2. Install Python packages.
+```bash
+uv sync
+```
+3. Create PostgreSQL database (if it doesn't exist).
+```bash
+poe create-db
+```
+4. Initialize database with tables.
+```bash
+poe init-db
+```
+5. Seed database with sample data.
+```bash
+poe seed
+```
+6. Start development server.
+```bash
+poe dev
+# or start production server:
+poe start
+```
 
 ```bash
 # Alternative manual setup
@@ -45,28 +66,30 @@ uv run uvicorn app.main:app --reload
 ## Environment Variables
 
 ```bash
-GEMINI_API_KEY=
 # Replace these with your database username, password, host, port, and database name.
 DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
+
+GEMINI_API_KEY='your-api-key'
+ENVIRONMENT='development'
+
+# Frontend CORS
+FRONTEND_URL='http://localhost:3000'
 ```
 
 ## API Endpoints
 
-- `GET /products` - List all products
-- `GET /products/{id}` - Get product by ID
-- `GET /products/category/{category}` - Filter by category
-- `GET /products/brand/{brand}` - Filter by brand
-- `GET /products/search/{name}` - Search products
-- `GET /health` - Health check
+- `GET /api/v1/health` - Health check
+- `GET /api/v1/products` - List all products
+- `GET /api/v1/products/{product_id}` - Get product by ID
+- `GET /api/v1/products/category/{category}` - Filter by category
+- `GET /api/v1/products/brand/{brand}` - Filter by brand
+- `GET /api/v1/products/search/{name}` - Search products
 
 The service will start on port 8000 by default.
 
 ## Development
 
 ```bash
-# Run tests
-uv run pytest
-
 # Format code
 uv run ruff format .
 

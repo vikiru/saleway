@@ -27,27 +27,39 @@ export async function createCheckoutSession() {
     const customerEmail = user.emailAddresses[0]?.emailAddress || '';
 
     if (!cart || cart.length === 0) {
-      return { success: false, error: 'Cart is empty' };
+      return { success: false, error: 'Your cart is empty.' };
     }
 
-    const lineItems = await Promise.all(
+    const enrichedItems = await Promise.all(
       cart.map(async (item) => {
         const product = await getProduct(Number(item.productId));
         if (!product) {
           throw new Error(`Product not found: ${item.productId}`);
         }
 
-        return {
+        const snapshotItem: CartItemSnapshot = {
+          productId: item.productId,
+          quantity: Number(item.quantity),
+          unitPrice: Number(product.price),
+          totalPrice: Number(product.price) * Number(item.quantity),
+        };
+
+        const lineItem = {
           productId: String(item.productId),
           name: product.name || 'Product',
           description: product.summary || '',
-          unitAmount: Math.round((item.unitPrice || 0) * 100),
+          unitAmount: Math.round((product.price || 0) * 100),
           currency: 'usd',
           quantity: item.quantity,
           image: product.image?.image_url || '',
         };
+
+        return { lineItem, snapshotItem };
       }),
     );
+
+    const lineItems = enrichedItems.map((e) => e.lineItem);
+    const cartSnapshotData = enrichedItems.map((e) => e.snapshotItem);
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     const result = await createCheckoutApi({
@@ -57,26 +69,14 @@ export async function createCheckoutSession() {
       customerEmail,
       metadata: {
         userId,
-        cartSnapshot: JSON.stringify(
-          cart.map(
-            (item) =>
-              ({
-                productId: item.productId,
-                quantity: Number(item.quantity),
-                unitPrice: Number(item.unitPrice),
-                totalPrice: Number(item.totalPrice) || Number(item.unitPrice) * Number(item.quantity),
-              }) satisfies CartItemSnapshot,
-          ),
-        ),
+        cartSnapshot: JSON.stringify(cartSnapshotData),
       },
     });
 
     return { success: true, data: result };
   } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'An unexpected error occurred during checkout',
-    };
+    console.error('[createCheckoutSession]', error);
+    return { success: false, error: 'Failed to create checkout session. Please try again.' };
   }
 }
 
@@ -126,7 +126,7 @@ export async function verifyCheckoutSession(sessionId: string): Promise<OrderRes
           product_brand: product.brand || '',
           product_description: product.summary || '',
           product_image: product.image?.image_url || '',
-          product_unit_price: item.unitPrice,
+          product_unit_price: product.price,
           product_quantity: item.quantity,
         };
       }),
@@ -149,9 +149,7 @@ export async function verifyCheckoutSession(sessionId: string): Promise<OrderRes
     await clearCart();
     return { success: true, message: 'Order created successfully', data: orderResult.data };
   } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'An unexpected error occurred during verification',
-    };
+    console.error('[verifyCheckoutSession]', error);
+    return { success: false, error: 'Failed to verify payment. Please contact support.' };
   }
 }

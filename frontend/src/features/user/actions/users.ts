@@ -35,8 +35,8 @@ export async function createUser(data: Partial<EcommerceUserCreate>): Promise<Us
     const result = await handleResponse<EcommerceUser>(response);
     return { success: true, data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to create user';
-    return { success: false, error: message };
+    console.error('[createUser]', error);
+    return { success: false, error: 'Failed to create account. Please try again.' };
   }
 }
 
@@ -59,8 +59,8 @@ export async function updateUser(data: Partial<EcommerceUserUpdate>): Promise<Us
     const result = await handleResponse<EcommerceUser>(response);
     return { success: true, data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to update user';
-    return { success: false, error: message };
+    console.error('[updateUser]', error);
+    return { success: false, error: 'Failed to update profile. Please try again.' };
   }
 }
 

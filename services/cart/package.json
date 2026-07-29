@@ -14,7 +14,7 @@
     "studio": "prisma studio",
     "lint": "biome lint",
     "format": "biome check --write",
-    "typecheck": "tsgo --noEmit",
+    "typecheck": "tsc --noEmit",
     "unused": "knip"
   },
   "dependencies": {
@@ -43,6 +43,7 @@
     "knip": "^5.88.1",
     "nodemon": "^3.1.14",
     "prisma": "^5.22.0",
-    "tsx": "^4.23.1"
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
   }
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createReviewAction, deleteReviewAction, updateReviewAction } from '@/features/rating/actions/rating';
 import type { ReviewCreate, ReviewUpdate } from '@/features/rating/types/rating';

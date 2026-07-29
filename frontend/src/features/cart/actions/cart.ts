@@ -1,3 +1,5 @@
+'use server';
+
 import {
   clearCart as clearCartApi,
   createCart as createCartApi,
@@ -21,8 +23,8 @@ export async function createCartAction(): Promise<CartResponse> {
     const result = await createCartApi(userId);
     return { success: true, message: 'Cart created', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to create cart';
-    return { success: false, error: message };
+    console.error('[createCartAction]', error);
+    return { success: false, error: 'Failed to create cart. Please try again.' };
   }
 }
 
@@ -31,8 +33,8 @@ export async function createCartItemAction(userId: string, item: CartItemCreateI
     const result = await createCartItemApi(userId, item);
     return { success: true, message: 'Item added to cart', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to add item to cart';
-    return { success: false, error: message };
+    console.error('[createCartItemAction]', error);
+    return { success: false, error: 'Failed to add item to cart. Please try again.' };
   }
 }
 
@@ -46,8 +48,8 @@ export async function updateCartItemAction(
     const result = await updateCartItemApi(userId, cartItemId, quantity, unitPrice);
     return { success: true, message: 'Cart updated', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to update cart';
-    return { success: false, error: message };
+    console.error('[updateCartItemAction]', error);
+    return { success: false, error: 'Failed to update cart. Please try again.' };
   }
 }
 
@@ -56,8 +58,8 @@ export async function removeCartItemAction(userId: string, cartItemId: string): 
     await removeCartItemApi(userId, cartItemId);
     return { success: true, message: 'Item removed from cart', data: undefined };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to remove item';
-    return { success: false, error: message };
+    console.error('[removeCartItemAction]', error);
+    return { success: false, error: 'Failed to remove item. Please try again.' };
   }
 }
 
@@ -67,8 +69,8 @@ export async function clearCart(): Promise<ServiceResponse<void>> {
     await clearCartApi(userId);
     return { success: true, message: 'Cart cleared', data: undefined };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to clear cart';
-    return { success: false, error: message };
+    console.error('[clearCart]', error);
+    return { success: false, error: 'Failed to clear cart. Please try again.' };
   }
 }
 
@@ -78,7 +80,7 @@ export async function syncCart(items: CartItemCreateInput[]): Promise<CartRespon
     const result = await syncCartApi(userId, items);
     return { success: true, message: 'Cart synced', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to sync cart';
-    return { success: false, error: message };
+    console.error('[syncCart]', error);
+    return { success: false, error: 'Failed to sync cart. Please try again.' };
   }
 }

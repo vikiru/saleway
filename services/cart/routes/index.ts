@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import * as CartController from '@/controllers/index';
 
-import { clerkAuth } from '../middleware/auth';
+import { clerkAuth } from '../middlewares/auth';
 
 const router = Router();
 

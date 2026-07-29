@@ -61,9 +61,9 @@ export function FilterSection({
 
       <div className="space-y-4">
         <div className="grid gap-2">
-          <label className="text-sm font-medium leading-none" id="category-label">
+          <div className="text-sm font-medium leading-none" id="category-label">
             Category
-          </label>
+          </div>
           <Select onValueChange={(v) => onFilterChange('category', v)} value={categoryValue}>
             <SelectTrigger aria-labelledby="category-label" className="w-full">
               <SelectValue placeholder="All Categories" />
@@ -80,9 +80,9 @@ export function FilterSection({
         </div>
 
         <div className="grid gap-2">
-          <label className="text-sm font-medium leading-none" id="brand-label">
+          <div className="text-sm font-medium leading-none" id="brand-label">
             Brand
-          </label>
+          </div>
           <Select onValueChange={(v) => onFilterChange('brand', v)} value={brandValue}>
             <SelectTrigger aria-labelledby="brand-label" className="w-full">
               <SelectValue placeholder="All Brands" />

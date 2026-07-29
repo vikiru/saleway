@@ -1,8 +1,8 @@
 import os
+
 import jwt
-from jwt import PyJWKClient
 from django.http import JsonResponse
-from django.conf import settings
+from jwt import PyJWKClient
 
 issuer_url = os.environ.get('CLERK_ISSUER_URL', '')
 jwks_url = f"{issuer_url.rstrip('/')}/.well-known/jwks.json"
@@ -20,9 +20,7 @@ class ClerkAuthMiddleware:
         if request.path.startswith('/api/v1/health'):
             return self.get_response(request)
             
-        if request.path.startswith('/api/v1/ratings'):
-            # Only require auth for POST/PUT/DELETE
-            if request.method not in ['POST', 'PUT', 'DELETE']:
+        if request.path.startswith('/api/v1/ratings') and request.method not in ['POST', 'PUT', 'DELETE']:
                 return self.get_response(request)
 
         auth_header = request.headers.get('Authorization')
@@ -45,7 +43,7 @@ class ClerkAuthMiddleware:
                 algorithms=["RS256"]
             )
             request.user_id = data.get('sub')
-        except Exception as e:
+        except Exception:
             return JsonResponse({'success': False, 'error': 'Invalid or expired token'}, status=401)
             
         return self.get_response(request)

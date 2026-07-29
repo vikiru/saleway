@@ -6,6 +6,8 @@ import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent } from '@/lib/components/ui/card';
 import { CART_ROUTE, SEARCH_ROUTE, SIGNIN_ROUTE } from '@/lib/constants/routes';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CheckoutCancelPage() {
   const userId = await getCurrentUser();
   if (!userId) {
@@ -20,7 +22,7 @@ export default async function CheckoutCancelPage() {
             <XCircle className="h-20 w-20 text-destructive" />
           </div>
 
-          <h1 className="text-3xl font-extrabold mt-10 tracking-tight">Payment Cancelled</h1>
+          <h1 className="font-extrabold mt-10 tracking-tight">Payment Cancelled</h1>
           <p className="text-muted-foreground mt-4 text-lg max-w-[320px]">
             The payment process was not completed. Your cart items are safe and waiting for you.
           </p>

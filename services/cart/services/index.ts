@@ -36,7 +36,8 @@ export async function addCartItemsToCart(userId: string, cartItems: CartItem[]) 
       return updatedCart;
     });
   } catch (error) {
-    logger.error(`An error occurred while adding items to cart. ${error}`); throw error;
+    logger.error(`An error occurred while adding items to cart. ${error}`);
+    throw error;
   }
 }
 
@@ -60,7 +61,8 @@ export async function createCartForUser(userId: string) {
     logger.info('Successfully created cart.');
     return cart;
   } catch (error) {
-    logger.error(`An error occurred while creating the cart, for ${userId} : ${error}`); throw error;
+    logger.error(`An error occurred while creating the cart, for ${userId} : ${error}`);
+    throw error;
   }
 }
 
@@ -84,7 +86,8 @@ export async function deleteCartByUserId(userId: string) {
       return updatedCart;
     });
   } catch (error) {
-    logger.error(`An error occurred while deleting the cart, for ${userId} : ${error}`); throw error;
+    logger.error(`An error occurred while deleting the cart, for ${userId} : ${error}`);
+    throw error;
   }
 }
 
@@ -119,7 +122,8 @@ export async function deleteCartItemById(userId: string, itemId: string) {
       return updatedCart;
     });
   } catch (error) {
-    logger.error(`An error occurred while deleting item from cart. ${error}`); throw error;
+    logger.error(`An error occurred while deleting item from cart. ${error}`);
+    throw error;
   }
 }
 
@@ -130,7 +134,8 @@ export async function retrieveCartByUserId(userId: string) {
       include: { items: true },
     });
   } catch (error) {
-    logger.error(`An error occurred while retrieving the cart, for ${userId} : ${error}`); throw error;
+    logger.error(`An error occurred while retrieving the cart, for ${userId} : ${error}`);
+    throw error;
   }
 }
 
@@ -170,7 +175,8 @@ export async function updateCartItemById(userId: string, updatedItem: CartItem) 
       return updatedCart;
     });
   } catch (error) {
-    logger.error(`An error occurred while updating item from cart. ${error}`); throw error;
+    logger.error(`An error occurred while updating item from cart. ${error}`);
+    throw error;
   }
 }
 
@@ -252,7 +258,8 @@ export async function syncCartByUserId(
       return { success: true };
     });
   } catch (error) {
-    logger.error(`An error occurred while syncing cart: ${error}`); throw error;
+    logger.error(`An error occurred while syncing cart: ${error}`);
+    throw error;
     return { success: false };
   }
 }

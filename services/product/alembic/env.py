@@ -12,7 +12,6 @@ load_dotenv()
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from models import Product, ProductImage
 
 config = context.config
 

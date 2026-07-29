@@ -1,3 +1,5 @@
+'use server';
+
 import {
   createOrder as createOrderApi,
   deleteOrder as deleteOrderApi,
@@ -7,13 +9,20 @@ import {
   updateOrderStatus as updateOrderStatusApi,
 } from '@/features/order/api/order';
 import type { Order, OrderCreate, OrderResponse } from '@/features/order/types/order';
+import { requireUser } from '@/features/user/actions/auth';
 import type { ServiceResponse } from '@/shared/api/types';
 
 export async function getOrderAction(orderId: number | string): Promise<Order> {
-  return getOrderApi(orderId);
+  const userId = await requireUser();
+  const order = await getOrderApi(orderId);
+  if (order.user_id !== userId) {
+    throw new Error('Unauthorized access to order');
+  }
+  return order;
 }
 
-export async function getOrdersAction(userId: string): Promise<Order[]> {
+export async function getOrdersAction(): Promise<Order[]> {
+  const userId = await requireUser();
   return getOrdersApi(userId);
 }
 
@@ -22,31 +31,43 @@ export async function getOrderByStripeSessionAction(sessionId: string): Promise<
 }
 
 export async function createOrder(data: OrderCreate): Promise<OrderResponse> {
+  const userId = await requireUser();
+  const payload = { ...data, user_id: userId };
   try {
-    const result = await createOrderApi(data);
+    const result = await createOrderApi(payload);
     return { success: true, message: 'Order created successfully', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to create order';
-    return { success: false, error: message };
+    console.error('[createOrder]', error);
+    return { success: false, error: 'Failed to create order. Please try again.' };
   }
 }
 
 export async function updateOrderStatusAction(orderId: number, status: string): Promise<OrderResponse> {
+  const userId = await requireUser();
+  const order = await getOrderApi(orderId);
+  if (order.user_id !== userId) {
+    return { success: false, error: 'Unauthorized' };
+  }
   try {
     const result = await updateOrderStatusApi(orderId, status);
     return { success: true, message: 'Order status updated', data: result };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to update order status';
-    return { success: false, error: message };
+    console.error('[updateOrderStatusAction]', error);
+    return { success: false, error: 'Failed to update order status. Please try again.' };
   }
 }
 
 export async function deleteOrderAction(orderId: number): Promise<ServiceResponse<void>> {
+  const userId = await requireUser();
+  const order = await getOrderApi(orderId);
+  if (order.user_id !== userId) {
+    return { success: false, error: 'Unauthorized' };
+  }
   try {
     await deleteOrderApi(orderId);
     return { success: true, message: 'Order deleted successfully', data: undefined };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to delete order';
-    return { success: false, error: message };
+    console.error('[deleteOrderAction]', error);
+    return { success: false, error: 'Failed to delete order. Please try again.' };
   }
 }

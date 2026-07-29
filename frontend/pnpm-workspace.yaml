@@ -1,21 +1,17 @@
 allowBuilds:
   '@clerk/shared': true
-  esbuild: set this to true or false
+  esbuild: true
 
 minimumReleaseAgeExclude:
-  - next@15.5.15
-  - dompurify@3.3.4
-  - postcss@8.5.10
-  - '@clerk/shared@3.47.4'
-  - '@clerk/nextjs@6.39.2'
-  - dompurify@3.4.0
-  - next@15.5.16
+  - next@15.5.15 || 15.5.16 || 15.5.18
+  - dompurify@3.3.4 || 3.4.0
+  - postcss@8.5.10 || 8.5.12 || 8.5.18
+  - '@clerk/shared@3.47.4 || 3.47.5'
+  - '@clerk/nextjs@6.39.2 || 6.39.3'
   - '@clerk/clerk-react@5.61.6'
-  - '@clerk/nextjs@6.39.3'
   - '@clerk/backend@2.33.3'
-  - '@clerk/shared@3.47.5'
-  - next@15.5.18
   - js-cookie@3.0.6
+  - sharp@0.35.0
 
 onlyBuiltDependencies:
   - '@clerk/shared'
@@ -27,3 +23,7 @@ overrides:
   dompurify@>=3.1.3 <=3.3.1: '>=3.3.2'
   js-yaml@>=4.0.0 <4.1.1: '>=4.1.1'
   next@>=15.5.0-canary.0 <15.5.7: '>=15.5.7'
+  postcss@<8.5.10: ^8.5.10
+  postcss@<=8.5.11: ^8.5.12
+  postcss@<=8.5.17: ^8.5.18
+  sharp@<0.35.0: ^0.35.0

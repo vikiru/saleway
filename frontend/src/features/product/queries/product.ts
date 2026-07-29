@@ -1,3 +1,5 @@
+'use client';
+
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getProduct, getProducts } from '@/features/product/api/product';
 import { productKeys } from '@/lib/queries/keys';
