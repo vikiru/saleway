@@ -1,9 +1,14 @@
 export const dynamic = 'force-dynamic';
 
+import type { Metadata } from 'next';
 import { getProducts } from '@/features/product/api/product';
 import { deriveFilterOptions } from '@/features/product/utils/filters';
 import { SearchPage } from '@/views/search/SearchPage';
 
+export const metadata: Metadata = {
+  title: 'Search Products - Saleway',
+  description: 'Search and filter our wide selection of products.',
+};
 interface ProductSearchProps {
   searchParams: Promise<{
     q?: string;

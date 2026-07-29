@@ -1,5 +1,3 @@
-
-
 import { ClerkProvider as BaseClerkProvider } from '@clerk/nextjs';
 import { shadcn } from '@clerk/themes';
 import type { ReactNode } from 'react';
