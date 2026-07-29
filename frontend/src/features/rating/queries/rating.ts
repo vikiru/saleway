@@ -1,3 +1,5 @@
+'use client';
+
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import {
   getProductAverageRatingAction,
@@ -32,7 +34,7 @@ export function useProductReviews(productId: string) {
 export function useUserReviews(userId: string) {
   return useQuery({
     queryKey: ratingKeys.byUser(userId),
-    queryFn: () => getUserReviewsAction(userId),
+    queryFn: () => getUserReviewsAction(),
     enabled: !!userId,
   });
 }
@@ -47,7 +49,7 @@ export function useSuspenseProductReviews(productId: string) {
 export function useSuspenseUserReviews(userId: string) {
   return useSuspenseQuery({
     queryKey: ratingKeys.byUser(userId),
-    queryFn: () => getUserReviewsAction(userId),
+    queryFn: () => getUserReviewsAction(),
   });
 }
 

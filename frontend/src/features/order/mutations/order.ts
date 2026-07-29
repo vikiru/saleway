@@ -1,3 +1,5 @@
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createOrder, deleteOrderAction, updateOrderStatusAction } from '@/features/order/actions/order';
 import type { OrderCreate } from '@/features/order/types/order';

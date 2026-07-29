@@ -22,15 +22,15 @@
     "postinstall": "lefthook install"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.16",
+    "@biomejs/biome": "^2.5.5",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@semantic-release/git": "^10.0.1",
-    "@types/node": "^25.9.2",
+    "@types/node": "^25.9.5",
     "@typescript/native-preview": "7.0.0-dev.20260303.1",
-    "@usebruno/cli": "^3.4.2",
+    "@usebruno/cli": "^3.5.3",
     "knip": "^5.88.1",
-    "lefthook": "^2.1.9",
+    "lefthook": "^2.1.10",
     "semantic-release": "^24.2.9",
     "typescript": "^5.9.3"
   },

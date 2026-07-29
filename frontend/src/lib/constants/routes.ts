@@ -1,9 +1,11 @@
-export const CART_SERVICE_URL = process.env.CART_SERVICE_URL || 'http://localhost:8080/api/v1';
-export const ORDER_SERVICE_URL = process.env.ORDER_SERVICE_URL || 'http://localhost:5000/api/v1';
-export const PAYMENT_SERVICE_URL = process.env.PAYMENT_SERVICE_URL || 'http://localhost:8081/api/v1';
-export const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL || 'http://localhost:8000/api/v1';
-export const RATING_SERVICE_URL = process.env.RATING_SERVICE_URL || 'http://localhost:8001/api/v1';
-export const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:8002/api/v1';
+import { validatedEnv } from '@/config/index';
+
+export const CART_SERVICE_URL = validatedEnv.CART_SERVICE_URL;
+export const ORDER_SERVICE_URL = validatedEnv.ORDER_SERVICE_URL;
+export const PAYMENT_SERVICE_URL = validatedEnv.PAYMENT_SERVICE_URL;
+export const PRODUCT_SERVICE_URL = validatedEnv.PRODUCT_SERVICE_URL;
+export const RATING_SERVICE_URL = validatedEnv.RATING_SERVICE_URL;
+export const USER_SERVICE_URL = validatedEnv.USER_SERVICE_URL;
 
 export const SIGNIN_ROUTE = '/auth/login';
 export const SIGNUP_ROUTE = '/auth/signup';

@@ -4,7 +4,6 @@ from .definitions import ErrorResponse, SuccessResponse
 from .models import (
     EcommerceUserCreate,
     EcommerceUserInput,
-    EcommerceUserOutput,
 )
 from .services import (
     create_user,

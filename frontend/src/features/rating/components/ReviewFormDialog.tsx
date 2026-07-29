@@ -105,9 +105,8 @@ export function ReviewFormDialog({
         toast.success('Review submitted successfully!');
       }
       setOpen(false);
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Failed to submit review. Please try again.';
-      toast.error(message);
+    } catch {
+      toast.error('Failed to submit review. Please try again.');
     }
   };
 

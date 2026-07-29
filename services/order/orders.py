@@ -3,6 +3,7 @@ from pydantic import ValidationError
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
+from auth import jwt_required
 from database import get_session
 from models import Order, OrderCreate, OrderItemCreate, OrderStatus
 from response import ErrorResponse, SuccessResponse
@@ -16,8 +17,6 @@ from services import (
     remove_item_from_order,
     update_order_status,
 )
-
-from auth import jwt_required
 
 orders_bp = Blueprint('orders', __name__, url_prefix='/api/v1/orders')
 
@@ -136,7 +135,7 @@ def remove_order_item_route(order_id: int, item_id: int):
             return jsonify(
                 SuccessResponse(success=True, message='Item removed from order', data=None).model_dump()
             ), 200
-    except Exception as e:
+    except Exception:
         return jsonify(
             ErrorResponse(
                 success=False, error='An unexpected error occurred.'
@@ -221,7 +220,7 @@ def get_order_by_stripe_session_route(session_id: str):
         return jsonify(
             SuccessResponse(success=True, message='Order retrieved', data=serialize_order(order)).model_dump()
         ), 200
-    except Exception as e:
+    except Exception:
         return jsonify(ErrorResponse(success=False, error='An unexpected error occurred.').model_dump()), 500
 
 

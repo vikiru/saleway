@@ -9,7 +9,11 @@ import * as middlewares from './middlewares/index';
 const app = express();
 
 app.use(middlewares.helmet());
-app.use(middlewares.cors());
+app.use(
+  middlewares.cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  })
+);
 app.use(middlewares.compression());
 app.use(middlewares.morgan);
 app.use(express.json());

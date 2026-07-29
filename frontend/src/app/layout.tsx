@@ -24,10 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
-        suppressHydrationWarning
-      >
+      <body className="min-h-full flex flex-col font-sans antialiased text-foreground bg-background selection:bg-primary/10 selection:text-primary">
         <ClerkProvider>
           <Providers>
             <Navbar />

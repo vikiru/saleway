@@ -1,4 +1,4 @@
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Minus, Package, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { CartItem as CartItemType } from '@/features/cart/types/cart';
@@ -16,15 +16,21 @@ interface CartItemProps {
 export function CartItem({ item, product, onUpdateQuantity, onRemove }: CartItemProps) {
   return (
     <Card className="overflow-hidden">
-      <div className="p-4 sm:flex sm:items-center sm:justify-between sm:space-x-4">
-        <div className="flex items-center space-x-4">
-          <div className="shrink-0 relative h-24 w-24">
-            <Image
-              alt={product?.name || item.productId}
-              className="rounded-md object-cover"
-              fill
-              src={product?.image?.image_url || `https://placehold.co/200x200/png?text=${item.productId}`}
-            />
+      <div className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
+        <div className="flex items-center gap-4">
+          <div className="shrink-0 relative h-24 w-24 bg-muted rounded-md overflow-hidden">
+            {product?.image?.image_url ? (
+              <Image
+                alt={product?.name || item.productId}
+                className="rounded-md object-cover"
+                fill
+                src={product.image.image_url}
+              />
+            ) : (
+              <div className="h-full w-full flex items-center justify-center">
+                <Package className="h-8 w-8 text-muted-foreground" />
+              </div>
+            )}
           </div>
           <div>
             <h3 className="text-base font-medium text-foreground">

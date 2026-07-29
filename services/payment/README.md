@@ -14,10 +14,16 @@ Spring Boot-based payment processing service with Stripe integration.
 ## Setup
 
 ### Spring Boot Service Startup Process:
-1. Install Java 17+ and Maven
-2. Set environment variables (see below)
-3. Build the application: `./mvnw clean compile`
-4. Start development server: `./mvnw spring-boot:run`
+1. Install Java 17+ and Maven.
+2. Set environment variables (see below).
+3. Build the application.
+```bash
+./mvnw clean compile
+```
+4. Start development server.
+```bash
+./mvnw spring-boot:run
+```
 
 ```bash
 # Alternative manual setup
@@ -34,17 +40,20 @@ Spring Boot-based payment processing service with Stripe integration.
 ## Environment Variables
 
 ```properties
-stripe.api.key=sk_test_your_test_key_here
-stripe.test.mode=true
-cors.allowed.origins=http://localhost:3000
+stripe.api.key=${STRIPE_API_KEY:sk_test_...}
+stripe.test.mode=${STRIPE_TEST_MODE:true}
+cors.allowed.origins=${FRONTEND_URL:http://localhost:3000}
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/payment_service}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:password}
 ```
 
 ## API Endpoints
 
-- `POST /api/checkout/create-session` - Create Stripe checkout session
-- `GET /api/refund/verify?sessionId={id}` - Verify session for refund
-- `POST /api/refund/process` - Process refund
-- `GET /health` - Health check
+- `GET /api/v1/health` - Health check
+- `POST /api/v1/checkout/create-session` - Create Stripe checkout session
+- `POST /api/v1/checkout/verify` - Verify session
+- `POST /api/v1/refund/process` - Process refund
 
 ## Development
 

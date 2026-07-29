@@ -37,9 +37,8 @@ export function ReviewCard({ review, productId }: ReviewCardProps) {
     try {
       await deleteReview.mutateAsync(review.id);
       toast.success('Review deleted.');
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Failed to delete review';
-      toast.error(message);
+    } catch {
+      toast.error('Failed to delete review. Please try again.');
     }
   };
 

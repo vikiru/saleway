@@ -1,7 +1,8 @@
 import os
 from functools import wraps
-from flask import request, jsonify
+
 import jwt
+from flask import jsonify, request
 from jwt import PyJWKClient
 
 issuer_url = os.environ.get('CLERK_ISSUER_URL', '')
@@ -36,7 +37,7 @@ def jwt_required(f):
             )
             # Attach user ID to request context
             request.user_id = data.get('sub')
-        except jwt.PyJWTError as e:
+        except jwt.PyJWTError:
             return jsonify({'success': False, 'error': 'Invalid or expired token'}), 401
             
         return f(*args, **kwargs)

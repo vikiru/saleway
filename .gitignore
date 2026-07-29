@@ -349,8 +349,11 @@ replay_pid*
 openspec
 .agents
 .agent
+.serena
+.impeccable
 skills-lock.json
 .github/prompts
+.github/hooks/impeccable.json
 .github/skills
 .cospec
 .gemini

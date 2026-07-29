@@ -9,7 +9,7 @@ export const productKeys = {
 export const orderKeys = {
   all: ['orders'] as const,
   lists: () => [...orderKeys.all, 'list'] as const,
-  byUser: (userId: string) => [...orderKeys.lists(), { userId }] as const,
+  byUser: (userId?: string) => [...orderKeys.lists(), { userId }] as const,
   details: () => [...orderKeys.all, 'detail'] as const,
   detail: (id: string | number) => [...orderKeys.details(), id] as const,
 };
@@ -27,7 +27,7 @@ export const userKeys = {
 export const ratingKeys = {
   all: ['ratings'] as const,
   byProduct: (productId: string) => [...ratingKeys.all, 'product', productId] as const,
-  byUser: (userId: string) => [...ratingKeys.all, 'user', userId] as const,
+  byUser: (userId?: string) => [...ratingKeys.all, 'user', userId] as const,
   average: (productId: string) => [...ratingKeys.all, 'average', productId] as const,
 };
 

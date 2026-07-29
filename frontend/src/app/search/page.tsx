@@ -1,6 +1,8 @@
+export const dynamic = 'force-dynamic';
+
 import { getProducts } from '@/features/product/api/product';
 import { deriveFilterOptions } from '@/features/product/utils/filters';
-import { SearchPage } from '@/pages/search/SearchPage';
+import { SearchPage } from '@/views/search/SearchPage';
 
 interface ProductSearchProps {
   searchParams: Promise<{

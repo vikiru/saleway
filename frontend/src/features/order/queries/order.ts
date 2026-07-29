@@ -1,3 +1,5 @@
+'use client';
+
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getOrderAction, getOrdersAction } from '@/features/order/actions/order';
 import { orderKeys } from '@/lib/queries/keys';
@@ -13,7 +15,7 @@ export function useOrder(orderId: string) {
 export function useOrders(userId: string) {
   return useQuery({
     queryKey: orderKeys.byUser(userId),
-    queryFn: () => getOrdersAction(userId),
+    queryFn: () => getOrdersAction(),
     enabled: !!userId,
   });
 }
@@ -25,9 +27,9 @@ export function useSuspenseOrder(orderId: string) {
   });
 }
 
-export function useSuspenseOrders(userId: string) {
+export function useSuspenseOrders() {
   return useSuspenseQuery({
-    queryKey: orderKeys.byUser(userId),
-    queryFn: () => getOrdersAction(userId),
+    queryKey: orderKeys.byUser(),
+    queryFn: () => getOrdersAction(),
   });
 }

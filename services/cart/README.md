@@ -37,29 +37,32 @@ pnpm run dev
 ## Environment Variables
 
 ```bash
-NODE_ENV='development'
-PORT=3000
 # Replace these with your database username, password, host, port, and database name.
 DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
+
+# Frontend CORS
+FRONTEND_URL='http://localhost:3000'
+
+# Clerk Authentication
+CLERK_SECRET_KEY='sk_test_...'
 ```
 
 ## API Endpoints
 
-- `GET /api/cart` - Get user's cart
-- `POST /api/cart` - Create new cart
-- `POST /api/cart/items` - Add item to cart
-- `PUT /api/cart/items/{itemId}` - Update item quantity
-- `DELETE /api/cart/items/{itemId}` - Remove item from cart
-- `DELETE /api/cart` - Clear cart
+- `GET /api/v1/health` - Health check
+- `GET /api/v1/cart/user/{userId}` - Get user's cart
+- `POST /api/v1/cart/user/{userId}` - Create new cart
+- `POST /api/v1/cart/user/{userId}/item` - Add item to cart
+- `POST /api/v1/cart/user/{userId}/sync` - Sync cart
+- `PUT /api/v1/cart/user/{userId}/item/{cartItemId}` - Update item quantity
+- `DELETE /api/v1/cart/user/{userId}/item/{cartItemId}` - Remove item from cart
+- `DELETE /api/v1/cart/user/{userId}` - Clear cart
 
-The service will start on port 3000 by default.
+The service will start on port 8080 by default.
 
 ## Development
 
 ```bash
-# Run tests
-pnpm test
-
 # Format code
 pnpm run format
 

@@ -1,9 +1,12 @@
+'use client';
+
 import { useState } from 'react';
 import { syncCart } from '@/features/cart/actions/cart';
 import { useCartStore } from '@/features/cart/store/Cart';
-import { createCheckoutSession } from '@/features/payment/actions/checkout';
 
-export function useCheckoutFlow() {
+type CheckoutAction = () => Promise<{ success: boolean; data?: { url?: string }; error?: string }>;
+
+export function useCheckoutFlow(checkoutAction: CheckoutAction) {
   const { items, getTotalPrice } = useCartStore();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,17 +20,19 @@ export function useCheckoutFlow() {
         const cartItems = items.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
-          unitPrice: item.unitPrice, // include unitPrice if required by type
+          unitPrice: item.unitPrice,
         }));
         await syncCart(cartItems);
       }
 
-      const result = await createCheckoutSession();
-      if (result.url) {
-        window.location.href = result.url;
+      const result = await checkoutAction();
+      if (result.success && result.data?.url) {
+        window.location.href = result.data.url;
+      } else if (!result.success) {
+        throw new Error(result.error || 'Failed to create checkout session');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Checkout failed');
+      setError(err instanceof Error ? err.message : 'Checkout failed. Please try again.');
       setIsLoading(false);
     }
   };

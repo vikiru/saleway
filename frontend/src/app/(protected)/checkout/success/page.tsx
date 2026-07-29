@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
+import { verifyCheckoutSession } from '@/features/payment/actions/checkout';
 import { getCurrentUser } from '@/features/user/actions/auth';
 import { CART_ROUTE, SIGNIN_ROUTE } from '@/lib/constants/routes';
-import { CheckoutSuccess } from '@/pages/checkout/CheckoutSuccess';
+import { CheckoutSuccess } from '@/views/checkout/CheckoutSuccess';
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ session_id?: string }> }) {
   const userId = await getCurrentUser();
@@ -15,5 +16,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
     redirect(CART_ROUTE);
   }
 
-  return <CheckoutSuccess sessionId={session_id} userId={userId} />;
+  const result = await verifyCheckoutSession(session_id);
+
+  return <CheckoutSuccess result={result} sessionId={session_id} />;
 }

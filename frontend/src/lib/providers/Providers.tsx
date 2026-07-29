@@ -1,3 +1,5 @@
+'use client';
+
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/lib/components/ui/sonner';
 import { ReactQueryProvider } from '@/lib/providers/ReactQueryProvider';
