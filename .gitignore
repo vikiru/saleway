@@ -379,3 +379,9 @@ skills-lock.json
 .qoder
 .roo
 .ruff_cache
+
+# Kubernetes Secrets
+infra/k8s/secrets.yaml
+*-secret.yaml
+*.pem
+*.key
