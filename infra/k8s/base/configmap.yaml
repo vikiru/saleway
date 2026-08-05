@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: saleway-config
+  namespace: ecommerce
+data:
+  NODE_ENV: "production"
+  PYTHON_ENV: "production"
+  DJANGO_SETTINGS_MODULE_USER: "user.settings"
+  DJANGO_SETTINGS_MODULE_RATING: "rating.settings"
+  
+  # Kubernetes Internal DNS formatting: <service-name>.<namespace>.svc.cluster.local
+  CART_SERVICE_URL: "http://cart-service.ecommerce.svc.cluster.local:80/api/v1"
+  PRODUCT_SERVICE_URL: "http://product-service.ecommerce.svc.cluster.local:80/api/v1"
+  ORDER_SERVICE_URL: "http://order-service.ecommerce.svc.cluster.local:80/api/v1"
+  RATING_SERVICE_URL: "http://rating-service.ecommerce.svc.cluster.local:80/api/v1"
+  USER_SERVICE_URL: "http://user-service.ecommerce.svc.cluster.local:80/api/v1"
+  PAYMENT_SERVICE_URL: "http://payment-service.ecommerce.svc.cluster.local:80/api/v1"
