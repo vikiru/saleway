@@ -5,46 +5,44 @@ description = "An order microservice for a fake e-commerce website."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "alembic>=1.14.0",
-    "flask>=3.0.0",
-    "flask-compress>=1.23",
-    "flask-cors>=5.0.0",
-    "loguru>=0.7.2",
-    "gunicorn>=21.2.0",
-    "psycopg2-binary>=2.9.10",
-    "python-dotenv>=1.0.0",
-    "sqlmodel>=0.0.22",
+  "alembic>=1.14.0",
+  "flask>=3.0.0",
+  "flask-compress>=1.23",
+  "flask-cors>=5.0.0",
+  "loguru>=0.7.2",
+  "gunicorn>=21.2.0",
+  "psycopg2-binary>=2.9.10",
+  "python-dotenv>=1.0.0",
+  "sqlmodel>=0.0.22",
+  "pyjwt>=2.8.0",
+  "cryptography>=42.0.0",
 ]
 
 [dependency-groups]
-dev = [
-    "poethepoet>=0.38.0",
-    "pyrefly>=0.55.0",
-    "ruff>=0.14.8",
-    "ty>=0.0.20",
-]
+dev = ["basedpyright>=1.36.1", "poethepoet>=0.38.0", "pyrefly>=0.55.0", "ruff>=0.14.8", "ty>=0.0.20"]
 
 [tool.poe.tasks]
-start = "gunicorn -w 4 'app:create_app()"
-dev = "flask run --debug"
+start = "gunicorn -b 0.0.0.0:5000 -w 4 'app:create_app()'"
+dev = "flask run --port 5000 --debug"
 venv-create = "uv venv"
 venv-activate = "source .venv/bin/activate"
 sync = "uv sync"
 update = "uv lock --upgrade"
-typecheck = "basedpyright ."
+typecheck = "pyrefly check"
 format = "ruff format ."
 lint = "ruff check --fix ."
 migrate = "alembic upgrade head"
 create-migration = "alembic revision --autogenerate -m"
 create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABASE order_service;\""
 
-# Flask Service Startup Process:
-# 1) source .venv/bin/activate  # Activate virtual environment
-# 2) uv sync                     # Install Python packages
-# 3) poe create-db               # Create PostgreSQL database (if not already)
-# 4) poe migrate                 # Run Alembic migrations
-# 5) poe dev                     # Start development server
-#    or poe start                # Start production server
+[tool.pyrefly]
+preset = "basic"
+
+[tool.ty.environment]
+python = ".venv"
+
+[tool.ty.src]
+include = ["**/*.py"]
 
 [tool.ruff]
 line-length = 120
@@ -53,18 +51,18 @@ extend-exclude = ["alembic/versions/"]
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
 ]
 ignore = ["E501", "W291", "UP017"]
 

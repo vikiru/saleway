@@ -32,19 +32,23 @@ uv sync
 cp .env.sample .env
 ```
 
-3. Run database migrations:
+3. Set up the required Google Gemini credentials:
+
+   - Create a project in [Google AI Studio](https://aistudio.google.com/) and obtain a Gemini API key.
+
+4. Run database migrations:
 
 ```bash
 uv run poe migrate
 ```
 
-4. Seed sample product catalog data:
+5. Seed sample product catalog data:
 
 ```bash
 uv run poe seed
 ```
 
-5. Start development server:
+6. Start development server:
 
 ```bash
 uv run poe dev

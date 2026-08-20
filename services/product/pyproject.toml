@@ -5,32 +5,27 @@ description = "A product microservice for a fake e-commerce website."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "alembic>=1.14.0",
-    "fastapi>=0.115.6",
-    "loguru>=0.7.3",
-    "psycopg2-binary>=2.9.10",
-    "python-dotenv>=1.0.0",
-    "sqlmodel>=0.0.22",
-    "uvicorn>=0.34.0",
-    "asyncpg>=0.30.0",
+  "alembic>=1.14.0",
+  "fastapi>=0.115.6",
+  "loguru>=0.7.3",
+  "psycopg2-binary>=2.9.10",
+  "python-dotenv>=1.0.0",
+  "sqlmodel>=0.0.22",
+  "uvicorn>=0.34.0",
+  "asyncpg>=0.30.0",
+  "google-genai>=1.0.0",
 ]
 
 [dependency-groups]
-dev = [
-    "basedpyright>=1.36.1",
-    "poethepoet>=0.38.0",
-    "pyrefly>=0.55.0",
-    "ruff>=0.14.8",
-    "ty>=0.0.20",
-]
+dev = ["basedpyright>=1.36.1", "poethepoet>=0.38.0", "pyrefly>=0.55.0", "ruff>=0.14.8", "ty>=0.0.20"]
 
 [tool.poe.tasks]
-start = "uvicorn app:app"
-dev = "uvicorn app:app --reload"
+start = "uvicorn app:app --host 0.0.0.0 --port 8000"
+dev = "uvicorn app:app --reload --port 8000"
 venv-create = "uv venv"
 venv-activate = "source .venv/bin/activate"
 sync = "uv sync"
-typecheck = "basedpyright ."
+typecheck = "pyrefly check"
 update = "uv lock --upgrade"
 format = "ruff format ."
 lint = "ruff check --fix ."
@@ -39,14 +34,14 @@ create-migration = "alembic revision --autogenerate -m"
 seed = "uv run seed.py"
 create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABASE product_service;\""
 
-# FastAPI Service Startup Process:
-# 1) source .venv/bin/activate  # Activate virtual environment
-# 2) uv sync                     # Install Python packages
-# 3) poe create-db               # Create PostgreSQL database (if not already)
-# 4) poe migrate                 # Run Alembic migrations
-# 5) poe seed                    # Seed database with sample data
-# 6) poe dev                     # Start development server
-#    or poe start                # Start production server
+[tool.pyrefly]
+preset = "basic"
+
+[tool.ty.environment]
+python = ".venv"
+
+[tool.ty.src]
+include = ["**/*.py"]
 
 [tool.ruff]
 line-length = 120
@@ -55,18 +50,18 @@ extend-exclude = ["alembic/versions/"]
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
 ]
 ignore = ["E501", "W291"]
 

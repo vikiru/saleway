@@ -20,20 +20,15 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-    "poethepoet>=0.38.0",
-    "pyrefly>=0.55.0",
-    "ruff>=0.14.8",
-    "ty>=0.0.20",
-]
+dev = ["poethepoet>=0.38.0", "pyrefly>=0.55.0", "ruff>=0.14.8", "ty>=0.0.20"]
 
 [tool.poe.tasks]
-start = "uv run gunicorn user.wsgi --workers 4"
-dev = "uv run python manage.py runserver --settings=user.settings --traceback"
+start = "uv run gunicorn user.wsgi --bind 0.0.0.0:8002 --workers 4"
+dev = "uv run python manage.py runserver 8002 --settings=user.settings --traceback"
 venv-create = "uv venv"
 venv-activate = "source .venv/bin/activate"
 sync = "uv sync"
-typecheck = "basedpyright ."
+typecheck = "pyrefly check"
 update = "uv lock --upgrade"
 format = "ruff format ."
 lint = "ruff check --fix ."
@@ -41,14 +36,15 @@ migrate = "uv run manage.py migrate"
 create-migrations = "uv run manage.py makemigrations"
 reset-db = "sh -c 'uv run manage.py flush --noinput && uv run manage.py migrate'"
 create-db = "psql -U vikiru -h localhost -p 5433 -d postgres -c \"CREATE DATABASE user_service;\""
-# Django Service Startup Process:
-# 1) source .venv/bin/activate  # Activate virtual environment
-# 2) uv sync                     # Install Python packages
-# 3) poe create-db               # Create PostgreSQL database (if not already)
-# 4) poe create-migrations       # Create Django migrations
-# 5) poe migrate                 # Apply Django migrations
-# 6) poe dev                     # Start development server
-#    or poe start                # Start production server
+
+[tool.pyrefly]
+preset = "basic"
+
+[tool.ty.environment]
+python = ".venv"
+
+[tool.ty.src]
+include = ["**/*.py"]
 
 [tool.ruff]
 line-length = 120
@@ -56,24 +52,35 @@ fix = true
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
 ]
 ignore = ["E501", "W291"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["services"]
-known-third-party = ["bcrypt", "django", "allauth", "corsheaders", "environ", "extensions", "ninja", "psycopg2", "requests", "pydantic"]
+known-third-party = [
+  "bcrypt",
+  "django",
+  "allauth",
+  "corsheaders",
+  "environ",
+  "extensions",
+  "ninja",
+  "psycopg2",
+  "requests",
+  "pydantic",
+]
 
 [tool.ruff.format]
 docstring-code-format = true

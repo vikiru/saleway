@@ -1,6 +1,16 @@
-import { verifyToken } from '@clerk/backend';
 import type { NextFunction, Request, Response } from 'express';
+
+import { verifyToken } from '@clerk/backend';
+
 import type { ServiceResponse } from '@/types/ServiceResponse';
+
+declare global {
+  namespace Express {
+    interface Request {
+      auth?: { userId?: string };
+    }
+  }
+}
 
 export const clerkAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
@@ -15,9 +25,9 @@ export const clerkAuth = async (req: Request, res: Response, next: NextFunction)
     });
 
     // Attach userId to request
-    (req as any).auth = { userId: claims.sub };
+    req.auth = { userId: claims.sub };
     next();
-  } catch (err) {
+  } catch {
     const response: ServiceResponse<null> = { success: false, error: 'Unauthorized: Invalid token' };
     return res.status(401).json(response);
   }
