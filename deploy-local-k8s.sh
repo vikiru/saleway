@@ -80,7 +80,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: saleway-secrets
-  namespace: ecommerce
+  namespace: saleway
 type: Opaque
 data:
   POSTGRES_ADMIN_PASSWORD: "$(b64 "$POSTGRES_ADMIN_PASS")"
@@ -118,5 +118,5 @@ kubectl apply -f infra/k8s/base/ingress.yaml
 echo ""
 echo "=========================================="
 echo " Deployment Triggered Successfully!"
-echo " Run 'kubectl get pods -n ecommerce -w' to watch the startup process."
+echo " Run 'kubectl get pods -n saleway -w' to watch the startup process."
 echo "=========================================="

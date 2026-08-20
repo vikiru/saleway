@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-headless
-  namespace: ecommerce
+  namespace: saleway
   labels:
     app: postgres
 spec:
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres
-  namespace: ecommerce
+  namespace: saleway
   labels:
     app: postgres
 spec:
@@ -33,9 +33,9 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
-  namespace: ecommerce
+  namespace: saleway
 spec:
-  serviceName: "postgres-headless"
+  serviceName: 'postgres-headless'
   replicas: 1
   selector:
     matchLabels:
@@ -52,14 +52,14 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_USER
-              value: "postgres"
+              value: 'postgres'
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: saleway-secrets
                   key: POSTGRES_ADMIN_PASSWORD
             - name: POSTGRES_DB
-              value: "postgres"
+              value: 'postgres'
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
@@ -69,24 +69,24 @@ spec:
           # Liveness probe to ensure DB is running
           livenessProbe:
             exec:
-              command: ["pg_isready", "-U", "postgres"]
+              command: ['pg_isready', '-U', 'postgres']
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
           # Readiness probe to ensure DB can accept connections
           readinessProbe:
             exec:
-              command: ["pg_isready", "-U", "postgres"]
+              command: ['pg_isready', '-U', 'postgres']
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
           resources:
             limits:
-              cpu: "1"
-              memory: "512Mi"
+              cpu: '1'
+              memory: '512Mi'
             requests:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: '250m'
+              memory: '256Mi'
       volumes:
         - name: postgres-init
           configMap:
@@ -97,7 +97,7 @@ spec:
     - metadata:
         name: postgres-data
       spec:
-        accessModes: [ "ReadWriteOnce" ]
+        accessModes: ['ReadWriteOnce']
         resources:
           requests:
             storage: 5Gi

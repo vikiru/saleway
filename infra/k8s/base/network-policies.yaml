@@ -2,17 +2,17 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: namespace-isolation
-  namespace: ecommerce
+  namespace: saleway
 spec:
-  # Applying to ALL pods in the ecommerce namespace
+  # Applying to ALL pods in the saleway namespace
   podSelector: {}
   policyTypes:
     - Ingress
   ingress:
-    # 1. Allow traffic from any other pod within the same 'ecommerce' namespace
+    # 1. Allow traffic from any other pod within the same 'saleway' namespace
     - from:
         - podSelector: {}
-    
+
     # 2. Allow external traffic from the Minikube Ingress Controller
     # (The Ingress controller usually lives in the ingress-nginx namespace)
     - from:

@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: saleway-ingress
-  namespace: ecommerce
+  namespace: saleway
   annotations: {}
 spec:
   ingressClassName: nginx
