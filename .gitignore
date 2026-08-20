@@ -1,18 +1,15 @@
-# Extra
-.vscode
-.windsurf
-
 .astro
 .docusaurus
-dist
-build
+# clerk configuration (can include secrets)
+/.clerk/
+
 todos.md
 *.md
-
-!frontend/lib/
-!frontend/src/lib/
-!frontend/src/types/
-
+!README.md
+!services/*/README.md
+plans
+dist
+build
 
 # Logs
 logs
@@ -63,6 +60,7 @@ web_modules/
 
 # TypeScript cache
 *.tsbuildinfo
+*.map
 
 # Optional npm cache directory
 .npm
@@ -106,6 +104,7 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+.output
 
 # Gatsby files
 .cache/
@@ -350,6 +349,9 @@ openspec
 .agents
 .agent
 .serena
+.codanna
+.codannaignore
+.fastembed_cache
 .impeccable
 skills-lock.json
 .github/prompts
@@ -358,8 +360,21 @@ skills-lock.json
 .cospec
 .gemini
 .qwen
+.vscode/
 .kilocode
 .opencode
+.hermes
+.devin
+.forge
+.zcode
+.bob
+.codeartsdoer
+.kimi-code
+.lingma
+.omp
+.windsurf
+.vibe
+.junie
 .claude
 .continue
 .trae
