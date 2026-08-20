@@ -54,6 +54,7 @@ jobs:
       - name: Format Java files with Google Java Format
         uses: axel-op/googlejavaformat-action@c1134ebd196c4cbffb077f9476585b0be8b6afcd # v4.0.0
         with:
+          release-name: 'v1.24.0'
           args: '--skip-sorting-imports --replace'
 
       - name: Check for changes
