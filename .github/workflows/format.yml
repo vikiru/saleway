@@ -7,6 +7,10 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   format:
     name: Format Files
@@ -44,8 +48,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Format files
-        run: pnpm format
+      - name: Format TypeScript and Python files
+        run: pnpm format:oxfmt && pnpm format:python
+
+      - name: Format Java files with Google Java Format
+        uses: axel-op/googlejavaformat-action@c1134ebd196c4cbffb077f9476585b0be8b6afcd # v4.0.0
+        with:
+          args: '--skip-sorting-imports --replace'
 
       - name: Check for changes
         id: changes
