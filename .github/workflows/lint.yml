@@ -1,5 +1,5 @@
 name: Lint Files
-run-name: Lint files using Oxlint, Ruff, and Maven
+run-name: Lint files using Oxlint, Ruff, and Checkstyle
 on:
   pull_request:
     branches:
@@ -10,12 +10,17 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     name: Lint Files
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -42,5 +47,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Lint files
-        run: pnpm lint
+      - name: Lint TypeScript and Python files
+        run: |
+          pnpm oxlint -f github
+          uvx ruff check --output-format=github services/**/*.py
+
+      - name: Run Checkstyle
+        uses: dbelyaev/action-checkstyle@ada3d54c61a086e8d8348886a212c4a2a9411e3c # v3.15.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          level: error
