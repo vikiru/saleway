@@ -13,7 +13,7 @@ pre-commit:
 
     - name: Format staged Python files with ruff
       glob: 'services/**/*.py'
-      run: uv run ruff format {staged_files}
+      run: uvx ruff format {staged_files}
       stage_fixed: true
 
     - name: Lint staged TypeScript files with oxlint
@@ -22,7 +22,7 @@ pre-commit:
 
     - name: Lint staged Python files with ruff
       glob: 'services/**/*.py'
-      run: uv run ruff check {staged_files}
+      run: uvx ruff check {staged_files}
 
     - name: Lint Java payment service
       glob: 'services/payment/**/*.java'
