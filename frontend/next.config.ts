@@ -4,8 +4,9 @@ import path from 'path';
 // Load env variables from the root of the monorepo/workspace
 loadEnvConfig(path.resolve(process.cwd(), '../'));
 
-import withBundleAnalyzer from '@next/bundle-analyzer';
 import type { NextConfig } from 'next';
+
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
@@ -36,10 +37,7 @@ const nextConfig: NextConfig = {
       config.externals = [
         ...existingExternals,
         ({ request }: { request?: string }, callback: (err?: Error | null, result?: string) => void) => {
-          if (
-            request === 'server-only' ||
-            request?.startsWith('node:')
-          ) {
+          if (request === 'server-only' || request?.startsWith('node:')) {
             return callback(null, `commonjs ${request}`);
           }
           callback();

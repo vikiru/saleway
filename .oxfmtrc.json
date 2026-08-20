@@ -24,5 +24,6 @@
     "stylesheet": "frontend/src/app/globals.css",
     "functions": ["clsx", "cn", "cva"],
     "preserveWhitespace": true
-  }
+  },
+  "ignorePatterns": ["dist/**", ".next/**", "node_modules/**", "**/generated/**", "**/.venv/**"]
 }

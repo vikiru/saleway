@@ -1,14 +1,93 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "project": ["frontend/tsconfig.json", "services/cart/tsconfig.json"],
-  "entry": [
-    "frontend/**/*.{js,mjs,cjs,ts,jsx,tsx,css}",
-    "services/cart/**/*.{js,mjs,cjs,ts,jsx,tsx,css}",
-    "*.{js,mjs,cjs,ts,jsx,tsx}"
+  "ignoreDependencies": [
+    "@typescript/native",
+    "tsx",
+    "knip",
+    "lefthook",
+    "oxfmt",
+    "oxlint",
+    "oxlint-tailwindcss",
+    "oxlint-tsgolint",
+    "semantic-release",
+    "@commitlint/*",
+    "@semantic-release/*",
+    "@usebruno/cli"
   ],
+  "ignoreBinaries": ["ruff", "mvn", "pnpm", "bru"],
+  "workspaces": {
+    "frontend": {
+      "entry": [
+        "src/app/**/{page,layout,loading,error,not-found,route,default,template}.{ts,tsx}",
+        "src/middleware.ts",
+        "scripts/*.ts",
+        "*.config.{ts,mjs,js}"
+      ],
+      "project": [
+        "src/**/*.{js,mjs,cjs,ts,jsx,tsx}",
+        "!src/lib/components/ui/**",
+        "!src/features/**/mutations/**",
+        "!src/features/**/queries/**",
+        "!src/features/**/schemas/**",
+        "!src/features/**/actions/**",
+        "!src/features/**/api/**",
+        "!src/features/**/types/**",
+        "!src/features/**/constants/**"
+      ],
+      "ignoreDependencies": [
+        "@radix-ui/*",
+        "@tailwindcss/*",
+        "@tanstack/*",
+        "@types/postcss-import",
+        "autoprefixer",
+        "clsx",
+        "dotenv",
+        "es-toolkit",
+        "flexsearch",
+        "globals",
+        "isomorphic-dompurify",
+        "lucide-react",
+        "next-themes",
+        "nuqs",
+        "postcss",
+        "postcss-import",
+        "react-error-boundary",
+        "react-scan",
+        "recharts",
+        "sonner",
+        "superjson",
+        "tailwind-merge",
+        "tailwindcss",
+        "tailwindcss-debug-screens",
+        "tailwindcss-scrollbar",
+        "tw-animate-css",
+        "zustand"
+      ]
+    },
+    "services/cart": {
+      "entry": ["app.ts"],
+      "project": ["**/*.ts", "!prisma/**", "!generated/**", "!schema/**"],
+      "ignoreDependencies": [
+        "@clerk/backend",
+        "@prisma/client",
+        "@types/body-parser",
+        "@types/module-alias",
+        "body-parser",
+        "compression",
+        "cors",
+        "dotenv",
+        "express",
+        "module-alias",
+        "nodemon",
+        "pino",
+        "pino-pretty",
+        "prisma",
+        "zod"
+      ]
+    }
+  },
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
-  },
-  "tags": ["-lintignore"]
+  }
 }
