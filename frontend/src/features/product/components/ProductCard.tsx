@@ -3,7 +3,9 @@
 import { Package, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import type { Product } from '@/features/product/types/product';
+
 import { useProductAverageRating } from '@/features/rating/queries/rating';
 import { Card, CardContent } from '@/lib/components/ui/card';
 
@@ -20,12 +22,12 @@ export function ProductCard({ product, rating, priority }: ProductCardProps) {
   return (
     <Link
       aria-label={`View details for ${product.name}`}
-      className="group block h-full rounded-xl focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none focus-visible:border-ring"
+      className="group block h-full rounded-xl focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
       href={`/products/${product.id}`}
       prefetch={false}
     >
-      <Card className="h-full overflow-hidden border-0 bg-transparent ring-0 shadow-none transition-colors duration-300 hover:bg-muted/30">
-        <div className="aspect-square w-full overflow-hidden rounded-xl bg-muted relative">
+      <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none ring-0 transition-colors duration-300 hover:bg-muted/30">
+        <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-muted">
           {product.image?.image_url ? (
             <Image
               alt={product.image?.alt_text || product.name}
@@ -36,13 +38,13 @@ export function ProductCard({ product, rating, priority }: ProductCardProps) {
               src={product.image.image_url}
             />
           ) : (
-            <div className="h-full w-full flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-105">
+            <div className="flex h-full w-full items-center justify-center transition-transform duration-700 ease-out group-hover:scale-105">
               <Package className="h-12 w-12 text-muted-foreground" />
             </div>
           )}
         </div>
         <CardContent className="p-4 pt-5">
-          <h3 className="font-heading text-base font-semibold text-foreground line-clamp-1">{product.name}</h3>
+          <h3 className="line-clamp-1 font-heading text-base font-semibold text-foreground">{product.name}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{product.brand}</p>
           <div className="mt-3 flex items-center gap-2">
             <div aria-label={`Rated ${finalRating} out of 5 stars`} className="flex text-amber-500" role="img">
@@ -55,7 +57,7 @@ export function ProductCard({ product, rating, priority }: ProductCardProps) {
               ))}
             </div>
           </div>
-          <div className="mt-3 font-heading font-bold text-lg text-foreground tracking-tight">
+          <div className="mt-3 font-heading text-lg font-bold tracking-tight text-foreground">
             ${product.price ? Number(product.price).toFixed(2) : '0.00'}
           </div>
         </CardContent>

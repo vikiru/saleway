@@ -1,6 +1,9 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import type { CartItemCreateInput } from '@/features/cart/types/cart';
+
 import {
   clearCart,
   createCartItemAction,
@@ -8,7 +11,6 @@ import {
   syncCart,
   updateCartItemAction,
 } from '@/features/cart/actions/cart';
-import type { CartItemCreateInput } from '@/features/cart/types/cart';
 import { cartKeys } from '@/lib/queries/keys';
 
 export function useCreateCartItem() {

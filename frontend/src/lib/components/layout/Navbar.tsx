@@ -3,6 +3,7 @@
 import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
+
 import { ThemeToggle } from '@/features/user/components/ThemeToggle';
 import UserButton from '@/features/user/components/UserButton';
 import { Button } from '@/lib/components/ui/button';
@@ -13,7 +14,7 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
-          <Link className="flex items-center gap-2 group transition-opacity hover:opacity-80" href={HOME_ROUTE}>
+          <Link className="group flex items-center gap-2 transition-opacity hover:opacity-80" href={HOME_ROUTE}>
             <span className="font-heading text-2xl font-bold tracking-tighter text-primary">Saleway.</span>
           </Link>
         </div>
@@ -27,7 +28,7 @@ export function Navbar() {
           </Link>
           <ThemeToggle />
           <ClerkLoading>
-            <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
+            <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
           </ClerkLoading>
           <ClerkLoaded>
             <SignedIn>

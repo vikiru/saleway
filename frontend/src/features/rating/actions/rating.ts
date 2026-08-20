@@ -1,13 +1,5 @@
 'use server';
 
-import {
-  createReview as createReviewApi,
-  deleteReview as deleteReviewApi,
-  getProductAverageRating as getProductAverageRatingApi,
-  getProductReviews as getProductReviewsApi,
-  getUserReviews as getUserReviewsApi,
-  updateReview as updateReviewApi,
-} from '@/features/rating/api/rating';
 import type {
   ProductReviewsResponse,
   ReviewCreate,
@@ -16,6 +8,15 @@ import type {
   ReviewUpdate,
   UserReviewsResponse,
 } from '@/features/rating/types/rating';
+
+import {
+  createReview as createReviewApi,
+  deleteReview as deleteReviewApi,
+  getProductAverageRating as getProductAverageRatingApi,
+  getProductReviews as getProductReviewsApi,
+  getUserReviews as getUserReviewsApi,
+  updateReview as updateReviewApi,
+} from '@/features/rating/api/rating';
 import { requireUser } from '@/features/user/actions/auth';
 
 export async function getReviewsAction(productId: string): Promise<ReviewsResponse> {

@@ -2,10 +2,12 @@
 
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
+
+import type { Product } from '@/features/product/types/product';
+
 import { CartItemList } from '@/features/cart/components/CartItemList';
 import { OrderSummary } from '@/features/cart/components/OrderSummary';
 import { useCartStore } from '@/features/cart/store/Cart';
-import type { Product } from '@/features/product/types/product';
 import { Button } from '@/lib/components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
 import { SEARCH_ROUTE } from '@/lib/constants/routes';
@@ -47,16 +49,16 @@ export function CartInteractiveZone({ products }: CartInteractiveZoneProps) {
 
   return (
     <>
-      <div className="flex justify-end mb-8">
+      <div className="mb-8 flex justify-end">
         <p className="text-muted-foreground">{items.length} items in your cart</p>
       </div>
 
-      <div className="grid lg:grid-cols-12 gap-10 items-start">
+      <div className="grid items-start gap-10 lg:grid-cols-12">
         <section className="lg:col-span-8">
           <CartItemList products={productMap} />
         </section>
 
-        <aside className="lg:col-span-4 lg:sticky lg:top-24">
+        <aside className="lg:sticky lg:top-24 lg:col-span-4">
           <OrderSummary />
         </aside>
       </div>

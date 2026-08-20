@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowDown01, ArrowUp01 } from 'lucide-react';
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/lib/components/ui/select';
 
 interface SortSelectProps {

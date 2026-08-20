@@ -1,12 +1,13 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
 @plugin "tailwindcss-debug-screens" {
-  classname: "debug-screens";
-  position: "bottom, left";
-  prefix: "screen: ";
+  classname: 'debug-screens';
+  position: 'bottom, left';
+  prefix: 'screen: ';
 }
 
 @layer base {
@@ -183,48 +184,48 @@
     font-size: var(--font-size-p);
   }
 
-  .prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  .prose :where(h1):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     font-size: var(--font-size-h1);
   }
-  .prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  .prose :where(h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     margin-top: 1.5em;
     margin-bottom: 0.75em;
     font-size: var(--font-size-h2);
   }
-  .prose :where(h2 + ul, h2 + ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  .prose :where(h2 + ul, h2 + ol):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     margin-top: 1.5em;
   }
-  .prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  .prose :where(h3):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     margin-top: 1.25em;
     margin-bottom: 0.5em;
     font-size: var(--font-size-h3);
   }
-  .prose :where(h3 + ul, h3 + ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  .prose :where(h3 + ul, h3 + ol):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     margin-top: 1.25em;
   }
-  .prose :where(h4):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  .prose :where(h4):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     margin-top: 1.25em;
     margin-bottom: 0.5em;
     font-size: var(--font-size-h4);
   }
-  .prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  .prose :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     margin-top: 0.75em;
     margin-bottom: 0.75em;
     font-size: var(--font-size-p);
   }
 
-  [data-status="delivered"],
-  [data-status="completed"] {
+  [data-status='delivered'],
+  [data-status='completed'] {
     @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400;
   }
-  [data-status="processing"],
-  [data-status="pending"] {
+  [data-status='processing'],
+  [data-status='pending'] {
     @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400;
   }
-  [data-status="cancelled"] {
+  [data-status='cancelled'] {
     @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400;
   }
-  [data-status="shipped"] {
+  [data-status='shipped'] {
     @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400;
   }
 }

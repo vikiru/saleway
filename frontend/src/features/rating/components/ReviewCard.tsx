@@ -4,10 +4,12 @@ import { useUser } from '@clerk/nextjs';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+
+import type { Review } from '@/features/rating/types/rating';
+
 import { RatingStars } from '@/features/rating/components/RatingStars';
 import { ReviewFormDialog } from '@/features/rating/components/ReviewFormDialog';
 import { useDeleteReview } from '@/features/rating/mutations/rating';
-import type { Review } from '@/features/rating/types/rating';
 import { ConfirmDialog } from '@/lib/components/confirm-dialog';
 import { Button } from '@/lib/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -51,21 +53,21 @@ export function ReviewCard({ review, productId }: ReviewCardProps) {
         )}
       >
         <div className="flex items-start justify-between gap-2">
-          <div className="flex flex-col gap-1 min-w-0">
+          <div className="flex min-w-0 flex-col gap-1">
             <div className="flex flex-wrap items-center gap-2">
               <RatingStars className="scale-90" rating={review.rating} />
               <span className="text-xs text-muted-foreground">{date}</span>
               {isOwner && (
-                <span className="text-xs font-medium text-primary bg-primary/10 rounded-full px-2 py-0.5">
+                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                   Your review
                 </span>
               )}
             </div>
-            <p className="font-semibold text-sm text-foreground leading-snug mt-1">{review.title}</p>
+            <p className="mt-1 text-sm leading-snug font-semibold text-foreground">{review.title}</p>
           </div>
 
           {isOwner && (
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex shrink-0 items-center gap-1">
               <Button
                 aria-label="Edit review"
                 className="h-7 w-7 text-muted-foreground hover:text-foreground"
@@ -98,7 +100,7 @@ export function ReviewCard({ review, productId }: ReviewCardProps) {
           )}
         </div>
 
-        <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{review.review}</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{review.review}</p>
 
         <p className="mt-2 text-xs text-muted-foreground/70">— {review.author}</p>
       </div>

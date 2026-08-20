@@ -1,9 +1,11 @@
 'use client';
 
-import { FilterSection } from '@/features/product/components/FilterSection';
-import { useProductSearch } from '@/features/product/hooks/useProductSearch';
 import type { Product } from '@/features/product/types/product';
 import type { FilterItem } from '@/features/product/utils/filters';
+
+import { FilterSection } from '@/features/product/components/FilterSection';
+import { useProductSearch } from '@/features/product/hooks/useProductSearch';
+
 import { SearchHeader } from './SearchHeader';
 import { SearchResultsGrid } from './SearchResultsGrid';
 
@@ -77,9 +79,9 @@ export function SearchInteractiveZone({ allProducts, categories, brands, searchP
       />
 
       <div className="pt-6 pb-24 lg:grid lg:grid-cols-5 lg:gap-x-8">
-        <aside className="hidden lg:block lg:col-span-1">{filterContent}</aside>
+        <aside className="hidden lg:col-span-1 lg:block">{filterContent}</aside>
 
-        <div className="lg:col-span-4 mt-6 lg:mt-0">
+        <div className="mt-6 lg:col-span-4 lg:mt-0">
           <SearchResultsGrid
             currentPage={currentPage}
             itemsPerPage={ITEMS_PER_PAGE}

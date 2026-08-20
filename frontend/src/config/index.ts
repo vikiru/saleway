@@ -1,4 +1,4 @@
-import z from 'zod';
+import { z } from 'zod';
 
 const isServer = typeof window === 'undefined';
 
@@ -28,12 +28,6 @@ const envSchema = z.object({
 
 const env = envSchema.safeParse(process.env);
 
-// Temporarily disabled Zod validation
-// if (!env.success) {
-//   const missingVars = env.error.issues.map((issue) => issue.path.join('.')).join(', ');
-//   throw new Error(`Invalid environment variables: ${missingVars}`);
-// }
-
 const fallbackEnv = {
   CART_SERVICE_URL: process.env.CART_SERVICE_URL || 'http://localhost:8080/api/v1',
   ORDER_SERVICE_URL: process.env.ORDER_SERVICE_URL || 'http://localhost:5000/api/v1',
@@ -49,10 +43,11 @@ const fallbackEnv = {
   NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL:
     process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL || '/onboarding',
   STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || '',
-  NODE_ENV: process.env.NODE_ENV || 'development',
+  CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY || '',
+  NODE_ENV: (process.env.NODE_ENV === 'production' ? 'production' : 'development') as 'development' | 'production',
 };
 
-// Cast to any to bypass type errors for now
-export const validatedEnv = (env.success ? env.data : fallbackEnv) as any;
+export type EnvConfig = z.infer<typeof envSchema>;
+export const validatedEnv: EnvConfig = env.success ? env.data : fallbackEnv;
 export const stripePublishableKey = validatedEnv.STRIPE_PUBLISHABLE_KEY;
 export const nodeEnv = validatedEnv.NODE_ENV;

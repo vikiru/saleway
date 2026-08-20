@@ -2,12 +2,15 @@
 
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
+
 import { useCartStore } from '@/features/cart/store/Cart';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/lib/components/ui/card';
 import { Separator } from '@/lib/components/ui/separator';
 import { CHECKOUT_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
+
+const emptySubscribe = () => () => {};
 
 interface OrderSummaryProps {
   className?: string;
@@ -15,11 +18,11 @@ interface OrderSummaryProps {
 
 export function OrderSummary({ className }: OrderSummaryProps) {
   const { items: storeItems, getTotalPrice } = useCartStore();
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  const hydrated = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
 
   if (!hydrated) return null;
 
@@ -40,7 +43,7 @@ export function OrderSummary({ className }: OrderSummaryProps) {
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">Shipping estimate</span>
-          <span className="text-green-600 dark:text-green-400 font-bold uppercase tracking-tight text-sm">Free</span>
+          <span className="text-sm font-bold tracking-tight text-green-600 uppercase dark:text-green-400">Free</span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">Tax estimate</span>
@@ -60,7 +63,7 @@ export function OrderSummary({ className }: OrderSummaryProps) {
         </Link>
         <div className="text-center text-sm">
           <span className="text-muted-foreground">or </span>
-          <Link className="font-medium text-primary hover:text-primary/80 inline-flex items-center" href={SEARCH_ROUTE}>
+          <Link className="inline-flex items-center font-medium text-primary hover:text-primary/80" href={SEARCH_ROUTE}>
             Continue Shopping <ArrowRight className="ml-1 h-3 w-3" />
           </Link>
         </div>

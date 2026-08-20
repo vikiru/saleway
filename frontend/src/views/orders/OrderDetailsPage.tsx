@@ -3,6 +3,7 @@
 import { ArrowLeft, Package } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { useOrder } from '@/features/order/queries/order';
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/lib/components/ui/card';
@@ -54,30 +55,30 @@ export function OrderDetailsPage({ id }: { id: string }) {
         </Button>
       </Link>
 
-      <div className="flex items-start justify-between mb-10">
+      <div className="mb-10 flex items-start justify-between">
         <div className="space-y-1">
           <h1>Order #{order.id}</h1>
           <p className="text-muted-foreground">Placed on {new Date(order.purchase_date).toLocaleDateString()}</p>
         </div>
         <span
-          className="px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide"
+          className="rounded-full px-4 py-1.5 text-sm font-semibold tracking-wide"
           data-status={order.status.toLowerCase()}
         >
           {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
         </span>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
           <Card className="border border-border/60 shadow-sm transition-all hover:shadow-md">
             <CardHeader>
               <CardTitle>Order Items</CardTitle>
             </CardHeader>
             <CardContent>
               {order.items.length === 0 ? (
-                <Empty className="py-8 border-none">
+                <Empty className="border-none py-8">
                   <EmptyHeader>
-                    <div className="bg-muted flex size-10 items-center justify-center rounded-lg mb-2">
+                    <div className="mb-2 flex size-10 items-center justify-center rounded-lg bg-muted">
                       <Package className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <EmptyTitle>No items found</EmptyTitle>
@@ -88,19 +89,19 @@ export function OrderDetailsPage({ id }: { id: string }) {
                 <ul className="divide-y text-sm">
                   {order.items.map((item) => (
                     <li className="py-4" key={item.id}>
-                      <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border">
                           {item.product_image ? (
                             <Image alt={item.product_name} className="object-cover" fill src={item.product_image} />
                           ) : (
-                            <div className="h-full w-full bg-muted flex items-center justify-center">
+                            <div className="flex h-full w-full items-center justify-center bg-muted">
                               <Package className="h-8 w-8 text-muted-foreground" />
                             </div>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate">{item.product_name}</p>
-                          <p className="text-sm text-muted-foreground mt-1">Qty: {item.product_quantity}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate font-medium">{item.product_name}</p>
+                          <p className="mt-1 text-sm text-muted-foreground">Qty: {item.product_quantity}</p>
                         </div>
                         <p className="font-medium sm:ml-auto">${item.product_total_price.toFixed(2)}</p>
                       </div>

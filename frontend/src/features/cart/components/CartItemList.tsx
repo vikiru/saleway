@@ -2,12 +2,15 @@
 
 import { ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
-import { useCartStore } from '@/features/cart/store/Cart';
+
 import type { Product } from '@/features/product/types/product';
+
+import { useCartStore } from '@/features/cart/store/Cart';
 import { Button } from '@/lib/components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import { ScrollArea } from '@/lib/components/ui/scroll-area';
 import { SEARCH_ROUTE } from '@/lib/constants/routes';
+
 import { CartItem } from './CartItem';
 
 interface CartItemListProps {
@@ -21,7 +24,7 @@ export function CartItemList({ products }: CartItemListProps) {
     return (
       <Empty>
         <EmptyHeader>
-          <div aria-hidden="true" className="bg-muted flex size-12 items-center justify-center rounded-full mb-4">
+          <div aria-hidden="true" className="mb-4 flex size-12 items-center justify-center rounded-full bg-muted">
             <ShoppingBag className="h-6 w-6 text-muted-foreground" />
           </div>
           <EmptyTitle>Your cart is empty</EmptyTitle>

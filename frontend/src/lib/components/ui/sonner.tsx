@@ -9,6 +9,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
+      // oxlint-disable-next-line tailwindcss/no-unknown-classes
       className="toaster group"
       icons={{
         success: <CircleCheckIcon className="size-4" />,

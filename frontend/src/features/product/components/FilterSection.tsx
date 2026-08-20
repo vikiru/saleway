@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+
 import { Button } from '@/lib/components/ui/button';
 import { Input } from '@/lib/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/lib/components/ui/select';
@@ -47,7 +48,7 @@ export function FilterSection({
         <h3 className="text-lg font-semibold tracking-tight">Filters</h3>
         <Button
           aria-label="Reset all filters"
-          className="h-8 px-2 text-muted-foreground hover:text-foreground flex items-center gap-1.5"
+          className="flex h-8 items-center gap-1.5 px-2 text-muted-foreground hover:text-foreground"
           onClick={onReset}
           size="sm"
           variant="ghost"
@@ -61,7 +62,7 @@ export function FilterSection({
 
       <div className="space-y-4">
         <div className="grid gap-2">
-          <div className="text-sm font-medium leading-none" id="category-label">
+          <div className="text-sm leading-none font-medium" id="category-label">
             Category
           </div>
           <Select onValueChange={(v) => onFilterChange('category', v)} value={categoryValue}>
@@ -80,7 +81,7 @@ export function FilterSection({
         </div>
 
         <div className="grid gap-2">
-          <div className="text-sm font-medium leading-none" id="brand-label">
+          <div className="text-sm leading-none font-medium" id="brand-label">
             Brand
           </div>
           <Select onValueChange={(v) => onFilterChange('brand', v)} value={brandValue}>
@@ -101,8 +102,8 @@ export function FilterSection({
 
       <Separator aria-hidden="true" />
 
-      <fieldset className="p-0 border-none m-0">
-        <legend className="text-lg font-semibold mb-4">Price Range</legend>
+      <fieldset className="m-0 border-none p-0">
+        <legend className="mb-4 text-lg font-semibold">Price Range</legend>
         <div className="space-y-4">
           <div className="flex items-center space-x-4">
             <div className="grid gap-1.5">
@@ -110,7 +111,7 @@ export function FilterSection({
                 Min Price
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-2.5 top-2.5 text-sm text-muted-foreground">
+                <span aria-hidden="true" className="absolute top-2.5 left-2.5 text-sm text-muted-foreground">
                   $
                 </span>
                 <Input
@@ -128,7 +129,7 @@ export function FilterSection({
                 Max Price
               </label>
               <div className="relative">
-                <span aria-hidden="true" className="absolute left-2.5 top-2.5 text-sm text-muted-foreground">
+                <span aria-hidden="true" className="absolute top-2.5 left-2.5 text-sm text-muted-foreground">
                   $
                 </span>
                 <Input

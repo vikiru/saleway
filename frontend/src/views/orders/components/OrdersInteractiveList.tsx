@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import Link from 'next/link';
+
 import { useOrdersList } from '@/features/order/hooks/useOrdersList';
 import { Badge } from '@/lib/components/ui/badge';
 import { Button } from '@/lib/components/ui/button';
@@ -40,26 +41,26 @@ export function OrdersInteractiveList({ userId }: { userId: string }) {
             <div className="space-y-4">
               {orders.map((order) => (
                 <Link
-                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl bg-transparent hover:bg-muted/30 transition-colors duration-300 gap-4"
+                  className="flex flex-col items-start justify-between gap-4 rounded-xl bg-transparent p-4 transition-colors duration-300 hover:bg-muted/30 sm:flex-row sm:items-center"
                   href={getOrderRoute(order.id)}
                   key={order.id}
                 >
-                  <div className="flex items-center gap-4 w-full sm:w-auto">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <div className="flex w-full items-center gap-4 sm:w-auto">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                       <Package className="h-5 w-5 text-primary" />
                     </div>
-                    <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-                      <div className="text-sm font-medium leading-none">Order #{order.id}</div>
+                    <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                      <div className="text-sm leading-none font-medium">Order #{order.id}</div>
                       <p className="text-xs text-muted-foreground">
                         {new Date(order.purchase_date).toLocaleDateString()} · {order.items.length}{' '}
                         {order.items.length === 1 ? 'item' : 'items'}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
+                  <div className="flex w-full items-center justify-between gap-6 sm:w-auto sm:justify-end">
                     <div className="font-medium">${toNum(order.total_price).toFixed(2)}</div>
                     <Badge
-                      className="uppercase tracking-wider"
+                      className="tracking-wider uppercase"
                       data-status={order.status.toLowerCase()}
                       variant="secondary"
                     >
@@ -74,8 +75,8 @@ export function OrdersInteractiveList({ userId }: { userId: string }) {
         )}
 
         {totalCount > 10 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 mt-4 border-t">
-            <div className="text-sm text-muted-foreground text-center sm:text-left">
+          <div className="mt-4 flex flex-col items-center justify-between gap-4 border-t py-4 sm:flex-row">
+            <div className="text-center text-sm text-muted-foreground sm:text-left">
               Showing {startIndex + 1} to {Math.min(startIndex + orders.length, totalCount)} of {totalCount} results
             </div>
             <div className="flex items-center space-x-2">
@@ -85,7 +86,7 @@ export function OrdersInteractiveList({ userId }: { userId: string }) {
                 size="sm"
                 variant="outline"
               >
-                <ChevronLeft className="h-4 w-4 mr-2" />
+                <ChevronLeft className="mr-2 h-4 w-4" />
                 Previous
               </Button>
               <div className="text-sm font-medium">
@@ -98,7 +99,7 @@ export function OrdersInteractiveList({ userId }: { userId: string }) {
                 variant="outline"
               >
                 Next
-                <ChevronRight className="h-4 w-4 ml-2" />
+                <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
           </div>

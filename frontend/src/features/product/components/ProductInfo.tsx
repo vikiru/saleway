@@ -1,4 +1,5 @@
 import { Badge } from '@/lib/components/ui/badge';
+
 import { AddToCartButton } from './AddToCartButton';
 
 interface ProductInfoProps {

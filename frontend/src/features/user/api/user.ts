@@ -1,5 +1,6 @@
-import { userSchema } from '@/features/user/schemas/user';
 import type { EcommerceUser } from '@/features/user/types/user';
+
+import { userSchema } from '@/features/user/schemas/user';
 import { USER_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 

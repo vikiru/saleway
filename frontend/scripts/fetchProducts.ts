@@ -16,17 +16,17 @@ async function fetchProducts() {
   console.log('Fetching products from:', PRODUCT_SERVICE_URL);
 
   const response = await fetch(`${PRODUCT_SERVICE_URL}/products`);
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
   }
 
   const data = await response.json();
-  
+
   console.log(`Fetched ${data.data?.length || 0} products`);
 
   await writeFile(OUTPUT_PATH, JSON.stringify(data, null, 2));
-  
+
   console.log('Products saved to:', OUTPUT_PATH);
 }
 

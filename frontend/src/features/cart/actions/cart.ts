@@ -1,5 +1,8 @@
 'use server';
 
+import type { Cart, CartItemCreateInput, CartItemResponse, CartResponse } from '@/features/cart/types/cart';
+import type { ServiceResponse } from '@/shared/api/types';
+
 import {
   clearCart as clearCartApi,
   createCart as createCartApi,
@@ -9,9 +12,7 @@ import {
   syncCart as syncCartApi,
   updateCartItem as updateCartItemApi,
 } from '@/features/cart/api/cart';
-import type { Cart, CartItemCreateInput, CartItemResponse, CartResponse } from '@/features/cart/types/cart';
 import { requireUser } from '@/features/user/actions/auth';
-import type { ServiceResponse } from '@/shared/api/types';
 
 export async function getCartAction(userId: string): Promise<Cart> {
   return getCartApi(userId);
