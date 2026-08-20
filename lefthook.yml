@@ -1,58 +1,44 @@
-# EXAMPLE USAGE:
-#
-#   Refer for explanation to following link:
-#   https://lefthook.dev/configuration/
-#
-pre-commit:
-  parallel: true
-  jobs:
-    - name: Lint TypeScript files with Biome.js
-      glob: "*.{js,mjs,cjs,ts,jsx,tsx}"
-      run: pnpm lint:ts --colors=off {staged_files}
-    - name: Lint Python files with Ruff
-      glob: "*.py"
-      run: pnpm lint:python {staged_files}
-    - name: Lint Java files with Checkstyle
-      glob: "*.java"
-      run: pnpm lint:java
 commit-msg:
   jobs:
-    - name: Validate commit-msg with commitlint
+    - name: Validate commit message with commitlint
       run: pnpm exec commitlint --edit $1
-# pre-push:
-#   jobs:
-#     - name: packages audit
-#       tags:
-#         - frontend
-#         - security
-#       run: yarn audit
-#
-#     - name: gems audit
-#       tags:
-#         - backend
-#         - security
-#       run: bundle audit
-#
-# pre-commit:
-#   parallel: true
-#   jobs:
-#     - run: yarn eslint {staged_files}
-#       glob: "*.{js,ts,jsx,tsx}"
-#
-#     - name: rubocop
-#       glob: "*.rb"
-#       exclude:
-#         - config/application.rb
-#         - config/routes.rb
-#       run: bundle exec rubocop --force-exclusion {all_files}
-#
-#     - name: govet
-#       files: git ls-files -m
-#       glob: "*.go"
-#       run: go vet {files}
-#
-#     - script: "hello.js"
-#       runner: node
-#
-#     - script: "hello.go"
-#       runner: go run
+
+pre-commit:
+  parallel: false
+  jobs:
+    - name: Format staged TypeScript and frontend files with oxfmt
+      glob: '*.{js,mjs,cjs,ts,jsx,tsx,json,css}'
+      run: pnpm oxfmt --write {staged_files}
+      stage_fixed: true
+
+    - name: Format staged Python files with ruff
+      glob: 'services/**/*.py'
+      run: uv run ruff format {staged_files}
+      stage_fixed: true
+
+    - name: Lint staged TypeScript files with oxlint
+      glob: '*.{js,mjs,cjs,ts,jsx,tsx}'
+      run: pnpm oxlint {staged_files}
+
+    - name: Lint staged Python files with ruff
+      glob: 'services/**/*.py'
+      run: uv run ruff check {staged_files}
+
+    - name: Lint Java payment service
+      glob: 'services/payment/**/*.java'
+      run: pnpm lint:java
+
+pre-push:
+  parallel: false
+  jobs:
+    - name: TypeScript verification
+      glob: '{frontend,services/cart}/**/*.{ts,tsx}'
+      run: pnpm typecheck
+
+    - name: Python services typecheck
+      glob: 'services/{order,product,rating,user}/**/*.py'
+      run: cd services/order && uv run pyrefly check && cd ../product && uv run pyrefly check && cd ../rating && uv run pyrefly check && cd ../user && uv run pyrefly check
+
+    - name: Java payment service typecheck
+      glob: 'services/payment/**/*.java'
+      run: cd services/payment && mvn test-compile
