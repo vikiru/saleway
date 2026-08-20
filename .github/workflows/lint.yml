@@ -32,12 +32,6 @@ jobs:
         with:
           enable-cache: false
 
-      - name: Setup Java 17
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
       - name: Setup pnpm
         uses: pnpm/setup@bf5bfae7d43e2b2b1191383f5005cd3fb69b848d # v2.0.2
         with:
