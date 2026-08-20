@@ -41,13 +41,13 @@ const loggingColours = {
 const consoleFormat = winston.format.combine(
   winston.format.colorize({ all: true }),
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+  winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
 );
 
 const fileFormat = winston.format.combine(
   winston.format.uncolorize(),
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+  winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
 );
 
 const loggingTransports = {
@@ -94,19 +94,19 @@ if (env.NODE_ENV === 'development') {
     new winston.transports.Console({
       format: consoleFormat,
       level: 'info',
-    })
+    }),
   );
   errorLogger.add(
     new winston.transports.Console({
       format: consoleFormat,
       level: 'error',
-    })
+    }),
   );
   requestLogger.add(
     new winston.transports.Console({
       format: consoleFormat,
       level: 'http',
-    })
+    }),
   );
   winston.addColors(loggingColours);
 }

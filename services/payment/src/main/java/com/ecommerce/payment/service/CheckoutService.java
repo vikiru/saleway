@@ -30,28 +30,32 @@ public class CheckoutService {
     for (CartItem item : request.getLineItems()) {
       validateCartItem(item);
 
-      ProductData productData = ProductData.builder()
-          .setName(item.getName())
-          .setDescription(item.getDescription())
-          .addImage(item.getImage())
-          .build();
+      ProductData productData =
+          ProductData.builder()
+              .setName(item.getName())
+              .setDescription(item.getDescription())
+              .addImage(item.getImage())
+              .build();
 
-      PriceData priceData = PriceData.builder()
-          .setCurrency(item.getCurrency())
-          .setUnitAmount(item.getUnitAmount())
-          .setProductData(productData)
-          .build();
+      PriceData priceData =
+          PriceData.builder()
+              .setCurrency(item.getCurrency())
+              .setUnitAmount(item.getUnitAmount())
+              .setProductData(productData)
+              .build();
 
-      LineItem stripeLineItem = LineItem.builder().setPriceData(priceData).setQuantity(item.getQuantity()).build();
+      LineItem stripeLineItem =
+          LineItem.builder().setPriceData(priceData).setQuantity(item.getQuantity()).build();
 
       stripeLineItems.add(stripeLineItem);
     }
 
-    Builder paramsBuilder = SessionCreateParams.builder()
-        .setMode(Mode.PAYMENT)
-        .setSuccessUrl(request.getSuccessUrl())
-        .setCancelUrl(request.getCancelUrl())
-        .addAllLineItem(stripeLineItems);
+    Builder paramsBuilder =
+        SessionCreateParams.builder()
+            .setMode(Mode.PAYMENT)
+            .setSuccessUrl(request.getSuccessUrl())
+            .setCancelUrl(request.getCancelUrl())
+            .addAllLineItem(stripeLineItems);
 
     if (request.getCustomerEmail() != null && !request.getCustomerEmail().isEmpty()) {
       paramsBuilder.setCustomerEmail(request.getCustomerEmail());

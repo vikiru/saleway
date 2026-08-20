@@ -32,13 +32,17 @@ uv sync
 cp .env.sample .env
 ```
 
-3. Run database migrations:
+3. Set up the required Clerk credentials:
+
+   - Create a [Clerk account](https://clerk.com/) and application to obtain your Clerk issuer URL for JWT verification.
+
+4. Run database migrations:
 
 ```bash
 uv run poe migrate
 ```
 
-4. Start development server:
+5. Start development server:
 
 ```bash
 uv run poe dev

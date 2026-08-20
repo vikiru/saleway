@@ -1,10 +1,12 @@
 import type { Response } from 'express';
-import { logger } from '@/config/logger';
+
 import type { CartItem } from '@/generated/prisma';
-import * as CartService from '@/services/index';
 import type { Cart } from '@/types/Cart';
 import type { ServiceResponse } from '@/types/ServiceResponse';
 import type { UserRequest } from '@/types/UserRequest';
+
+import { logger } from '@/config/logger';
+import * as CartService from '@/services/index';
 
 export async function addCartItemsToCart(req: UserRequest, res: Response) {
   const { userId } = req.params;

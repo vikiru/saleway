@@ -15,7 +15,7 @@ Payment processing and checkout management service built with [Spring Boot](http
 - **Language**: [Java](https://adoptium.net/) 17+
 - **Payment SDK**: [Stripe Java SDK](https://github.com/stripe/stripe-java)
 - **Build Tool**: [Maven](https://maven.apache.org/)
-- **Code Formatter**: [fmt-maven-plugin](https://github.com/coveooss/fmt-maven-plugin)
+- **Linter & Formatter**: [Checkstyle](https://checkstyle.sourceforge.io/), [Google Java Format](https://github.com/google/google-java-format)
 
 ## Setup
 
@@ -25,13 +25,17 @@ Payment processing and checkout management service built with [Spring Boot](http
 cp src/main/resources/application-sample.properties src/main/resources/application.properties
 ```
 
-2. Build and compile the application:
+2. Set up the required Stripe credentials:
+
+   - Create a [Stripe account](https://stripe.com/) to obtain your Stripe secret API key.
+
+3. Build and compile the application:
 
 ```bash
 ./mvnw clean compile
 ```
 
-3. Start development server:
+4. Start development server:
 
 ```bash
 ./mvnw spring-boot:run
@@ -64,8 +68,8 @@ The service runs on port `8081` by default.
 - `./mvnw spring-boot:run` - Start development server
 - `./mvnw clean compile` - Compile source code
 - `./mvnw clean package` - Package into executable JAR
-- `./mvnw validate` - Validate code rules
-- `./mvnw fmt:format` - Format code with fmt-maven-plugin
+- `./mvnw validate` - Lint code with Checkstyle
+- `./mvnw fmt:format` - Format code with Google Java Format
 
 ## Test Cards
 

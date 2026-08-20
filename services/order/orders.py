@@ -136,11 +136,7 @@ def remove_order_item_route(order_id: int, item_id: int):
                 SuccessResponse(success=True, message='Item removed from order', data=None).model_dump()
             ), 200
     except Exception:
-        return jsonify(
-            ErrorResponse(
-                success=False, error='An unexpected error occurred.'
-            ).model_dump()
-        ), 500
+        return jsonify(ErrorResponse(success=False, error='An unexpected error occurred.').model_dump()), 500
 
 
 @orders_bp.route('/<int:order_id>', methods=['GET'])

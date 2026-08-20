@@ -1,11 +1,10 @@
 import { logger } from '@/config/logger';
 import { prisma } from '@/data/index';
-import type { CartItem } from '@/generated/prisma';
-import { Prisma } from '@/generated/prisma';
+import { type CartItem, Prisma } from '@/generated/prisma';
 
 export async function addCartItemsToCart(userId: string, cartItems: CartItem[]) {
   try {
-    return await prisma.$transaction(async tx => {
+    return await prisma.$transaction(async (tx) => {
       const cart = await tx.cart.findUnique({ where: { userId } });
       if (!cart) {
         throw new Error(`Cart not found for ${userId}.`);
@@ -14,11 +13,11 @@ export async function addCartItemsToCart(userId: string, cartItems: CartItem[]) 
       const cartId = cart.cartId;
       const itemsTotalPrice = cartItems.reduce(
         (acc, curr) => acc.plus(new Prisma.Decimal(curr.totalPrice)),
-        new Prisma.Decimal(0)
+        new Prisma.Decimal(0),
       );
 
       await tx.cartItem.createMany({
-        data: cartItems.map(cartItem => ({
+        data: cartItems.map((cartItem) => ({
           ...cartItem,
           cartId,
         })),
@@ -68,7 +67,7 @@ export async function createCartForUser(userId: string) {
 
 export async function deleteCartByUserId(userId: string) {
   try {
-    return await prisma.$transaction(async tx => {
+    return await prisma.$transaction(async (tx) => {
       const cart = await tx.cart.findUnique({ where: { userId } });
       if (!cart) {
         throw new Error(`Cart not found for ${userId}.`);
@@ -93,7 +92,7 @@ export async function deleteCartByUserId(userId: string) {
 
 export async function deleteCartItemById(userId: string, itemId: string) {
   try {
-    return await prisma.$transaction(async tx => {
+    return await prisma.$transaction(async (tx) => {
       const cart = await tx.cart.findUnique({ where: { userId } });
       if (!cart) {
         throw new Error(`Cart not found for ${userId}.`);
@@ -141,7 +140,7 @@ export async function retrieveCartByUserId(userId: string) {
 
 export async function updateCartItemById(userId: string, updatedItem: CartItem) {
   try {
-    return await prisma.$transaction(async tx => {
+    return await prisma.$transaction(async (tx) => {
       const cart = await tx.cart.findUnique({ where: { userId } });
       if (!cart) {
         throw new Error(`Cart not found for ${userId}.`);
@@ -182,10 +181,10 @@ export async function updateCartItemById(userId: string, updatedItem: CartItem) 
 
 export async function syncCartByUserId(
   userId: string,
-  items: Array<{ productId: string; quantity: number; unitPrice: number }>
+  items: Array<{ productId: string; quantity: number; unitPrice: number }>,
 ) {
   try {
-    return await prisma.$transaction(async tx => {
+    return await prisma.$transaction(async (tx) => {
       let cart = await tx.cart.findUnique({
         where: { userId },
         include: { items: true },
@@ -198,8 +197,8 @@ export async function syncCartByUserId(
         });
       }
 
-      const existingProductIds = new Set(cart.items.map(i => i.productId));
-      const syncProductIds = new Set(items.map(i => i.productId));
+      const existingProductIds = new Set(cart.items.map((i) => i.productId));
+      const syncProductIds = new Set(items.map((i) => i.productId));
 
       for (const item of items) {
         if (item.quantity <= 0) {
@@ -246,7 +245,7 @@ export async function syncCartByUserId(
       const allItems = await tx.cartItem.findMany({ where: { cartId: cart.cartId } });
       const totalCartPrice = allItems.reduce(
         (sum, i) => sum.plus(new Prisma.Decimal(i.totalPrice)),
-        new Prisma.Decimal(0)
+        new Prisma.Decimal(0),
       );
 
       await tx.cart.update({
@@ -260,6 +259,5 @@ export async function syncCartByUserId(
   } catch (error) {
     logger.error(`An error occurred while syncing cart: ${error}`);
     throw error;
-    return { success: false };
   }
 }

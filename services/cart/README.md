@@ -32,19 +32,23 @@ pnpm install
 cp .env.sample .env
 ```
 
-3. Run database migrations:
+3. Set up the required Clerk credentials:
+
+   - Create a [Clerk account](https://clerk.com/) and application to obtain your Clerk secret key and issuer URL.
+
+4. Run database migrations:
 
 ```bash
 npx prisma migrate dev
 ```
 
-4. Generate Prisma client:
+5. Generate Prisma client:
 
 ```bash
 pnpm generate
 ```
 
-5. Start development server:
+6. Start development server:
 
 ```bash
 pnpm dev
