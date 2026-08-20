@@ -1,73 +1,54 @@
 # Rating Service
 
-Django-based product rating and review management service.
+Product rating and review management service built with [Django](https://www.djangoproject.com/) and [Django Ninja](https://django-ninja.dev/).
 
 ## Features
-- Product rating system
-- User review management
-- Average rating calculations
-- Django Ninja API integration
+
+- Product rating and review submissions
+- Dynamic average rating calculations
+- User review retrieval and moderation
+- OpenAPI-compliant API routing via Django Ninja
 
 ## Tech Stack
-- **Framework**: Django 6.0
-- **API**: Django Ninja
-- **Database**: PostgreSQL
-- **Development Tools**: uv, Poe the Poet, Ruff
+
+- **Framework**: [Django](https://www.djangoproject.com/) 6.0
+- **API Framework**: [Django Ninja](https://django-ninja.dev/)
+- **Language**: [Python](https://www.python.org/) 3.13
+- **Database**: [PostgreSQL](https://www.postgresql.org/) with Django ORM
+- **Package & Task Runner**: [uv](https://docs.astral.sh/uv/), [poethepoet](https://github.com/nat-n/poethepoet)
+- **Linter & Formatter**: [Ruff](https://docs.astral.sh/ruff/)
 
 ## Setup
 
-### Django Service Startup Process:
-1. Activate virtual environment.
-```bash
-source .venv/bin/activate
-```
-2. Install Python packages.
+1. Install dependencies:
+
 ```bash
 uv sync
 ```
-3. Create PostgreSQL database.
+
+2. Configure environment variables:
+
 ```bash
-poe create-db
-```
-4. Create Django migrations.
-```bash
-poe create-migrations
-```
-5. Apply Django migrations.
-```bash
-poe migrate
-```
-6. Start development server.
-```bash
-poe dev
-# or start production server:
-poe start
+cp .env.sample .env
 ```
 
+3. Apply database migrations:
+
 ```bash
-# Alternative manual setup
-# Download dependencies using uv
-uv sync
+uv run poe migrate
+```
 
-# Copy and configure environment
-# Edit .env with your database credentials
-cp .env.example .env
+4. Start development server:
 
-# Run database migrations
-uv run python manage.py migrate
-
-# Create superuser (optional)
-uv run python manage.py createsuperuser
-
-# Start the application
-uv run python manage.py runserver
+```bash
+uv run poe dev
 ```
 
 ## Environment Variables
 
 ```bash
-# Replace these with your database username, password, host, port, and database name.
-DATABASE_URL='postgresql://<username>:<password>@<host>:<port>/<database name>'
+# Replace with your database credentials
+DATABASE_URL='postgresql://rating_user:<password>@localhost:5432/rating_db'
 
 # Frontend CORS
 CORS_ALLOWED_ORIGINS='http://localhost:3000'
@@ -78,23 +59,23 @@ CLERK_ISSUER_URL='https://clerk.your-tenant.com'
 
 ## API Endpoints
 
-- `GET /api/v1/health` - Health check
+- `GET /api/v1/health` - Health check probe
 - `GET /api/v1/products/{product_id}/rating` - Get product average rating
 - `GET /api/v1/products/{product_id}/reviews` - Get product reviews
-- `POST /api/v1/products/{product_id}/reviews` - Create new review
+- `POST /api/v1/products/{product_id}/reviews` - Create product review
 - `GET /api/v1/products/{product_id}/reviews/{review_id}` - Get review by ID
 - `PUT /api/v1/products/{product_id}/reviews/{review_id}` - Update review
 - `DELETE /api/v1/products/{product_id}/reviews/{review_id}` - Delete review
-- `GET /api/v1/reviews/user/{user_id}` - Get user's reviews
+- `GET /api/v1/reviews/user/{user_id}` - Get reviews by user ID
 
-The service will start on port 8001 by default.
+The service runs on port `8001` by default.
 
-## Development
+## Available Scripts
 
-```bash
-# Format code
-uv run ruff format .
-
-# Lint code
-uv run ruff check .
-```
+- `uv run poe dev` - Start development server with hot reload
+- `uv run poe start` - Start production server with Gunicorn
+- `uv run poe migrate` - Apply Django database migrations
+- `uv run poe create-migrations` - Create new Django migrations
+- `uv run poe lint` - Lint and fix code with Ruff
+- `uv run poe format` - Format code with Ruff
+- `uv run poe typecheck` - Run type checks with basedpyright
