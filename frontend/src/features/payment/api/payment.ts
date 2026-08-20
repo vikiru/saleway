@@ -1,9 +1,3 @@
-import {
-  checkoutSessionRequestSchema,
-  checkoutSessionResponseSchema,
-  refundResponseSchema,
-  verifySessionResponseSchema,
-} from '@/features/payment/schemas/payment';
 import type {
   CheckoutSessionRequest,
   CheckoutSessionResponse,
@@ -11,6 +5,13 @@ import type {
   RefundResponse,
   VerifySessionResponse,
 } from '@/features/payment/types/payment';
+
+import {
+  checkoutSessionRequestSchema,
+  checkoutSessionResponseSchema,
+  refundResponseSchema,
+  verifySessionResponseSchema,
+} from '@/features/payment/schemas/payment';
 import { PAYMENT_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 

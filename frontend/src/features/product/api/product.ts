@@ -1,4 +1,5 @@
 import type { Product } from '@/features/product/types/product';
+
 import { getProduct as getStaticProduct, getProducts as getStaticProducts } from '@/shared/api/static';
 
 export async function getProducts(_signal?: AbortSignal): Promise<Product[]> {

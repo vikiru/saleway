@@ -1,6 +1,8 @@
 import { Search } from 'lucide-react';
-import { ProductGrid } from '@/features/product/components/ProductGrid';
+
 import type { ProductWithRating } from '@/features/product/types/product';
+
+import { ProductGrid } from '@/features/product/components/ProductGrid';
 import { Button } from '@/lib/components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
 import {
@@ -35,8 +37,8 @@ export function SearchResultsGrid({
   const endIndex = Math.min(startIndex + itemsPerPage, totalProducts);
 
   return (
-    <div className="flex flex-col h-full">
-      <output aria-live="polite" className="block text-sm text-muted-foreground mb-6">
+    <div className="flex h-full flex-col">
+      <output aria-live="polite" className="mb-6 block text-sm text-muted-foreground">
         Showing {totalProducts > 0 ? startIndex + 1 : 0}–{endIndex} of {totalProducts} items
       </output>
 

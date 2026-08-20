@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+
 import { createCheckoutSession } from '@/features/payment/actions/checkout';
 import { getProducts } from '@/features/product/api/product';
 import { getCurrentUser } from '@/features/user/actions/auth';

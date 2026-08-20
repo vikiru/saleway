@@ -1,10 +1,3 @@
-import {
-  productReviewsDataSchema,
-  reviewCreateSchema,
-  reviewSchema,
-  reviewUpdateSchema,
-  userReviewsDataSchema,
-} from '@/features/rating/schemas/rating';
 import type {
   ProductReviewsResponse,
   Review,
@@ -12,6 +5,14 @@ import type {
   ReviewUpdate,
   UserReviewsResponse,
 } from '@/features/rating/types/rating';
+
+import {
+  productReviewsDataSchema,
+  reviewCreateSchema,
+  reviewSchema,
+  reviewUpdateSchema,
+  userReviewsDataSchema,
+} from '@/features/rating/schemas/rating';
 import { RATING_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 

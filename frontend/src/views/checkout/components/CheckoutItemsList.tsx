@@ -1,7 +1,9 @@
 import { Package } from 'lucide-react';
 import Image from 'next/image';
+
 import type { CartItem } from '@/features/cart/types/cart';
 import type { Product } from '@/features/product/types/product';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/lib/components/ui/card';
 
 interface CheckoutItemsListProps {
@@ -16,20 +18,20 @@ export function CheckoutItemsList({ items, products }: CheckoutItemsListProps) {
   }));
 
   return (
-    <section aria-labelledby="order-items-title" className="lg:col-span-7 space-y-6">
-      <Card className="border-none shadow-none bg-transparent">
+    <section aria-labelledby="order-items-title" className="space-y-6 lg:col-span-7">
+      <Card className="border-none bg-transparent shadow-none">
         <CardHeader className="px-0 pt-0">
           <CardTitle className="text-xl font-semibold" id="order-items-title">
             Order Items
           </CardTitle>
         </CardHeader>
-        <CardContent className="px-0 space-y-6">
+        <CardContent className="space-y-6 px-0">
           {cartWithProducts.map((item) => (
             <div
-              className="flex gap-6 py-4 first:pt-0 last:pb-0 border-b last:border-0 border-border/50"
+              className="flex gap-6 border-b border-border/50 py-4 first:pt-0 last:border-0 last:pb-0"
               key={item.cartItemId}
             >
-              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-muted border border-border/40">
+              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-border/40 bg-muted">
                 {item.product?.image?.image_url ? (
                   <Image
                     alt={item.product.name}
@@ -39,17 +41,17 @@ export function CheckoutItemsList({ items, products }: CheckoutItemsListProps) {
                     src={item.product.image.image_url}
                   />
                 ) : (
-                  <div className="h-full w-full bg-muted flex items-center justify-center">
+                  <div className="flex h-full w-full items-center justify-center bg-muted">
                     <Package className="h-6 w-6 text-muted-foreground" />
                   </div>
                 )}
               </div>
-              <div className="flex-1 flex flex-col justify-between min-w-0">
+              <div className="flex min-w-0 flex-1 flex-col justify-between">
                 <div>
-                  <p className="font-semibold text-lg truncate">{item.product?.name || 'Product'}</p>
-                  <p className="text-sm text-muted-foreground mt-1">Quantity: {item.quantity}</p>
+                  <p className="truncate text-lg font-semibold">{item.product?.name || 'Product'}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Quantity: {item.quantity}</p>
                 </div>
-                <p className="font-medium text-lg">
+                <p className="text-lg font-medium">
                   ${((item.product?.price || item.unitPrice) * item.quantity).toFixed(2)}
                 </p>
               </div>

@@ -1,5 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+
 import { CART_ROUTE } from '@/lib/constants/routes';
 
 interface CheckoutHeaderProps {
@@ -10,7 +11,7 @@ export function CheckoutHeader({ itemCount }: CheckoutHeaderProps) {
   return (
     <>
       <Link
-        className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+        className="mb-8 inline-flex items-center rounded-sm text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
         href={CART_ROUTE}
         prefetch={false}
       >
@@ -18,7 +19,7 @@ export function CheckoutHeader({ itemCount }: CheckoutHeaderProps) {
         Back to Cart
       </Link>
 
-      <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-10">
+      <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-baseline">
         <h1 className="font-bold tracking-tight">Checkout</h1>
         <p className="text-muted-foreground">{itemCount} items in your order</p>
       </div>

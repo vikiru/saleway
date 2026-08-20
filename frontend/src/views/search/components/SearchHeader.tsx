@@ -1,4 +1,5 @@
 import { Filter } from 'lucide-react';
+
 import { SearchInput } from '@/features/product/components/SearchInput';
 import { SortSelect } from '@/features/product/components/SortSelect';
 import { Button } from '@/lib/components/ui/button';
@@ -14,12 +15,12 @@ interface SearchHeaderProps {
 
 export function SearchHeader({ searchTerm, sortBy, onSearch, onSort, filterContent }: SearchHeaderProps) {
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-6 pt-12 gap-4">
+    <div className="flex flex-col gap-4 border-b pt-12 pb-6 md:flex-row md:items-center md:justify-between">
       <div>
         <h1>Shop All</h1>
       </div>
 
-      <div className="flex items-center space-x-4 flex-1 justify-end">
+      <div className="flex flex-1 items-center justify-end space-x-4">
         <SearchInput onSearch={onSearch} value={searchTerm} />
         <SortSelect onValueChange={onSort} value={sortBy} />
 

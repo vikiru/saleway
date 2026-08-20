@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
+
 import type { Product } from '@/features/product/types/product';
 
 interface UseProductSearchProps {

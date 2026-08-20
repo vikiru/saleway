@@ -9,7 +9,7 @@ interface ProductGalleryProps {
 export function ProductGallery({ name, image_url }: ProductGalleryProps) {
   return (
     <div>
-      <div className="overflow-hidden rounded-lg bg-muted aspect-square relative flex items-center justify-center">
+      <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-muted">
         {image_url ? (
           <Image
             alt={name}

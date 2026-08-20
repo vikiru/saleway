@@ -1,13 +1,15 @@
 'use client';
 
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+
+import type { Review } from '@/features/rating/types/rating';
+
 import {
   getProductAverageRatingAction,
   getProductReviewsAction,
   getReviewsAction,
   getUserReviewsAction,
 } from '@/features/rating/actions/rating';
-import type { Review } from '@/features/rating/types/rating';
 import { ratingKeys } from '@/lib/queries/keys';
 
 export function useReviews(productId: string, initialData?: Review[]) {

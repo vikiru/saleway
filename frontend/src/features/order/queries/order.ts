@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+
 import { getOrderAction, getOrdersAction } from '@/features/order/actions/order';
 import { orderKeys } from '@/lib/queries/keys';
 

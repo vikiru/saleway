@@ -1,6 +1,5 @@
 'use server';
 
-import { createCheckout, processRefund, verifySession as verifySessionApi } from '@/features/payment/api/payment';
 import type {
   CheckoutSessionRequest,
   CheckoutSessionResponse,
@@ -9,6 +8,8 @@ import type {
   VerifySessionResponse,
 } from '@/features/payment/types/payment';
 import type { ServiceResponse } from '@/shared/api/types';
+
+import { createCheckout, processRefund, verifySession as verifySessionApi } from '@/features/payment/api/payment';
 
 export async function createCheckoutAction(
   request: CheckoutSessionRequest,

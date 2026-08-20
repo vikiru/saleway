@@ -1,5 +1,6 @@
 import type { Product } from '@/features/product/types/product';
 import type { FilterItem } from '@/features/product/utils/filters';
+
 import { SearchInteractiveZone } from './components/SearchInteractiveZone';
 
 interface SearchPageProps {

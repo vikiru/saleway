@@ -1,6 +1,8 @@
 import { z } from 'zod';
-import { orderCreateSchema, orderReadSchema } from '@/features/order/schemas/order';
+
 import type { Order, OrderCreate } from '@/features/order/types/order';
+
+import { orderCreateSchema, orderReadSchema } from '@/features/order/schemas/order';
 import { ORDER_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 

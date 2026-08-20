@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+
 import { getCurrentUser } from '@/features/user/actions/auth';
 import { SIGNIN_ROUTE } from '@/lib/constants/routes';
 import { OrderDetailsPage } from '@/views/orders/OrderDetailsPage';

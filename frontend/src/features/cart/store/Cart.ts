@@ -3,7 +3,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+
 import type { CartItem } from '@/features/cart/types/cart';
+
 import { toNum } from '@/shared/utils/numbers';
 
 interface AddCartItemInput {

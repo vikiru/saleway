@@ -1,8 +1,10 @@
 import { Minus, Package, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import type { CartItem as CartItemType } from '@/features/cart/types/cart';
 import type { Product } from '@/features/product/types/product';
+
 import { Button } from '@/lib/components/ui/button';
 import { Card } from '@/lib/components/ui/card';
 
@@ -16,9 +18,9 @@ interface CartItemProps {
 export function CartItem({ item, product, onUpdateQuantity, onRemove }: CartItemProps) {
   return (
     <Card className="overflow-hidden">
-      <div className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
+      <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
         <div className="flex items-center gap-4">
-          <div className="shrink-0 relative h-24 w-24 bg-muted rounded-md overflow-hidden">
+          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md bg-muted">
             {product?.image?.image_url ? (
               <Image
                 alt={product?.name || item.productId}
@@ -27,7 +29,7 @@ export function CartItem({ item, product, onUpdateQuantity, onRemove }: CartItem
                 src={product.image.image_url}
               />
             ) : (
-              <div className="h-full w-full flex items-center justify-center">
+              <div className="flex h-full w-full items-center justify-center">
                 <Package className="h-8 w-8 text-muted-foreground" />
               </div>
             )}
@@ -43,7 +45,7 @@ export function CartItem({ item, product, onUpdateQuantity, onRemove }: CartItem
         </div>
 
         <div className="mt-4 flex items-center justify-between sm:mt-0">
-          <div className="flex items-center border rounded-md mx-4">
+          <div className="mx-4 flex items-center rounded-md border">
             <Button
               className="h-8 w-8 rounded-none border-r"
               disabled={item.quantity <= 1}

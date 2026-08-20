@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
+
 import { Geist, Geist_Mono } from 'next/font/google';
+
 import { Footer } from '@/lib/components/layout/Footer';
 import { Navbar } from '@/lib/components/layout/Navbar';
 import { ClerkProvider } from '@/lib/providers/ClerkProvider';
 import { Providers } from '@/lib/providers/Providers';
+
 import './globals.css';
 
 const geistSans = Geist({
@@ -24,7 +27,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-full flex flex-col font-sans antialiased text-foreground bg-background selection:bg-primary/10 selection:text-primary">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} flex min-h-full flex-col bg-background font-sans text-foreground antialiased selection:bg-primary/10 selection:text-primary`}
+      >
         <ClerkProvider>
           <Providers>
             <Navbar />

@@ -2,11 +2,14 @@
 
 import { ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
-import { useCheckoutFlow } from '@/features/payment/hooks/useCheckoutFlow';
+
 import type { Product } from '@/features/product/types/product';
+
+import { useCheckoutFlow } from '@/features/payment/hooks/useCheckoutFlow';
 import { Button } from '@/lib/components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
 import { SEARCH_ROUTE } from '@/lib/constants/routes';
+
 import { CheckoutHeader } from './CheckoutHeader';
 import { CheckoutItemsList } from './CheckoutItemsList';
 import { CheckoutSummary } from './CheckoutSummary';
@@ -22,9 +25,9 @@ export function CheckoutInteractiveZone({ onCheckout, products }: CheckoutIntera
   if (items.length === 0) {
     return (
       <div className="py-32">
-        <Empty className="max-w-md mx-auto">
+        <Empty className="mx-auto max-w-md">
           <EmptyHeader>
-            <div className="bg-muted flex size-12 items-center justify-center rounded-full mb-4">
+            <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-muted">
               <ShoppingBag className="h-6 w-6 text-muted-foreground" />
             </div>
             <EmptyTitle>Your cart is empty</EmptyTitle>
@@ -44,7 +47,7 @@ export function CheckoutInteractiveZone({ onCheckout, products }: CheckoutIntera
     <>
       <CheckoutHeader itemCount={items.length} />
 
-      <div className="grid lg:grid-cols-12 gap-10 items-start">
+      <div className="grid items-start gap-10 lg:grid-cols-12">
         <CheckoutItemsList items={items} products={products} />
         <CheckoutSummary
           error={error}

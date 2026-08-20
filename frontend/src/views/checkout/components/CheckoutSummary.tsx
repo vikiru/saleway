@@ -1,4 +1,5 @@
 import { Loader2 } from 'lucide-react';
+
 import { Button } from '@/lib/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/lib/components/ui/card';
 import { Separator } from '@/lib/components/ui/separator';
@@ -23,8 +24,8 @@ export function CheckoutSummary({
   onCheckout,
 }: CheckoutSummaryProps) {
   return (
-    <aside aria-labelledby="summary-title" className="lg:col-span-5 lg:sticky lg:top-24">
-      <Card className="border border-border/60 shadow-sm bg-card">
+    <aside aria-labelledby="summary-title" className="lg:sticky lg:top-24 lg:col-span-5">
+      <Card className="border border-border/60 bg-card shadow-sm">
         <CardHeader>
           <CardTitle className="text-xl font-semibold" id="summary-title">
             Order Summary
@@ -33,33 +34,33 @@ export function CheckoutSummary({
         <CardContent className="space-y-4">
           <div className="flex justify-between text-base">
             <span className="text-muted-foreground">Subtotal</span>
-            <span className="font-medium font-mono">${subtotal.toFixed(2)}</span>
+            <span className="font-mono font-medium">${subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-base">
             <span className="text-muted-foreground">Shipping</span>
-            <span className="font-medium font-mono text-green-600 dark:text-green-400">${shipping.toFixed(2)}</span>
+            <span className="font-mono font-medium text-green-600 dark:text-green-400">${shipping.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-base">
             <span className="text-muted-foreground">Estimated Tax</span>
-            <span className="font-medium font-mono">${tax.toFixed(2)}</span>
+            <span className="font-mono font-medium">${tax.toFixed(2)}</span>
           </div>
           <Separator className="my-2" />
-          <div className="flex justify-between text-xl font-bold pt-2">
+          <div className="flex justify-between pt-2 text-xl font-bold">
             <span>Total</span>
             <span className="font-mono">${total.toFixed(2)}</span>
           </div>
         </CardContent>
-        <CardFooter className="flex-col gap-4 mt-4">
+        <CardFooter className="mt-4 flex-col gap-4">
           {error && (
             <div
               aria-live="polite"
-              className="text-sm font-medium text-destructive bg-destructive/10 p-3 rounded-lg w-full text-center"
+              className="w-full rounded-lg bg-destructive/10 p-3 text-center text-sm font-medium text-destructive"
             >
               {error}
             </div>
           )}
           <Button
-            className="w-full h-12 text-base font-semibold transition-all hover:-translate-y-px active:translate-y-0"
+            className="h-12 w-full text-base font-semibold transition-all hover:-translate-y-px active:translate-y-0"
             disabled={isLoading}
             onClick={onCheckout}
             size="lg"
@@ -73,7 +74,7 @@ export function CheckoutSummary({
               'Confirm & Pay'
             )}
           </Button>
-          <p className="text-xs text-muted-foreground text-center px-4">
+          <p className="px-4 text-center text-xs text-muted-foreground">
             By clicking "Confirm & Pay", you agree to our Terms of Service and Privacy Policy.
           </p>
         </CardFooter>

@@ -2,8 +2,10 @@
 
 import { ArrowRight, Package } from 'lucide-react';
 import Link from 'next/link';
-import { useOrders } from '@/features/order/queries/order';
+
 import type { Order } from '@/features/order/types/order';
+
+import { useOrders } from '@/features/order/queries/order';
 import { Avatar, AvatarFallback } from '@/lib/components/ui/avatar';
 import { Badge } from '@/lib/components/ui/badge';
 import { Button } from '@/lib/components/ui/button';
@@ -79,28 +81,28 @@ export function RecentOrders({ userId, initialOrders }: RecentOrdersProps) {
         <div className="space-y-6">
           {orders.map((order) => (
             <Link
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl bg-transparent hover:bg-muted/30 transition-colors duration-300 gap-4"
+              className="flex flex-col items-start justify-between gap-4 rounded-xl bg-transparent p-4 transition-colors duration-300 hover:bg-muted/30 sm:flex-row sm:items-center"
               href={getOrderRoute(order.id)}
               key={order.id}
             >
               <div className="flex items-center gap-4">
-                <Avatar className="h-9 w-9 hidden sm:flex">
+                <Avatar className="hidden h-9 w-9 sm:flex">
                   <AvatarFallback>
                     <Package className="h-4 w-4" />
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col gap-1.5">
-                  <p className="text-sm font-medium leading-none">Order #{order.id}</p>
+                  <p className="text-sm leading-none font-medium">Order #{order.id}</p>
                   <p className="text-xs text-muted-foreground">
                     {new Date(order.purchase_date).toLocaleDateString()} · {order.items.length}{' '}
                     {order.items.length === 1 ? 'item' : 'items'}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto">
+              <div className="flex w-full items-center justify-between gap-6 sm:w-auto sm:justify-end">
                 <div className="font-medium">${toNum(order.total_price).toFixed(2)}</div>
                 <Badge
-                  className="uppercase tracking-wider"
+                  className="tracking-wider uppercase"
                   data-status={order.status.toLowerCase()}
                   variant="secondary"
                 >
@@ -110,7 +112,7 @@ export function RecentOrders({ userId, initialOrders }: RecentOrdersProps) {
             </Link>
           ))}
         </div>
-        <Button asChild className="w-full mt-6 sm:hidden" size="sm" variant="outline">
+        <Button asChild className="mt-6 w-full sm:hidden" size="sm" variant="outline">
           <Link href={ORDERS_ROUTE}>
             View All
             <ArrowRight className="ml-2 h-4 w-4" />

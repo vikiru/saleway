@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+
 import { verifyCheckoutSession } from '@/features/payment/actions/checkout';
 import { getCurrentUser } from '@/features/user/actions/auth';
 import { CART_ROUTE, SIGNIN_ROUTE } from '@/lib/constants/routes';

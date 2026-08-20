@@ -1,4 +1,5 @@
 import parse from 'html-react-parser';
+
 import { Separator } from '@/lib/components/ui/separator';
 
 interface ProductDescriptionProps {
@@ -11,7 +12,8 @@ export function ProductDescription({ longDescription }: ProductDescriptionProps)
     <>
       <div className="mt-10">
         <h2 className="font-bold tracking-tight text-foreground">Description</h2>
-        <div className="mt-6 max-w-none prose dark:prose-invert">{parse(longDescription)}</div>
+        {/* oxlint-disable-next-line tailwindcss/no-unknown-classes */}
+        <div className="prose mt-6 max-w-none dark:prose-invert">{parse(longDescription)}</div>
       </div>
 
       <Separator className="my-8" />

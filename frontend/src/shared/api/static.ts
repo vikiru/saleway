@@ -1,5 +1,6 @@
-import productsData from '@/data/products.json';
 import type { Product, ProductImage } from '@/features/product/types/product';
+
+import productsData from '@/data/products.json';
 
 interface RawImage {
   id?: number;

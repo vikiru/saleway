@@ -1,6 +1,8 @@
 import { z } from 'zod';
-import { cartItemCreateInputSchema, cartItemSchema, cartSchema } from '@/features/cart/schemas/cart';
+
 import type { Cart, CartItem, CartItemCreateInput } from '@/features/cart/types/cart';
+
+import { cartItemCreateInputSchema, cartItemSchema, cartSchema } from '@/features/cart/schemas/cart';
 import { CART_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 

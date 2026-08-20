@@ -1,13 +1,16 @@
 'use client';
 
+import type { z } from 'zod';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import type { z } from 'zod';
-import { createUser } from '@/features/user/actions/users';
+
 import type { EcommerceUserCreate } from '@/features/user/types/user';
+
+import { createUser } from '@/features/user/actions/users';
 import { DASHBOARD_ROUTE, ONBOARDING_ROUTE } from '@/lib/constants/routes';
 import { onboardingSchema } from '@/lib/schema/onboarding';
 

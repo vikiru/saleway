@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+
 import { syncCart } from '@/features/cart/actions/cart';
 import { useCartStore } from '@/features/cart/store/Cart';
 

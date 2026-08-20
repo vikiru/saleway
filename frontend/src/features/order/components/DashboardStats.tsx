@@ -1,8 +1,10 @@
 'use client';
 
 import { DollarSign, Package, ShoppingCart, TrendingUp } from 'lucide-react';
-import { useDashboardStats } from '@/features/order/hooks/useDashboardStats';
+
 import type { DashboardStatsData } from '@/features/order/utils/stats';
+
+import { useDashboardStats } from '@/features/order/hooks/useDashboardStats';
 import { StatsCard } from '@/features/user/components/StatsCard';
 
 type DashboardStatsProps = {

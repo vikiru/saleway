@@ -1,6 +1,7 @@
 'use client';
 
 import { Check, ShoppingCart } from 'lucide-react';
+
 import { useAddToCart } from '@/features/product/hooks/useAddToCart';
 import { Button } from '@/lib/components/ui/button';
 

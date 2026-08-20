@@ -1,11 +1,12 @@
+import type { Product } from '@/features/product/types/product';
+import type { ProductReviewsResponse } from '@/features/rating/types/rating';
+
 import { ProductBreadcrumb } from '@/features/product/components/ProductBreadcrumb';
 import { ProductDescription } from '@/features/product/components/ProductDescription';
 import { ProductGallery } from '@/features/product/components/ProductGallery';
 import { ProductInfo } from '@/features/product/components/ProductInfo';
-import type { Product } from '@/features/product/types/product';
 import { ProductRating } from '@/features/rating/components/ProductRating';
 import { ReviewsList } from '@/features/rating/components/ReviewsList';
-import type { ProductReviewsResponse } from '@/features/rating/types/rating';
 
 interface ProductDetailsPageProps {
   product: Product;

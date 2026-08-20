@@ -2,10 +2,12 @@
 
 import { useUser } from '@clerk/nextjs';
 import { MessageSquareOff, Plus } from 'lucide-react';
+
+import type { Review } from '@/features/rating/types/rating';
+
 import { ReviewCard } from '@/features/rating/components/ReviewCard';
 import { ReviewFormDialog } from '@/features/rating/components/ReviewFormDialog';
 import { useReviews } from '@/features/rating/queries/rating';
-import type { Review } from '@/features/rating/types/rating';
 import { Button } from '@/lib/components/ui/button';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
 import { ScrollArea } from '@/lib/components/ui/scroll-area';
@@ -22,10 +24,10 @@ export function ReviewsList({ reviews: serverReviews, productId }: ReviewsListPr
 
   return (
     <section className="pb-16">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="font-bold tracking-tight text-foreground">Customer Reviews</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <p className="mt-0.5 text-sm text-muted-foreground">
             {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
           </p>
         </div>

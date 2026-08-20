@@ -1,4 +1,5 @@
 import type { Product } from '@/features/product/types/product';
+
 import { CheckoutInteractiveZone } from './components/CheckoutInteractiveZone';
 
 interface CheckoutPageProps {
@@ -8,7 +9,7 @@ interface CheckoutPageProps {
 
 export function CheckoutPage({ onCheckout, products }: CheckoutPageProps) {
   return (
-    <main className="container mx-auto px-4 py-8 lg:py-12 min-h-[70vh]">
+    <main className="container mx-auto min-h-[70vh] px-4 py-8 lg:py-12">
       <CheckoutInteractiveZone onCheckout={onCheckout} products={products} />
     </main>
   );

@@ -1,7 +1,7 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-import { requireUser } from '@/features/user/actions/auth';
+
 import type {
   EcommerceUser,
   EcommerceUserCreate,
@@ -9,6 +9,8 @@ import type {
   UserProfileResponse,
   UserResponse,
 } from '@/features/user/types/user';
+
+import { requireUser } from '@/features/user/actions/auth';
 import { USER_SERVICE_URL } from '@/lib/constants/routes';
 import { handleResponse } from '@/shared/api/fetch';
 
