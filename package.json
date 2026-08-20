@@ -1,17 +1,26 @@
 {
   "name": "saleway",
-  "description": "A fake Ecommerce web app using microservice architecture.",
   "version": "0.0.1",
   "private": true,
+  "description": "A fake Ecommerce web app using microservice architecture.",
   "license": "MIT",
   "author": "Visakan Kirubakaran",
+  "workspaces": [
+    "frontend",
+    "services/*"
+  ],
   "scripts": {
-    "lint:ts": "biome lint",
-    "format:ts": "biome check --write",
+    "lint": "pnpm lint:oxlint && pnpm lint:python && pnpm lint:java",
+    "lint:oxlint": "oxlint",
     "lint:python": "ruff check services/**/*.py",
-    "format:python": "ruff check services/**/*.py --fix && ruff format services/**/*.py",
     "lint:java": "cd services/payment && mvn validate",
+    "format": "oxfmt --write && ruff check services/**/*.py --fix && ruff format services/**/*.py && cd services/payment && mvn fmt:format",
+    "format:oxfmt": "oxfmt --write",
+    "format:check": "oxfmt --check",
+    "format:python": "ruff check services/**/*.py --fix && ruff format services/**/*.py",
     "format:java": "cd services/payment && mvn fmt:format",
+    "typecheck": "tsgo --noEmit",
+    "check": "oxfmt --check && pnpm lint && pnpm typecheck && pnpm unused",
     "bruno:product": "cd services/product/.bruno/product-collection && bru run",
     "bruno:order": "cd services/order/.bruno/order-collection && bru run",
     "bruno:user": "cd services/user/.bruno/user-collection && bru run",
@@ -22,20 +31,21 @@
     "postinstall": "lefthook install"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.5",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@semantic-release/git": "^10.0.1",
-    "@types/node": "^25.9.5",
-    "@typescript/native-preview": "7.0.0-dev.20260303.1",
+    "@types/node": "^26.2.0",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@usebruno/cli": "^3.5.3",
-    "knip": "^5.88.1",
-    "lefthook": "^2.1.10",
+    "knip": "^6.32.2",
+    "lefthook": "^1.13.6",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.79.0",
+    "oxlint-tailwindcss": "^1.9.0",
+    "oxlint-tsgolint": "^7.0.2001",
     "semantic-release": "^24.2.9",
-    "typescript": "^5.9.3"
+    "tsx": "^4.23.12",
+    "typescript": "5.9.3"
   },
-  "workspaces": [
-    "frontend",
-    "services/*"
-  ]
+  "packageManager": "pnpm@11.20.0"
 }

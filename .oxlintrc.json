@@ -1,0 +1,70 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "oxc", "node", "react", "jsx-a11y", "typescript", "import", "unicorn", "promise", "react-perf"],
+  "jsPlugins": ["oxlint-tailwindcss"],
+  "settings": {
+    "tailwindcss": {
+      "entryPoint": "frontend/src/app/globals.css"
+    }
+  },
+  "options": {
+    "typeAware": false,
+    "typeCheck": false
+  },
+  "categories": {
+    "correctness": "warn",
+    "suspicious": "warn",
+    "pedantic": "off",
+    "style": "off",
+    "restriction": "off",
+    "nursery": "off"
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/error-boundaries": "warn",
+    "react/globals": "warn",
+    "react/immutability": "warn",
+    "react/incompatible-library": "warn",
+    "react/preserve-manual-memoization": "warn",
+    "react/purity": "warn",
+    "react/refs": "warn",
+    "react/set-state-in-effect": "warn",
+    "react/set-state-in-render": "warn",
+    "react/static-components": "warn",
+    "react/use-memo": "warn",
+    "react/unsupported-syntax": "warn",
+    "react/void-use-memo": "warn",
+    "tailwindcss/no-unknown-classes": "error",
+    "tailwindcss/no-duplicate-classes": "error",
+    "tailwindcss/no-conflicting-classes": "error",
+    "tailwindcss/no-deprecated-classes": "error",
+    "tailwindcss/no-unnecessary-whitespace": "error",
+    "tailwindcss/no-dark-without-light": "off",
+    "tailwindcss/enforce-canonical": "warn",
+    "tailwindcss/enforce-sort-order": "warn",
+    "tailwindcss/enforce-shorthand": "warn",
+    "tailwindcss/enforce-consistent-important-position": "warn",
+    "tailwindcss/enforce-negative-arbitrary-values": "warn",
+    "tailwindcss/enforce-consistent-variable-syntax": "warn",
+    "tailwindcss/consistent-variant-order": "off",
+    "tailwindcss/no-hardcoded-colors": "warn",
+    "tailwindcss/no-unnecessary-arbitrary-value": "warn",
+    "eqeqeq": "warn",
+    "no-debugger": "error",
+    "no-var": "error",
+    "prefer-const": "warn",
+    "no-duplicate-imports": "warn",
+    "unicorn/prefer-string-replace-all": "warn",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "warn",
+    "typescript/no-base-to-string": "off",
+    "typescript/no-redundant-type-constituents": "off",
+    "typescript/no-unnecessary-type-assertion": "off",
+    "typescript/no-unsafe-type-assertion": "off",
+    "typescript/no-useless-default-assignment": "off",
+    "typescript/restrict-template-expressions": "off",
+    "no-unused-vars": "warn",
+    "no-console": ["warn", { "allow": ["warn", "error", "info"] }]
+  },
+  "ignorePatterns": ["dist/**", ".output/**", ".next/**", "node_modules/**", "services/**/.venv/**", "**/generated/**"]
+}
