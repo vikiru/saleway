@@ -4,12 +4,12 @@ import { CheckCircle, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
-import type { OrderResponse } from '@/features/order/types/order';
+import type { OrderResponse } from '@/entities/order/types/order';
 
-import { useCartStore } from '@/features/cart/store/Cart';
-import { Button } from '@/lib/components/ui/button';
-import { Card, CardContent } from '@/lib/components/ui/card';
-import { CART_ROUTE, getOrderRoute, SEARCH_ROUTE } from '@/lib/constants/routes';
+import { useCartStore } from '@/entities/cart/store/Cart';
+import { CART_ROUTE, getOrderRoute, SEARCH_ROUTE } from '@/shared/config/routes';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
 
 interface CheckoutSuccessProps {
   result: OrderResponse;

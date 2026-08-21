@@ -2,10 +2,10 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { OrderCreate } from '@/features/order/types/order';
+import type { OrderCreate } from '@/entities/order/types/order';
 
+import { orderKeys } from '@/entities/order/queries/keys';
 import { createOrder, deleteOrderAction, updateOrderStatusAction } from '@/features/order/actions/order';
-import { orderKeys } from '@/lib/queries/keys';
 
 export function useCreateOrder() {
   const queryClient = useQueryClient();

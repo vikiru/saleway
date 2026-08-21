@@ -1,10 +1,10 @@
 import { Search } from 'lucide-react';
 
-import type { ProductWithRating } from '@/features/product/types/product';
+import type { ProductWithRating } from '@/entities/product/types/product';
 
-import { ProductGrid } from '@/features/product/components/ProductGrid';
-import { Button } from '@/lib/components/ui/button';
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
+import { ProductGrid } from '@/entities/product/components/ProductGrid';
+import { Button } from '@/shared/ui/button';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
 import {
   Pagination,
   PaginationContent,
@@ -13,8 +13,8 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/lib/components/ui/pagination';
-import { ScrollArea } from '@/lib/components/ui/scroll-area';
+} from '@/shared/ui/pagination';
+import { ScrollArea } from '@/shared/ui/scroll-area';
 
 interface SearchResultsGridProps {
   products: ProductWithRating[];

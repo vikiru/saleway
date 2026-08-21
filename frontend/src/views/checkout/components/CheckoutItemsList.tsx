@@ -1,10 +1,10 @@
 import { Package } from 'lucide-react';
 import Image from 'next/image';
 
-import type { CartItem } from '@/features/cart/types/cart';
-import type { Product } from '@/features/product/types/product';
+import type { CartItem } from '@/entities/cart/types/cart';
+import type { Product } from '@/entities/product/types/product';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/lib/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 
 interface CheckoutItemsListProps {
   items: CartItem[];

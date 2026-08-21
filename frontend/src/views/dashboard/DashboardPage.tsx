@@ -1,8 +1,8 @@
-import type { Order } from '@/features/order/types/order';
-import type { DashboardStatsData } from '@/features/order/utils/stats';
+import type { Order } from '@/entities/order/types/order';
+import type { DashboardStatsData } from '@/entities/order/utils/stats';
 
-import { DashboardStats } from '@/features/order/components/DashboardStats';
-import { RecentOrders } from '@/features/order/components/RecentOrders';
+import { DashboardStats } from '@/entities/order/components/DashboardStats';
+import { RecentOrders } from '@/entities/order/components/RecentOrders';
 
 interface DashboardPageProps {
   userId: string;

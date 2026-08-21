@@ -1,12 +1,12 @@
 import { ChevronRight, Clock, Shield, Truck } from 'lucide-react';
 import Link from 'next/link';
 
-import type { Product } from '@/features/product/types/product';
+import type { Product } from '@/entities/product/types/product';
 
-import { ProductCard } from '@/features/product/components/ProductCard';
-import { Button } from '@/lib/components/ui/button';
-import { Card, CardContent } from '@/lib/components/ui/card';
-import { SEARCH_ROUTE } from '@/lib/constants/routes';
+import { ProductCard } from '@/entities/product/components/ProductCard';
+import { SEARCH_ROUTE } from '@/shared/config/routes';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
 
 interface HomePageProps {
   products: Product[];

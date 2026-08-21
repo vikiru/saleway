@@ -1,4 +1,4 @@
-import type { Product } from '@/features/product/types/product';
+import type { Product } from '@/entities/product/types/product';
 
 import { CheckoutInteractiveZone } from './components/CheckoutInteractiveZone';
 

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import { useOrders } from '@/features/order/queries/order';
+import { useOrders } from '@/entities/order/queries/order';
 
 export function useOrdersList(userId: string) {
   const { data: orders, isLoading, error } = useOrders(userId);

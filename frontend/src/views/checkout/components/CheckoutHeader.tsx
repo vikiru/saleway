@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-import { CART_ROUTE } from '@/lib/constants/routes';
+import { CART_ROUTE } from '@/shared/config/routes';
 
 interface CheckoutHeaderProps {
   itemCount: number;

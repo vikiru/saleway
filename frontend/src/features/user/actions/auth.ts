@@ -4,7 +4,7 @@ import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
-import { SIGNIN_ROUTE } from '@/lib/constants/routes';
+import { SIGNIN_ROUTE } from '@/shared/config/routes';
 
 export const getCurrentUser = cache(async function getCurrentUser() {
   try {

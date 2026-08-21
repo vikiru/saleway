@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { getCurrentUser } from '@/features/user/actions/auth';
-import { Button } from '@/lib/components/ui/button';
-import { Card, CardContent } from '@/lib/components/ui/card';
-import { CART_ROUTE, SEARCH_ROUTE, SIGNIN_ROUTE } from '@/lib/constants/routes';
+import { CART_ROUTE, SEARCH_ROUTE, SIGNIN_ROUTE } from '@/shared/config/routes';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
 
 export const dynamic = 'force-dynamic';
 

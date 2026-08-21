@@ -3,12 +3,12 @@
 import { ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 
-import type { Product } from '@/features/product/types/product';
+import type { Product } from '@/entities/product/types/product';
 
-import { useCheckoutFlow } from '@/features/payment/hooks/useCheckoutFlow';
-import { Button } from '@/lib/components/ui/button';
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/lib/components/ui/empty';
-import { SEARCH_ROUTE } from '@/lib/constants/routes';
+import { useCheckoutFlow } from '@/features/checkout/hooks/useCheckoutFlow';
+import { SEARCH_ROUTE } from '@/shared/config/routes';
+import { Button } from '@/shared/ui/button';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/shared/ui/empty';
 
 import { CheckoutHeader } from './CheckoutHeader';
 import { CheckoutItemsList } from './CheckoutItemsList';

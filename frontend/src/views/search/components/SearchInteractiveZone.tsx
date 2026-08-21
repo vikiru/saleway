@@ -1,10 +1,10 @@
 'use client';
 
-import type { Product } from '@/features/product/types/product';
-import type { FilterItem } from '@/features/product/utils/filters';
+import type { Product } from '@/entities/product/types/product';
+import type { FilterItem } from '@/features/search/utils/filters';
 
-import { FilterSection } from '@/features/product/components/FilterSection';
-import { useProductSearch } from '@/features/product/hooks/useProductSearch';
+import { FilterSection } from '@/features/search/components/FilterSection';
+import { useProductSearch } from '@/features/search/hooks/useProductSearch';
 
 import { SearchHeader } from './SearchHeader';
 import { SearchResultsGrid } from './SearchResultsGrid';

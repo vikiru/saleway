@@ -3,14 +3,14 @@
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 
-import type { Product } from '@/features/product/types/product';
+import type { Product } from '@/entities/product/types/product';
 
-import { CartItemList } from '@/features/cart/components/CartItemList';
-import { OrderSummary } from '@/features/cart/components/OrderSummary';
-import { useCartStore } from '@/features/cart/store/Cart';
-import { Button } from '@/lib/components/ui/button';
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
-import { SEARCH_ROUTE } from '@/lib/constants/routes';
+import { CartItemList } from '@/entities/cart/components/CartItemList';
+import { OrderSummary } from '@/entities/cart/components/OrderSummary';
+import { useCartStore } from '@/entities/cart/store/Cart';
+import { SEARCH_ROUTE } from '@/shared/config/routes';
+import { Button } from '@/shared/ui/button';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
 
 interface CartInteractiveZoneProps {
   products: Product[];

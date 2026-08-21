@@ -2,10 +2,10 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { EcommerceUserCreate, EcommerceUserUpdate } from '@/features/user/types/user';
+import type { EcommerceUserCreate, EcommerceUserUpdate } from '@/entities/user/types/user';
 
-import { createUser, updateUser } from '@/features/user/actions/users';
-import { userKeys } from '@/lib/queries/keys';
+import { userKeys } from '@/entities/user/queries/keys';
+import { createUser, updateUser } from '@/features/user/actions/user';
 
 export function useCreateUser() {
   const queryClient = useQueryClient();

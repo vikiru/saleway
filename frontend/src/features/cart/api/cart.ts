@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import type { Cart, CartItem, CartItemCreateInput } from '@/features/cart/types/cart';
+import type { Cart, CartItem, CartItemCreateInput } from '@/entities/cart/types/cart';
 
-import { cartItemCreateInputSchema, cartItemSchema, cartSchema } from '@/features/cart/schemas/cart';
-import { CART_SERVICE_URL } from '@/lib/constants/routes';
+import { cartItemCreateInputSchema, cartItemSchema, cartSchema } from '@/entities/cart/schemas/cart';
 import { handleResponse } from '@/shared/api/fetch';
+import { CART_SERVICE_URL } from '@/shared/config/routes';
 
 export async function getCart(userId: string, signal?: AbortSignal): Promise<Cart> {
   const response = await fetch(`${CART_SERVICE_URL}/cart/user/${userId}`, { signal });

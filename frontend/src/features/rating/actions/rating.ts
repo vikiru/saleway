@@ -7,7 +7,7 @@ import type {
   ReviewsResponse,
   ReviewUpdate,
   UserReviewsResponse,
-} from '@/features/rating/types/rating';
+} from '@/entities/rating/types/rating';
 
 import {
   createReview as createReviewApi,
@@ -16,7 +16,7 @@ import {
   getProductReviews as getProductReviewsApi,
   getUserReviews as getUserReviewsApi,
   updateReview as updateReviewApi,
-} from '@/features/rating/api/rating';
+} from '@/entities/rating/api/rating';
 import { requireUser } from '@/features/user/actions/auth';
 
 export async function getReviewsAction(productId: string): Promise<ReviewsResponse> {

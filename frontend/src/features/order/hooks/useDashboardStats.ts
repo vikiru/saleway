@@ -1,8 +1,7 @@
 'use client';
 
-import { useOrders } from '@/features/order/queries/order';
-
-import { calculateDashboardStats } from '../utils/stats';
+import { useOrders } from '@/entities/order/queries/order';
+import { calculateDashboardStats } from '@/entities/order/utils/stats';
 
 export function useDashboardStats(userId: string) {
   const { data: orders, isLoading, error } = useOrders(userId);

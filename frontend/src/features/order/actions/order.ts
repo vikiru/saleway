@@ -1,6 +1,6 @@
 'use server';
 
-import type { Order, OrderCreate, OrderResponse } from '@/features/order/types/order';
+import type { Order, OrderCreate, OrderResponse } from '@/entities/order/types/order';
 import type { ServiceResponse } from '@/shared/api/types';
 
 import {
@@ -10,7 +10,7 @@ import {
   getOrderByStripeSession as getOrderByStripeSessionApi,
   getOrders as getOrdersApi,
   updateOrderStatus as updateOrderStatusApi,
-} from '@/features/order/api/order';
+} from '@/entities/order/api/order';
 import { requireUser } from '@/features/user/actions/auth';
 
 export async function getOrderAction(orderId: number | string): Promise<Order> {

@@ -1,4 +1,4 @@
-import { getProducts } from '@/features/product/api/product';
+import { getProducts } from '@/entities/product/api/product';
 import { requireUser } from '@/features/user/actions/auth';
 import { CartPage } from '@/views/cart/CartPage';
 
