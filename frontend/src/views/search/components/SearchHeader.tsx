@@ -1,9 +1,9 @@
 import { Filter } from 'lucide-react';
 
-import { SearchInput } from '@/features/product/components/SearchInput';
-import { SortSelect } from '@/features/product/components/SortSelect';
-import { Button } from '@/lib/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/lib/components/ui/dialog';
+import { SearchInput } from '@/features/search/components/SearchInput';
+import { SortSelect } from '@/features/search/components/SortSelect';
+import { Button } from '@/shared/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 
 interface SearchHeaderProps {
   searchTerm?: string;

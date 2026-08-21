@@ -1,5 +1,5 @@
-import { getOrders } from '@/features/order/api/order';
-import { calculateDashboardStats } from '@/features/order/utils/stats';
+import { getOrders } from '@/entities/order/api/order';
+import { calculateDashboardStats } from '@/entities/order/utils/stats';
 import { requireUser } from '@/features/user/actions/auth';
 import { DashboardPage } from '@/views/dashboard/DashboardPage';
 

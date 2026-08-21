@@ -2,8 +2,8 @@ export const dynamic = 'force-dynamic';
 
 import type { Metadata } from 'next';
 
-import { getProducts } from '@/features/product/api/product';
-import { deriveFilterOptions } from '@/features/product/utils/filters';
+import { getProducts } from '@/entities/product/api/product';
+import { deriveFilterOptions } from '@/features/search/utils/filters';
 import { SearchPage } from '@/views/search/SearchPage';
 
 export const metadata: Metadata = {

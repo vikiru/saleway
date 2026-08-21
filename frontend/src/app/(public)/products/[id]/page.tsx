@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import { notFound } from 'next/navigation';
 
-import { getProduct, getProducts } from '@/features/product/api/product';
+import { getProduct, getProducts } from '@/entities/product/api/product';
 import { getProductReviewsAction } from '@/features/rating/actions/rating';
 import { ProductDetailsPage } from '@/views/product-details/ProductDetailsPage';
 

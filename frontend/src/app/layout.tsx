@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 
 import { Geist, Geist_Mono } from 'next/font/google';
 
-import { Footer } from '@/lib/components/layout/Footer';
-import { Navbar } from '@/lib/components/layout/Navbar';
-import { ClerkProvider } from '@/lib/providers/ClerkProvider';
-import { Providers } from '@/lib/providers/Providers';
+import { ClerkProvider } from '@/shared/providers/ClerkProvider';
+import { Providers } from '@/shared/providers/Providers';
+import { Footer } from '@/widgets/footer/Footer';
+import { Navbar } from '@/widgets/navbar/Navbar';
 
 import './globals.css';
 

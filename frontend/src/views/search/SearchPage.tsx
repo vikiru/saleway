@@ -1,5 +1,5 @@
-import type { Product } from '@/features/product/types/product';
-import type { FilterItem } from '@/features/product/utils/filters';
+import type { Product } from '@/entities/product/types/product';
+import type { FilterItem } from '@/features/search/utils/filters';
 
 import { SearchInteractiveZone } from './components/SearchInteractiveZone';
 

@@ -1,8 +1,8 @@
 import { Loader2 } from 'lucide-react';
 
-import { Button } from '@/lib/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/lib/components/ui/card';
-import { Separator } from '@/lib/components/ui/separator';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Separator } from '@/shared/ui/separator';
 
 interface CheckoutSummaryProps {
   subtotal: number;

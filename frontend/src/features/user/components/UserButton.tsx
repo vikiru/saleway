@@ -1,7 +1,7 @@
 import { UserButton as ClerkButton } from '@clerk/nextjs';
 import { House, LayoutDashboard, Package, ShoppingCart, Store } from 'lucide-react';
 
-import { CART_ROUTE, DASHBOARD_ROUTE, HOME_ROUTE, ORDERS_ROUTE, SEARCH_ROUTE } from '@/lib/constants/routes';
+import { CART_ROUTE, DASHBOARD_ROUTE, HOME_ROUTE, ORDERS_ROUTE, SEARCH_ROUTE } from '@/shared/config/routes';
 
 export default function UserButton() {
   return (

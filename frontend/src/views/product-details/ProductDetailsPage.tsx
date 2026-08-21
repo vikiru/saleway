@@ -1,12 +1,12 @@
-import type { Product } from '@/features/product/types/product';
-import type { ProductReviewsResponse } from '@/features/rating/types/rating';
+import type { Product } from '@/entities/product/types/product';
+import type { ProductReviewsResponse } from '@/entities/rating/types/rating';
 
-import { ProductBreadcrumb } from '@/features/product/components/ProductBreadcrumb';
-import { ProductDescription } from '@/features/product/components/ProductDescription';
-import { ProductGallery } from '@/features/product/components/ProductGallery';
-import { ProductInfo } from '@/features/product/components/ProductInfo';
-import { ProductRating } from '@/features/rating/components/ProductRating';
-import { ReviewsList } from '@/features/rating/components/ReviewsList';
+import { ProductBreadcrumb } from '@/entities/product/components/ProductBreadcrumb';
+import { ProductDescription } from '@/entities/product/components/ProductDescription';
+import { ProductGallery } from '@/entities/product/components/ProductGallery';
+import { ProductInfo } from '@/entities/product/components/ProductInfo';
+import { ProductRating } from '@/entities/rating/components/ProductRating';
+import { ReviewsList } from '@/entities/rating/components/ReviewsList';
 
 interface ProductDetailsPageProps {
   product: Product;

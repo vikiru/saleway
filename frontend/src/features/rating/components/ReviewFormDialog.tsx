@@ -7,8 +7,9 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { type ReviewFormValues, reviewFormSchema } from '@/entities/rating/schemas/rating';
 import { useCreateReview, useUpdateReview } from '@/features/rating/mutations/rating';
-import { Button } from '@/lib/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -17,11 +18,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/lib/components/ui/dialog';
-import { Input } from '@/lib/components/ui/input';
-import { Label } from '@/lib/components/ui/label';
-import { Textarea } from '@/lib/components/ui/textarea';
-import { type ReviewFormValues, reviewSchema } from '@/lib/schema/review';
+} from '@/shared/ui/dialog';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { Textarea } from '@/shared/ui/textarea';
 
 interface ReviewFormDialogProps {
   productId: number;
@@ -59,7 +59,7 @@ export function ReviewFormDialog({
   const updateReview = useUpdateReview(String(productId));
 
   const form = useForm<ReviewFormValues>({
-    resolver: zodResolver(reviewSchema),
+    resolver: zodResolver(reviewFormSchema),
     defaultValues: defaultValues ?? { rating: 0, title: '', review: '' },
   });
 

@@ -2,11 +2,11 @@
 
 import { Loader2 } from 'lucide-react';
 
-import { Button } from '@/lib/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/lib/components/ui/card';
-import { Input } from '@/lib/components/ui/input';
-import { Label } from '@/lib/components/ui/label';
-import { useOnboarding } from '@/lib/hooks/useOnboarding';
+import { useOnboarding } from '@/features/user/hooks/useOnboarding';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
 export function OnboardingForm() {
   const { form, onSubmit } = useOnboarding();

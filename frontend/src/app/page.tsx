@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { getProducts } from '@/features/product/api/product';
+import { getProducts } from '@/entities/product/api/product';
 import { HomePage } from '@/views/home/HomePage';
 
 export const metadata: Metadata = {

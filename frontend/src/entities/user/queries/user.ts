@@ -1,0 +1,21 @@
+'use client';
+
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+
+import { userKeys } from '@/entities/user/queries/keys';
+import { getUserAction } from '@/features/user/actions/user';
+
+export function useUser(userId: string) {
+  return useQuery({
+    queryKey: userKeys.single(userId),
+    queryFn: () => getUserAction(userId),
+    enabled: !!userId,
+  });
+}
+
+export function useSuspenseUser(userId: string) {
+  return useSuspenseQuery({
+    queryKey: userKeys.single(userId),
+    queryFn: () => getUserAction(userId),
+  });
+}

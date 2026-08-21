@@ -1,4 +1,4 @@
-import type { Product, ProductImage } from '@/features/product/types/product';
+import type { Product, ProductImage } from '@/entities/product/types/product';
 
 import productsData from '@/data/products.json';
 

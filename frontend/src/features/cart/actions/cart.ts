@@ -1,6 +1,6 @@
 'use server';
 
-import type { Cart, CartItemCreateInput, CartItemResponse, CartResponse } from '@/features/cart/types/cart';
+import type { Cart, CartItemCreateInput, CartItemResponse, CartResponse } from '@/entities/cart/types/cart';
 import type { ServiceResponse } from '@/shared/api/types';
 
 import {

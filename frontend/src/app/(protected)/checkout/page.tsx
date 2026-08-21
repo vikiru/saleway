@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 
-import { createCheckoutSession } from '@/features/payment/actions/checkout';
-import { getProducts } from '@/features/product/api/product';
+import { getProducts } from '@/entities/product/api/product';
+import { createCheckoutSession } from '@/features/checkout/actions/checkout';
 import { getCurrentUser } from '@/features/user/actions/auth';
-import { SIGNIN_ROUTE } from '@/lib/constants/routes';
+import { SIGNIN_ROUTE } from '@/shared/config/routes';
 import { CheckoutPage } from '@/views/checkout/CheckoutPage';
 
 export default async function Page() {

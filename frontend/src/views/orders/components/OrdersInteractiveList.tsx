@@ -4,13 +4,13 @@ import { ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import Link from 'next/link';
 
 import { useOrdersList } from '@/features/order/hooks/useOrdersList';
-import { Badge } from '@/lib/components/ui/badge';
-import { Button } from '@/lib/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/lib/components/ui/card';
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/lib/components/ui/empty';
-import { ScrollArea } from '@/lib/components/ui/scroll-area';
-import { getOrderRoute } from '@/lib/constants/routes';
-import { toNum } from '@/shared/utils/numbers';
+import { getOrderRoute } from '@/shared/config/routes';
+import { toNum } from '@/shared/lib/numbers';
+import { Badge } from '@/shared/ui/badge';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
+import { ScrollArea } from '@/shared/ui/scroll-area';
 
 export function OrdersInteractiveList({ userId }: { userId: string }) {
   const { orders, searchQuery, currentPage, setCurrentPage, totalPages, totalCount } = useOrdersList(userId);
