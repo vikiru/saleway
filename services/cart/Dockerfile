@@ -3,6 +3,8 @@ FROM node:22-slim AS base
 
 # Install pnpm via corepack
 RUN corepack enable && corepack prepare pnpm@9.x --activate
+ENV COREPACK_ENABLE_PROJECT_SPEC=0
+ENV CI=true
 
 # Install OpenSSL for Prisma
 RUN apt-get update && apt-get install -y openssl wget && rm -rf /var/lib/apt/lists/*
@@ -17,11 +19,11 @@ FROM base AS deps
 
 # Copy prisma schema first for layer caching
 COPY prisma/schema.prisma ./prisma/
-COPY pnpm-lock.yaml package.json ./
+COPY pnpm-lock.yaml package.json pnpm-workspace.yaml ./
 
 # Install all dependencies (including devDependencies for tsx)
 RUN pnpm fetch
-RUN pnpm install
+RUN pnpm install --no-frozen-lockfile
 
 # Generate Prisma client
 RUN pnpm prisma generate
@@ -58,4 +60,4 @@ USER appuser
 EXPOSE 8080
 
 ENTRYPOINT ["./entrypoint.sh"]
-CMD ["pnpm", "start"]
+CMD ["./node_modules/.bin/tsx", "app.ts"]

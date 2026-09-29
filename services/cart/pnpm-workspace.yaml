@@ -1,5 +1,10 @@
+packages: []
+
 allowBuilds:
+  '@prisma/client': true
+  '@prisma/engines': true
   esbuild: true
+  prisma: true
 minimumReleaseAgeExclude:
   - smol-toml@1.6.1
   - path-to-regexp@0.1.13
@@ -11,11 +16,26 @@ minimumReleaseAgeExclude:
   - js-yaml@4.1.2
   - morgan@1.10.2
   - body-parser@1.20.6 || 2.3.0
-onlyBuiltDependencies:
-  - '@prisma/client'
-  - '@prisma/engines'
-  - esbuild
-  - prisma
+  - '@oxlint/binding-android-arm-eabi@1.86.0'
+  - '@oxlint/binding-android-arm64@1.86.0'
+  - '@oxlint/binding-darwin-arm64@1.86.0'
+  - '@oxlint/binding-darwin-x64@1.86.0'
+  - '@oxlint/binding-freebsd-x64@1.86.0'
+  - '@oxlint/binding-linux-arm-gnueabihf@1.86.0'
+  - '@oxlint/binding-linux-arm-musleabihf@1.86.0'
+  - '@oxlint/binding-linux-arm64-gnu@1.86.0'
+  - '@oxlint/binding-linux-arm64-musl@1.86.0'
+  - '@oxlint/binding-linux-ppc64-gnu@1.86.0'
+  - '@oxlint/binding-linux-riscv64-gnu@1.86.0'
+  - '@oxlint/binding-linux-riscv64-musl@1.86.0'
+  - '@oxlint/binding-linux-s390x-gnu@1.86.0'
+  - '@oxlint/binding-linux-x64-gnu@1.86.0'
+  - '@oxlint/binding-linux-x64-musl@1.86.0'
+  - '@oxlint/binding-openharmony-arm64@1.86.0'
+  - '@oxlint/binding-win32-arm64-msvc@1.86.0'
+  - '@oxlint/binding-win32-ia32-msvc@1.86.0'
+  - '@oxlint/binding-win32-x64-msvc@1.86.0'
+  - oxlint@1.86.0
 overrides:
   body-parser@<1.20.6: ^1.20.6
   body-parser@>=2.0.0 <2.3.0: ^2.3.0

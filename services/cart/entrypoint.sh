@@ -2,7 +2,7 @@
 set -e
 
 echo "Running database migrations..."
-pnpm prisma migrate deploy
+./node_modules/.bin/prisma migrate deploy
 
 echo "Starting application..."
 exec "$@"
