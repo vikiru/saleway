@@ -1,8 +1,10 @@
+import asyncio
 import json
 import os
 from decimal import Decimal
 
-from sqlmodel import Session, select
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 from database import engine
 from models import Product, ProductImage
@@ -13,10 +15,11 @@ def load_products_from_json(file_path: str):
         return json.load(f)
 
 
-def seed_database():
+async def seed_database() -> None:
     # Check if already seeded (idempotent)
-    with Session(engine) as session:
-        existing = session.exec(select(Product)).first()
+    async with AsyncSession(engine) as session:
+        result = await session.exec(select(Product))
+        existing = result.first()
         if existing:
             print('Database already seeded, skipping...')
             return
@@ -25,7 +28,7 @@ def seed_database():
     products_data = load_products_from_json(data_file_path)
     print(f'Loaded {len(products_data)} products from generated_products.json')
 
-    with Session(engine) as session:
+    async with AsyncSession(engine) as session:
         for product_data in products_data:
             image_data = product_data.pop('image', {})
 
@@ -38,7 +41,7 @@ def seed_database():
                 price=Decimal(str(product_data['price'])),
             )
             session.add(product)
-            session.flush()
+            await session.flush()
 
             product_image = ProductImage(
                 product_id=product.id,
@@ -49,10 +52,10 @@ def seed_database():
             )
             session.add(product_image)
 
-        session.commit()
+        await session.commit()
 
     print(f'Successfully seeded {len(products_data)} products')
 
 
 if __name__ == '__main__':
-    seed_database()
+    asyncio.run(seed_database())
