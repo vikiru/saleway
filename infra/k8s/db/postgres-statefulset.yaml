@@ -60,6 +60,31 @@ spec:
                   key: POSTGRES_ADMIN_PASSWORD
             - name: POSTGRES_DB
               value: 'postgres'
+            - name: CART_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: saleway-secrets
+                  key: CART_DB_PASSWORD
+            - name: ORDER_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: saleway-secrets
+                  key: ORDER_DB_PASSWORD
+            - name: PRODUCT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: saleway-secrets
+                  key: PRODUCT_DB_PASSWORD
+            - name: RATING_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: saleway-secrets
+                  key: RATING_DB_PASSWORD
+            - name: USER_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: saleway-secrets
+                  key: USER_DB_PASSWORD
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
