@@ -15,33 +15,8 @@ else
 fi
 
 echo ""
-echo "=> 1. Building Frontend with K8s environment variables..."
-
-# Load Clerk Key from .env if it exists
-CLERK_KEY="pk_test_YOUR_CLERK_PUBLISHABLE_KEY"
-if [ -f .env ]; then
-  echo "   Loading environment variables from .env..."
-  # Safely extract just the clerk key to avoid bash syntax errors from complex .env files
-  ENV_KEY=$(grep '^NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=' .env | cut -d '=' -f2-)
-  if [ ! -z "$ENV_KEY" ]; then
-    CLERK_KEY=$ENV_KEY
-  fi
-fi
-
-# Pass the required Clerk/App URL arguments so Next.js bakes them into the static bundle
-docker build \
-  --build-arg NEXT_PUBLIC_APP_URL=http://saleway.local \
-  --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="${CLERK_KEY}" \
-  --build-arg NEXT_PUBLIC_CLERK_SIGN_IN_URL=/auth/login \
-  --build-arg NEXT_PUBLIC_CLERK_SIGN_UP_URL=/auth/signup \
-  --build-arg NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/dashboard \
-  --build-arg NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/onboarding \
-  -t saleway-frontend:latest \
-  ./frontend
-
-echo ""
-echo "=> 2. Building Backend Microservices..."
-docker build -t saleway-cart:latest ./services/cart
+echo "=> 1. Building Backend Microservices..."
+docker build -f services/cart/Dockerfile -t saleway-cart:latest ./services/cart
 docker build -t saleway-order:latest ./services/order
 docker build -t saleway-payment:latest ./services/payment
 docker build -t saleway-product:latest ./services/product
@@ -49,7 +24,7 @@ docker build -t saleway-rating:latest ./services/rating
 docker build -t saleway-user:latest ./services/user
 
 echo ""
-echo "=> 3. Applying Kubernetes Manifests..."
+echo "=> 2. Applying Kubernetes base manifests..."
 # Base configs and secrets
 kubectl apply -f infra/k8s/base/namespace.yaml
 kubectl apply -f infra/k8s/base/configmap.yaml
@@ -91,6 +66,7 @@ data:
   USER_DB_PASSWORD: "$(b64 "$USER_DB_PASS")"
   CLERK_SECRET_KEY: "$(b64 "$CLERK_SECRET")"
   STRIPE_SECRET_KEY: "$(b64 "$STRIPE_SECRET")"
+  STRIPE_API_KEY: "$(b64 "$STRIPE_SECRET")"
   STRIPE_WEBHOOK_SECRET: "$(b64 "$STRIPE_WEBHOOK")"
   STRIPE_PUBLISHABLE_KEY: "$(b64 "$STRIPE_PUB")"
 EOF
@@ -104,16 +80,66 @@ fi
 echo "   Applying secrets.yaml..."
 kubectl apply -f infra/k8s/base/secrets.yaml
 
-# Database
+# Database and product service (required by the frontend prebuild)
 kubectl apply -f infra/k8s/db/postgres-init-configmap.yaml
 kubectl apply -f infra/k8s/db/postgres-statefulset.yaml
+kubectl apply -f infra/k8s/apps/product-deployment.yaml
 
-# Apps
+echo "   Waiting for product service..."
+kubectl rollout status deployment/product-service -n saleway --timeout=180s
+
+PRODUCT_PORT_FORWARD_LOG=$(mktemp)
+kubectl port-forward -n saleway service/product-service 8000:80 >"$PRODUCT_PORT_FORWARD_LOG" 2>&1 &
+PRODUCT_PORT_FORWARD_PID=$!
+trap 'kill "$PRODUCT_PORT_FORWARD_PID" 2>/dev/null || true; rm -f "$PRODUCT_PORT_FORWARD_LOG"' EXIT
+
+until curl --silent --fail http://localhost:8000/api/v1/health >/dev/null; do
+  if ! kill -0 "$PRODUCT_PORT_FORWARD_PID" 2>/dev/null; then
+    cat "$PRODUCT_PORT_FORWARD_LOG"
+    exit 1
+  fi
+  sleep 2
+done
+
+echo "   Fetching frontend product data..."
+(cd frontend && PRODUCT_SERVICE_URL=http://localhost:8000/api/v1 pnpm prebuild)
+
+echo ""
+echo "=> 3. Building Frontend..."
+
+# Load Clerk Key from .env if it exists
+CLERK_KEY="${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:-pk_test_YOUR_CLERK_PUBLISHABLE_KEY}"
+if [ -f .env ]; then
+  echo "   Loading environment variables from .env..."
+  ENV_KEY=$(grep '^NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=' .env | cut -d '=' -f2-)
+  if [ -z "${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:-}" ] && [ -n "$ENV_KEY" ]; then
+    CLERK_KEY=$ENV_KEY
+  fi
+fi
+
+docker build \
+  --build-arg NEXT_PUBLIC_APP_URL=http://saleway.local \
+  --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="${CLERK_KEY}" \
+  --build-arg NEXT_PUBLIC_CLERK_SIGN_IN_URL=/auth/login \
+  --build-arg NEXT_PUBLIC_CLERK_SIGN_UP_URL=/auth/signup \
+  --build-arg NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/dashboard \
+  --build-arg NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/onboarding \
+  -t saleway-frontend:latest \
+  ./frontend
+
+echo ""
+echo "=> 4. Applying application and networking manifests..."
+
+# Remaining apps
 kubectl apply -f infra/k8s/apps/
 
 # Networking
 kubectl apply -f infra/k8s/base/network-policies.yaml
 kubectl apply -f infra/k8s/base/ingress.yaml
+
+for service in cart order payment product rating user frontend; do
+  kubectl rollout status "deployment/${service}-service" -n saleway --timeout=180s
+done
 
 echo ""
 echo "=========================================="
