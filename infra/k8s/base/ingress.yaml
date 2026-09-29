@@ -17,21 +17,35 @@ spec:
                 name: cart-service
                 port:
                   number: 80
-          - path: /api/v1/order
+          - path: /api/v1/orders
             pathType: Prefix
             backend:
               service:
                 name: order-service
                 port:
                   number: 80
-          - path: /api/v1/payment
+          - path: /api/v1/checkout
             pathType: Prefix
             backend:
               service:
                 name: payment-service
                 port:
                   number: 80
-          - path: /api/v1/product
+          - path: /api/v1/refund
+            pathType: Prefix
+            backend:
+              service:
+                name: payment-service
+                port:
+                  number: 80
+          - path: /api/v1/webhooks
+            pathType: Prefix
+            backend:
+              service:
+                name: payment-service
+                port:
+                  number: 80
+          - path: /api/v1/products
             pathType: Prefix
             backend:
               service:

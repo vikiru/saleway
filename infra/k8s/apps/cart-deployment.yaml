@@ -23,6 +23,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
             capabilities:
               drop: ['ALL']
           image: saleway-cart:latest
@@ -34,6 +36,16 @@ spec:
                 name: saleway-config
             - secretRef:
                 name: saleway-secrets
+          env:
+            - name: COREPACK_ENABLE_PROJECT_SPEC
+              value: "0"
+            - name: CART_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: saleway-secrets
+                  key: CART_DB_PASSWORD
+            - name: DATABASE_URL
+              value: postgresql://cart_user:$(CART_DB_PASSWORD)@postgres:5432/cart_db
           readinessProbe:
             httpGet:
               path: /api/v1/health
@@ -53,32 +65,6 @@ spec:
             limits:
               cpu: '500m'
               memory: '256Mi'
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: cart-service-hpa
-  namespace: saleway
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: cart-service
-  minReplicas: 2
-  maxReplicas: 5
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 70
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 80
 ---
 apiVersion: v1
 kind: Service
