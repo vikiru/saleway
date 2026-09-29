@@ -12,7 +12,6 @@ psql -v ON_ERROR_STOP=1 \
 		    CREATE DATABASE cart_db;
 		    CREATE USER cart_user WITH PASSWORD :'cart_password';
 		    GRANT ALL PRIVILEGES ON DATABASE cart_db TO cart_user;
-		    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO cart_user;
 
 		    -- Order database
 		    CREATE DATABASE order_db;
@@ -24,7 +23,6 @@ psql -v ON_ERROR_STOP=1 \
 		    CREATE DATABASE product_db;
 		    CREATE USER product_user WITH PASSWORD :'product_password';
 		    GRANT ALL PRIVILEGES ON DATABASE product_db TO product_user;
-		    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO product_user;
 
 		    -- Rating database
 		    CREATE DATABASE rating_db;
@@ -36,10 +34,24 @@ psql -v ON_ERROR_STOP=1 \
 		    CREATE DATABASE user_db;
 		    CREATE USER user_service WITH PASSWORD :'user_password';
 		    GRANT ALL PRIVILEGES ON DATABASE user_db TO user_service;
-		    -- Grant schema permissions (required for migrations)
-		GRANT CREATE ON SCHEMA public TO cart_user;
-		GRANT CREATE ON SCHEMA public TO order_user;
-		GRANT CREATE ON SCHEMA public TO product_user;
-		GRANT CREATE ON SCHEMA public TO rating_user;
-		GRANT CREATE ON SCHEMA public TO user_service;
+		    -- Grant schema permissions in each service database (required for migrations)
+		    \connect cart_db
+		    GRANT USAGE, CREATE ON SCHEMA public TO cart_user;
+		    ALTER SCHEMA public OWNER TO cart_user;
+
+		    \connect order_db
+		    GRANT USAGE, CREATE ON SCHEMA public TO order_user;
+		    ALTER SCHEMA public OWNER TO order_user;
+
+		    \connect product_db
+		    GRANT USAGE, CREATE ON SCHEMA public TO product_user;
+		    ALTER SCHEMA public OWNER TO product_user;
+
+		    \connect rating_db
+		    GRANT USAGE, CREATE ON SCHEMA public TO rating_user;
+		    ALTER SCHEMA public OWNER TO rating_user;
+
+		    \connect user_db
+		    GRANT USAGE, CREATE ON SCHEMA public TO user_service;
+		    ALTER SCHEMA public OWNER TO user_service;
 	EOSQL
