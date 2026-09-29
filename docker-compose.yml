@@ -34,6 +34,7 @@ services:
     build:
       context: ./services/cart
       dockerfile: Dockerfile
+    image: saleway-cart:latest
     container_name: saleway-cart
     restart: unless-stopped
     env_file:
@@ -66,6 +67,7 @@ services:
     build:
       context: ./services/order
       dockerfile: Dockerfile
+    image: saleway-order:latest
     container_name: saleway-order
     restart: unless-stopped
     env_file:
@@ -98,12 +100,14 @@ services:
     build:
       context: ./services/payment
       dockerfile: Dockerfile
+    image: saleway-payment:latest
     container_name: saleway-payment
     restart: unless-stopped
     env_file:
       - .env
     environment:
       SERVER_PORT: 8081
+      STRIPE_API_KEY: ${STRIPE_SECRET_KEY}
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
       STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
@@ -128,6 +132,7 @@ services:
     build:
       context: ./services/product
       dockerfile: Dockerfile
+    image: saleway-product:latest
     container_name: saleway-product
     restart: unless-stopped
     env_file:
@@ -144,7 +149,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:8000/api/v1/health']
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--output-document=/dev/null', 'http://localhost:8000/api/v1/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -160,6 +165,7 @@ services:
     build:
       context: ./services/rating
       dockerfile: Dockerfile
+    image: saleway-rating:latest
     container_name: saleway-rating
     restart: unless-stopped
     env_file:
@@ -192,6 +198,7 @@ services:
     build:
       context: ./services/user
       dockerfile: Dockerfile
+    image: saleway-user:latest
     container_name: saleway-user
     restart: unless-stopped
     env_file:
