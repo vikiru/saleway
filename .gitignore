@@ -397,6 +397,7 @@ skills-lock.json
 
 # Kubernetes Secrets
 infra/k8s/secrets.yaml
+infra/k8s/base/secrets.yaml
 *-secret.yaml
 *.pem
 *.key
